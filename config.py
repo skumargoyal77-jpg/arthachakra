@@ -27,7 +27,8 @@ class Settings:
     mongo_db_name: str
     log_level:     str
     log_dir:       str
-
+    dhan_client_id:    str
+    dhan_access_token: str
 
 def _load() -> Settings:
     return Settings(
@@ -35,6 +36,8 @@ def _load() -> Settings:
         mongo_db_name = os.getenv("ARTHACHAKRA_DB_NAME", "arthachakra"),
         log_level     = os.getenv("LOG_LEVEL", "INFO"),
         log_dir       = os.getenv("LOG_DIR", "logs/"),
+        dhan_client_id    = os.getenv("DHAN_CLIENT_ID", ""),
+        dhan_access_token = os.getenv("DHAN_ACCESS_TOKEN", ""),
     )
 
 

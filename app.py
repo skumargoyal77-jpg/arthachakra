@@ -1,7 +1,8 @@
 """
 app.py
 ────────
-ArthaChakra — Step 2: Real Login Gate + Per-User Kite Connect
+ArthaChakra — Step 2 + Step 2.1: Real Login Gate + Per-User Kite
+Connect + Live Strangle Dashboard
 
 Flow:
   1. Sign up / log in (auth/auth_service.py)
@@ -9,7 +10,11 @@ Flow:
      OWN Kite Connect api_key/api_secret (their own personal Zerodha
      developer subscription, not a shared platform credential — see
      kite_oauth/kite_connect_flow.py docstring for why).
-  3. See the assembled UserSession (users/session_builder.py, built in
+  3. See live positions across ALL connected accounts, grouped into
+     strangles, with per-leg Black-Scholes delta and a net
+     delta-neutrality status (Step 2.1 — dashboard/strangle_grouper.py,
+     dashboard/greeks.py, brokers/kite_client.py).
+  4. See the assembled UserSession (users/session_builder.py, built in
      Step 1) — proves login → real broker connection → session works
      end to end.
 
@@ -34,6 +39,7 @@ from __future__ import annotations
 import streamlit as st
 
 from auth.auth_service import AuthError, login, signup
+from config import settings
 from core.database import Database
 from kite_oauth.connection_service import (
     add_mock_connection, connect_real_account, deactivate_connection,
@@ -42,7 +48,7 @@ from kite_oauth.connection_service import (
 from kite_oauth.kite_connect_flow import build_login_url
 from users.session_builder import build_user_session
 
-st.set_page_config(page_title="ArthaChakra", page_icon="🔆", layout="centered")
+st.set_page_config(page_title="ArthaChakra", page_icon="🔆", layout="wide")
 
 
 # ── Database (once per session) ─────────────────────────────────────────
@@ -134,7 +140,8 @@ def render_existing_connections(user_id: str) -> None:
     for c in connections:
         with st.container(border=True):
             col1, col2, col3 = st.columns([3, 2, 1])
-            col1.markdown(f"**{c.label}**")
+            account_suffix = f" · Zerodha: {c.broker_account_name}" if c.broker_account_name and c.broker_account_name != "Mock User" else ""
+            col1.markdown(f"**{c.label}**{account_suffix}")
             kind = "🔵 mock" if c.access_token.startswith("mock_tok_") else "✅ live"
             col2.markdown(f"`{c.broker.upper()}` · {c.account_type} · {kind}")
             if col3.button("Remove", key=f"rm_{c.connection_id}"):
@@ -312,6 +319,8 @@ def main() -> None:
         if st.button("Log out"):
             logout()
             st.rerun()
+        st.divider()
+        st.page_link("pages/1_Live_Dashboard.py", label="📊 Live Dashboard", icon="📊")
         st.divider()
         st.caption(
             "Step 2 validates: real signup/login, per-user Kite Connect "

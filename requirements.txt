@@ -6,3 +6,4 @@ streamlit>=1.32
 # app still runs — "Connect with Zerodha" falls back to a mock token
 # automatically (see kite_oauth/kite_connect_flow.py).
 kiteconnect>=4.2
+requests>=2.31

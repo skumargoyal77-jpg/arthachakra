@@ -74,6 +74,7 @@ class BrokerConnection:
     access_token:  Optional[str] = None
     token_expiry:  Optional[str] = None   # "YYYY-MM-DD"
     account_type:  str = "equity"   # "equity" | "index" | "both"
+    broker_account_name: str = ""   # the real name on the broker's own profile (e.g. Zerodha)
     active:        bool = True
     created_at:    datetime = field(default_factory=now_utc)
 
@@ -98,13 +99,16 @@ class BrokerConnection:
             "access_token":  self.access_token,
             "token_expiry":  self.token_expiry,
             "account_type":  self.account_type,
+            "broker_account_name": self.broker_account_name,
             "active":        self.active,
             "created_at":    self.created_at,
         }
 
     @staticmethod
     def from_dict(d: dict) -> "BrokerConnection":
-        return BrokerConnection(**{k: v for k, v in d.items() if k != "_id"})
+        d = {k: v for k, v in d.items() if k != "_id"}
+        d.setdefault("broker_account_name", "")
+        return BrokerConnection(**d)
 
 
 # ── Rule definitions (platform / default / custom) ─────────────────────────
