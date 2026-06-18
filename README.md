@@ -1,2 +1,2 @@
-# arthachakra
+# ArthaDhakra
 MY NSE Trading model
