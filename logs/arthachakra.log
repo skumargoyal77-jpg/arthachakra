@@ -13,3 +13,13 @@
 2026-06-18 01:13:23,406 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
 2026-06-18 01:20:35,404 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
 2026-06-18 01:20:35,471 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 20:31:19,210 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 20:31:19,281 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 20:31:34,223 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 20:31:34,463 | WARNING | kite_oauth.kite_connect_flow | Kite OAuth: no platform api_key/api_secret configured (ARTHACHAKRA_KITE_API_KEY / ARTHACHAKRA_KITE_API_SECRET) — using mock token
+2026-06-18 20:32:06,377 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 20:35:19,855 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 22:54:16,423 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 23:12:58,311 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 23:15:30,051 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-18 23:15:30,249 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal

@@ -297,11 +297,152 @@ def run_step1() -> bool:
     return passed == total
 
 
+def run_step2() -> bool:
+    """
+    Automated verification of auth/ + kite_oauth/ wiring.
+
+    IMPORTANT SCOPE NOTE: this proves the *wiring* — signup/login, mock
+    connections, renaming, and the request_token parsing logic. It does
+    NOT and CANNOT test a real Zerodha browser login (that requires an
+    actual human with their own Kite Connect credentials clicking
+    through Zerodha's UI). After this passes, confirm the real flow
+    yourself:
+
+        streamlit run app.py
+
+    Sign up, go to "Add a real Kite account", enter YOUR OWN Kite
+    Connect api_key/api_secret, click "Get Login URL", log into Zerodha
+    in the new tab, copy the request_token (or the whole redirected
+    URL) from its address bar, paste it back, and click "Connect &
+    Verify". You should see "✅ Connected as <your name>".
+    """
+    results: list[tuple[str, bool, str]] = []
+
+    def check(name: str, condition: bool, detail: str = "") -> None:
+        results.append((name, condition, detail))
+        icon = "✅" if condition else "❌"
+        print(f"  {icon}  {name}" + (f"  —  {detail}" if detail else ""))
+
+    print_header("ArthaChakra — Step 2 Verification: auth/ + kite_oauth/ wiring")
+    print("  This automated suite verifies signup/login and the connection")
+    print("  service wiring using mock connections and token-parsing logic. It does not")
+    print("  test a real Zerodha browser login — confirm that manually afterwards:")
+    print("      streamlit run app.py")
+
+    db = Database()
+    print(f"\n  Database mode: {'MongoDB' if not db.is_mock else 'MOCK (in-memory)'}")
+
+    if not db.is_mock:
+        print("  Cleaning up any leftover _verify_ test data from a previous run...")
+        _cleanup_test_data(db)
+    print()
+
+    try:
+        # ── 1. Auth: signup + login ──────────────────────────────────────
+        print(f"{SEP}\n  1 — Sign up / log in via auth_service\n{SEP}")
+        from auth.auth_service import AuthError, login, signup
+
+        user1 = signup(db, TEST_USERNAME_1, TEST_EMAIL_1, "testpass123", "Verify Test User 1")
+        check("Signup creates a user", bool(user1.user_id))
+
+        try:
+            signup(db, TEST_USERNAME_1, "other@verify.local", "whatever123")
+            check("Duplicate username rejected on signup", False, "no exception raised")
+        except AuthError:
+            check("Duplicate username rejected on signup", True)
+
+        logged_in = login(db, TEST_USERNAME_1, "testpass123")
+        check("Login with correct password", logged_in.user_id == user1.user_id)
+
+        try:
+            login(db, TEST_USERNAME_1, "wrongpassword")
+            check("Login with wrong password rejected", False, "no exception raised")
+        except AuthError:
+            check("Login with wrong password rejected", True)
+
+        # ── 2. Kite connection wiring (mock connection, no real exchange) ──
+        print(f"\n{SEP}\n  2 — Kite connection wiring (mock connection)\n{SEP}")
+        from kite_oauth.connection_service import add_mock_connection, list_connections
+
+        conn = add_mock_connection(db, user1.user_id, label="Verify Index Account",
+                                   account_type="index")
+        check("Connection created and persisted", bool(conn.connection_id))
+        check(
+            "Connection token issued (mock — no real Zerodha login happened here)",
+            conn.access_token.startswith("mock_tok_"),
+        )
+
+        conns = list_connections(db, user1.user_id)
+        check("list_connections() returns the new connection", len(conns) == 1)
+
+        # update_connection() — supports the rename UI in app.py
+        from kite_oauth.connection_service import update_connection
+        renamed = update_connection(
+            db, user1.user_id, conn.connection_id,
+            label="Renamed Index Account", account_type="both",
+        )
+        check("update_connection() reports success", renamed is True)
+
+        refreshed = list_connections(db, user1.user_id)[0]
+        check("Label was actually updated", refreshed.label == "Renamed Index Account")
+        check("Account type was actually updated", refreshed.account_type == "both")
+
+        # extract_request_token() — must handle both a bare token and a
+        # full pasted URL, since the user might copy either from the
+        # browser's address bar.
+        from kite_oauth.kite_connect_flow import extract_request_token
+
+        check("extract_request_token parses a bare token",
+              extract_request_token("abc123xyz") == "abc123xyz")
+        check(
+            "extract_request_token parses a full redirected URL",
+            extract_request_token(
+                "http://localhost:8501/?action=login&request_token=xyz789&status=success"
+            ) == "xyz789",
+        )
+
+        # ── 3. Session reflects the new connection ─────────────────────────
+        print(f"\n{SEP}\n  3 — Session reflects the new connection (Step 1 session_builder)\n{SEP}")
+        from users.session_builder import build_user_session
+
+        session = build_user_session(db, user1.user_id, user1.display_name)
+        check("Session shows 1 active broker connection", len(session.active_connections) == 1)
+        print()
+        print(session.summary())
+        print()
+
+    finally:
+        if not db.is_mock:
+            _cleanup_test_data(db)
+            print(f"\n  🧹 Cleaned up all _verify_ test data — real database left untouched.")
+
+    # ── Summary ──────────────────────────────────────────────────────────
+    passed = sum(1 for _, ok, _ in results if ok)
+    total  = len(results)
+
+    print(f"\n{SEP2}")
+    if passed == total:
+        print(f"  ✅  STEP 2 AUTOMATED VERIFICATION PASSED  ({passed}/{total})")
+        print(f"  👉  Now confirm the REAL Zerodha login manually:  streamlit run app.py")
+    else:
+        print(f"  ❌  STEP 2 VERIFICATION FAILED  ({passed}/{total})")
+        for name, ok, detail in results:
+            if not ok:
+                print(f"    ❌ {name}  {detail}")
+    print(SEP2)
+
+    return passed == total
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="ArthaChakra — verification suite")
     parser.add_argument("--step1", action="store_true", help="Run Step 1 verification")
+    parser.add_argument("--step2", action="store_true", help="Run Step 2 verification")
     args = parser.parse_args()
 
+    if args.step2:
+        ok = run_step2()
+        return 0 if ok else 1
     if args.step1 or len(sys.argv) == 1:
         ok = run_step1()
         return 0 if ok else 1
