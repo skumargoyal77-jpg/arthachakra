@@ -1,0 +1,15 @@
+2026-06-18 00:58:07,499 | INFO    | core.database | Database: connected to MongoDB (mongodb://localhost:27017 / arthachakra)
+2026-06-18 01:02:51,437 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 01:02:51,724 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 01:06:50,767 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 01:06:50,781 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 01:07:07,958 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 01:07:07,979 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 01:12:21,966 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 01:12:21,990 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 01:12:27,560 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 01:12:27,581 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 01:13:23,387 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 01:13:23,406 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
+2026-06-18 01:20:35,404 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-18 01:20:35,471 | INFO    | core.database | ensure_indexes: created 15 indexes across 14 collections
