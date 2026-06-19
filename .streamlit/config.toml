@@ -1,0 +1,16 @@
+# ArthaChakra — Streamlit server configuration
+#
+# disconnectedSessionTTL: how long (seconds) a session survives after
+# its WebSocket disconnects before being garbage-collected. Streamlit's
+# own default is a very conservative 120 seconds (2 minutes) — meant
+# for "recover from a brief network blip," not "leave the dashboard
+# open while you do something else." Raised to 30 minutes here so the
+# Live Dashboard (and login session) survive normal idle periods,
+# laptop sleep, or a brief network hiccup without losing session_state.
+[server]
+disconnectedSessionTTL = 1800
+
+# Keeps the WebSocket itself alive with regular pings, reducing how
+# often it disconnects in the first place. (Values below 30 can cause
+# issues on Tornado >= 6.5, so this stays at a safe default.)
+websocketPingInterval = 30

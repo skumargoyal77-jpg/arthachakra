@@ -44,6 +44,11 @@ def _norm_cdf(x: float) -> float:
     return 0.5 * (1.0 + math.erf(x / math.sqrt(2.0)))
 
 
+# Public alias — used by dashboard/strangle_grouper.py for the POP
+# (Probability of Profit) calculation, which needs the same normal CDF.
+norm_cdf = _norm_cdf
+
+
 def _norm_pdf(x: float) -> float:
     """Standard normal PDF."""
     return math.exp(-0.5 * x * x) / math.sqrt(2.0 * math.pi)

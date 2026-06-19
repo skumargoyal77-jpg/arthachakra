@@ -40,6 +40,7 @@ def add_connection(
     token_expiry:  str,
     account_type:  str = "equity",
     broker:        str = "kite",
+    broker_account_name: str = "",
 ) -> BrokerConnection:
     """
     Persist an already-obtained, already-verified connection. Pure
@@ -56,6 +57,7 @@ def add_connection(
         access_token  = access_token,
         token_expiry  = token_expiry,
         account_type  = account_type,
+        broker_account_name = broker_account_name,
         active        = True,
     )
     db.broker_connections.insert_one(conn.to_dict())
@@ -100,9 +102,58 @@ def connect_real_account(
     conn = add_connection(
         db, user_id, label=label, api_key=api_key, api_secret=api_secret,
         access_token=token_data["access_token"], token_expiry=token_data["expiry"],
-        account_type=account_type,
+        account_type=account_type, broker_account_name=profile.get("user_name", ""),
     )
     return conn, profile
+
+
+def reconnect_connection(
+    db: Database, user_id: str, connection_id: str, pasted_token: str,
+) -> tuple[BrokerConnection, dict]:
+    """
+    Re-establish an EXISTING connection whose access_token has expired
+    (Kite tokens expire daily, ~6am). Reuses the api_key/api_secret
+    already stored on this connection — the user doesn't re-enter them.
+    Updates the SAME connection_id row; never creates a duplicate.
+
+    Raises RuntimeError with a clear message on failure — the old
+    (expired) token is left untouched if re-verification fails.
+    """
+    existing = db.broker_connections.find_one(
+        {"user_id": user_id, "connection_id": connection_id}
+    )
+    if not existing:
+        raise RuntimeError("Connection not found.")
+
+    request_token = extract_request_token(pasted_token)
+    if not request_token:
+        raise RuntimeError("Could not find a request_token in what you pasted.")
+
+    try:
+        token_data = exchange_request_token_strict(
+            existing["api_key"], existing["api_secret"], request_token,
+        )
+    except Exception as e:
+        raise RuntimeError(f"Token exchange failed: {e}") from e
+
+    try:
+        profile = verify_connection(existing["api_key"], token_data["access_token"])
+    except Exception as e:
+        raise RuntimeError(f"Got a token, but verification failed: {e}") from e
+
+    db.broker_connections.update_one(
+        {"user_id": user_id, "connection_id": connection_id},
+        {"$set": {
+            "access_token": token_data["access_token"],
+            "token_expiry": token_data["expiry"],
+            "broker_account_name": profile.get("user_name", existing.get("broker_account_name", "")),
+            "active": True,
+        }},
+    )
+    refreshed = db.broker_connections.find_one(
+        {"user_id": user_id, "connection_id": connection_id}
+    )
+    return BrokerConnection.from_dict(refreshed), profile
 
 
 def add_mock_connection(
@@ -120,7 +171,7 @@ def add_mock_connection(
     return add_connection(
         db, user_id, label=label, api_key="mock_key", api_secret="mock_secret",
         access_token=mock_token, token_expiry=expiry,
-        account_type=account_type, broker=broker,
+        account_type=account_type, broker=broker, broker_account_name="Mock User",
     )
 
 

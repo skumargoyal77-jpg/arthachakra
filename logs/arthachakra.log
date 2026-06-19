@@ -40,3 +40,297 @@
 2026-06-19 02:47:49,334 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
 2026-06-19 03:01:55,296 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
 2026-06-19 03:02:07,339 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 12:56:47,635 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-19 12:57:11,617 | WARNING | brokers.kite_client | Failed to fetch positions for 'Sandy_Kite': Incorrect `api_key` or `access_token`.
+2026-06-19 12:57:37,014 | WARNING | brokers.kite_client | Failed to fetch positions for 'Sandy_Kite': Incorrect `api_key` or `access_token`.
+2026-06-19 12:57:55,598 | WARNING | brokers.kite_client | Failed to fetch positions for 'Sandy_Kite': Incorrect `api_key` or `access_token`.
+2026-06-19 12:57:57,315 | WARNING | brokers.kite_client | Failed to fetch positions for 'Sandy_Kite': Incorrect `api_key` or `access_token`.
+2026-06-19 13:32:09,164 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-19 13:33:35,453 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-19 13:33:35,560 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-19 13:38:26,621 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 13:41:38,489 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 13:52:52,564 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 14:09:15,995 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-19 14:09:37,181 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 14:16:29,899 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-19 14:17:11,538 | INFO    | dashboard.dhan_instruments | dhan_instruments: downloaded 237408 rows — columns found: ['EXCH_ID', 'SEGMENT', 'SECURITY_ID', 'ISIN', 'INSTRUMENT', 'UNDERLYING_SECURITY_ID', 'UNDERLYING_SYMBOL', 'SYMBOL_NAME', 'DISPLAY_NAME', 'INSTRUMENT_TYPE', 'SERIES', 'LOT_SIZE', 'SM_EXPIRY_DATE', 'STRIKE_PRICE', 'OPTION_TYPE', 'TICK_SIZE', 'EXPIRY_FLAG', 'BRACKET_FLAG', 'COVER_FLAG', 'ASM_GSM_FLAG', 'ASM_GSM_CATEGORY', 'BUY_SELL_INDICATOR', 'BUY_CO_MIN_MARGIN_PER', 'BUY_CO_SL_RANGE_MAX_PERC', 'BUY_CO_SL_RANGE_MIN_PERC', 'BUY_BO_MIN_MARGIN_PER', 'BUY_BO_PROFIT_RANGE_MAX_PERC', 'BUY_BO_PROFIT_RANGE_MIN_PERC', 'MTF_LEVERAGE', 'SM_UPPER_LIMIT', 'SM_LOWER_LIMIT', 'SM_FREEZE_QTY', '']
+2026-06-19 14:17:11,548 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:17:11,550 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:17:11,676 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:11,682 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:17:11,807 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:11,811 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:17:11,816 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:17:11,898 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:11,903 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:17:11,996 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:12,000 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:17:12,002 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:17:12,085 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:12,090 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:17:12,161 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:12,167 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:17:12,171 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:17:12,266 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:12,270 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:17:12,350 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:12,356 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:17:12,361 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:17:12,451 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:12,456 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:17:12,548 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:17:12,551 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 14:39:38,316 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:39:38,322 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:39:38,470 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:38,476 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:39:38,577 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:38,584 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:39:38,588 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:39:38,659 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:38,663 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:39:38,773 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:38,780 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:39:38,785 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:39:38,875 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:38,880 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:39:39,018 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:39,022 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:39:39,026 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:39:39,148 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:39,153 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:39:39,257 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:39,266 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:39:39,271 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:39:39,390 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:39,396 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:39:39,501 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:39:39,504 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 14:55:04,932 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:55:04,939 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:55:05,091 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,095 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:55:05,190 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,198 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:55:05,203 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:55:05,297 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,303 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:55:05,419 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,427 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:55:05,433 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:55:05,554 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,562 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:55:05,674 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,683 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:55:05,687 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:55:05,782 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,788 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:55:05,885 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:05,894 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:55:05,899 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:55:06,032 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:06,043 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:55:06,141 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:55:06,145 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 14:56:08,737 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:56:08,743 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:56:08,866 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:08,878 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:56:09,085 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:09,093 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:56:09,103 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:56:09,273 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:09,286 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:56:09,421 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:09,432 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:56:09,443 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:56:09,573 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:09,585 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:56:09,721 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:09,736 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:56:09,779 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:56:09,917 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:09,937 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:56:10,084 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:10,092 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:56:10,100 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:56:10,207 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:10,217 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:56:10,348 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:56:10,353 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 14:59:40,475 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:59:40,482 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:59:40,602 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:40,611 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 14:59:40,722 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:40,730 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:59:40,741 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:59:40,862 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:40,870 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 14:59:41,001 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:41,009 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:59:41,030 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:59:41,136 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:41,147 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 14:59:41,274 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:41,284 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:59:41,294 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:59:41,407 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:41,427 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 14:59:41,544 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:41,553 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:59:41,559 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:59:41,659 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:41,670 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 14:59:41,799 | WARNING | dashboard.dhan_greeks | dhan_greeks: HTTP 400 — errorType=None errorCode=None errorMessage=None
+2026-06-19 14:59:41,804 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:17:03,460 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-19 19:17:44,519 | INFO    | dashboard.dhan_instruments | dhan_instruments: downloaded 237408 rows — columns found: ['EXCH_ID', 'SEGMENT', 'SECURITY_ID', 'ISIN', 'INSTRUMENT', 'UNDERLYING_SECURITY_ID', 'UNDERLYING_SYMBOL', 'SYMBOL_NAME', 'DISPLAY_NAME', 'INSTRUMENT_TYPE', 'SERIES', 'LOT_SIZE', 'SM_EXPIRY_DATE', 'STRIKE_PRICE', 'OPTION_TYPE', 'TICK_SIZE', 'EXPIRY_FLAG', 'BRACKET_FLAG', 'COVER_FLAG', 'ASM_GSM_FLAG', 'ASM_GSM_CATEGORY', 'BUY_SELL_INDICATOR', 'BUY_CO_MIN_MARGIN_PER', 'BUY_CO_SL_RANGE_MAX_PERC', 'BUY_CO_SL_RANGE_MIN_PERC', 'BUY_BO_MIN_MARGIN_PER', 'BUY_BO_PROFIT_RANGE_MAX_PERC', 'BUY_BO_PROFIT_RANGE_MIN_PERC', 'MTF_LEVERAGE', 'SM_UPPER_LIMIT', 'SM_LOWER_LIMIT', 'SM_FREEZE_QTY', '']
+2026-06-19 19:17:44,543 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:17:44,892 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:45,252 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:45,262 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:17:45,514 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:45,808 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:45,810 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:17:45,943 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:46,165 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:46,174 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:17:46,377 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:46,653 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:46,658 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:17:46,943 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:47,120 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:47,137 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:17:58,653 | INFO    | dashboard.dhan_instruments | dhan_instruments: downloaded 237408 rows — columns found: ['EXCH_ID', 'SEGMENT', 'SECURITY_ID', 'ISIN', 'INSTRUMENT', 'UNDERLYING_SECURITY_ID', 'UNDERLYING_SYMBOL', 'SYMBOL_NAME', 'DISPLAY_NAME', 'INSTRUMENT_TYPE', 'SERIES', 'LOT_SIZE', 'SM_EXPIRY_DATE', 'STRIKE_PRICE', 'OPTION_TYPE', 'TICK_SIZE', 'EXPIRY_FLAG', 'BRACKET_FLAG', 'COVER_FLAG', 'ASM_GSM_FLAG', 'ASM_GSM_CATEGORY', 'BUY_SELL_INDICATOR', 'BUY_CO_MIN_MARGIN_PER', 'BUY_CO_SL_RANGE_MAX_PERC', 'BUY_CO_SL_RANGE_MIN_PERC', 'BUY_BO_MIN_MARGIN_PER', 'BUY_BO_PROFIT_RANGE_MAX_PERC', 'BUY_BO_PROFIT_RANGE_MIN_PERC', 'MTF_LEVERAGE', 'SM_UPPER_LIMIT', 'SM_LOWER_LIMIT', 'SM_FREEZE_QTY', '']
+2026-06-19 19:17:58,790 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:17:58,891 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:58,988 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:58,993 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:17:59,089 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,164 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,173 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:17:59,263 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,384 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,394 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:17:59,498 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,606 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,609 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:17:59,688 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,773 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:17:59,776 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:18:51,487 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:18:51,676 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:51,852 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:51,862 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:18:52,051 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:52,283 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:52,293 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:18:52,484 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:52,641 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:52,654 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:18:52,819 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:52,949 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:52,965 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:18:53,175 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:53,335 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:18:53,342 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:27:52,377 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-19 19:28:36,297 | INFO    | dashboard.dhan_instruments | dhan_instruments: downloaded 237408 rows — columns found: ['EXCH_ID', 'SEGMENT', 'SECURITY_ID', 'ISIN', 'INSTRUMENT', 'UNDERLYING_SECURITY_ID', 'UNDERLYING_SYMBOL', 'SYMBOL_NAME', 'DISPLAY_NAME', 'INSTRUMENT_TYPE', 'SERIES', 'LOT_SIZE', 'SM_EXPIRY_DATE', 'STRIKE_PRICE', 'OPTION_TYPE', 'TICK_SIZE', 'EXPIRY_FLAG', 'BRACKET_FLAG', 'COVER_FLAG', 'ASM_GSM_FLAG', 'ASM_GSM_CATEGORY', 'BUY_SELL_INDICATOR', 'BUY_CO_MIN_MARGIN_PER', 'BUY_CO_SL_RANGE_MAX_PERC', 'BUY_CO_SL_RANGE_MIN_PERC', 'BUY_BO_MIN_MARGIN_PER', 'BUY_BO_PROFIT_RANGE_MAX_PERC', 'BUY_BO_PROFIT_RANGE_MIN_PERC', 'MTF_LEVERAGE', 'SM_UPPER_LIMIT', 'SM_LOWER_LIMIT', 'SM_FREEZE_QTY', '']
+2026-06-19 19:28:36,312 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:28:36,393 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:36,463 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:36,469 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:28:36,546 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:36,625 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:36,628 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:28:36,706 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:36,808 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:36,814 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:28:36,940 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:37,026 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:37,032 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:28:37,120 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:37,219 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:28:37,221 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:33:16,250 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:33:16,473 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:16,667 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:16,675 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:33:16,768 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:16,892 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:16,905 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:33:17,045 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:17,198 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:17,218 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:33:17,385 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:17,501 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:17,511 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:33:17,668 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:17,813 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:33:17,817 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:38:16,176 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:38:16,306 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:16,464 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:16,473 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:38:16,588 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:16,811 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:16,844 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:38:17,030 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:17,203 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:17,215 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:38:17,318 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:17,432 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:17,440 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:38:17,552 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:17,665 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:38:17,668 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:43:21,689 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:43:22,094 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:22,427 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:22,483 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:43:22,786 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:22,990 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:23,111 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:43:23,309 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:23,476 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:23,500 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:43:23,750 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:23,937 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:23,980 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:43:24,180 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:24,438 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:43:24,456 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:48:21,260 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:48:21,645 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:21,860 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:21,880 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:48:22,145 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:22,392 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:22,406 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:48:22,584 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:22,743 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:22,750 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:48:22,921 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:23,141 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:23,148 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:48:23,399 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:23,664 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:48:23,667 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-19 19:53:21,025 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1101955
+2026-06-19 19:53:21,180 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:21,343 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:21,352 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1103329
+2026-06-19 19:53:21,458 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:21,575 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:21,586 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'NTPC' -> security_id=1102085
+2026-06-19 19:53:21,699 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:21,999 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:NTPC] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:22,017 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1102926
+2026-06-19 19:53:22,139 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:22,246 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:22,254 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1102473
+2026-06-19 19:53:22,366 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:22,494 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 400 — full body: {'data': {'813': 'Invalid SecurityId'}, 'status': 'failed'}
+2026-06-19 19:53:22,501 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback

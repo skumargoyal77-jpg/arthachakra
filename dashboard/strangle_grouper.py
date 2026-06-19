@@ -89,6 +89,26 @@ MOCK_SPOTS = {
 
 THRESHOLDS = {"CRITICAL": 3.0, "WARNING": 5.0, "CAUTION": 8.0}
 
+# ── NSE F&O lot sizes ────────────────────────────────────────────────────
+# ⚠️  NSE revises lot sizes periodically (roughly every 6 months) — these
+# are best-effort values, NOT guaranteed current. ASIANPAINT=30 is
+# confirmed directly from a real Kite position ("5 x 30" lots × size).
+# Others are reasonable estimates — VERIFY against your own contract note
+# or the latest NSE F&O lot size circular before relying on the
+# lot-equivalent delta for real position-sizing decisions. Any symbol not
+# listed here shows "N/A" for lot-equivalent delta rather than guessing.
+LOT_SIZE_MAP: dict[str, int] = {
+    # Indices
+    "NIFTY": 25, "BANKNIFTY": 15, "FINNIFTY": 25,
+    "MIDCPNIFTY": 50, "NIFTYNXT50": 10,
+    # Equities — verify before trusting for real sizing
+    "ASIANPAINT": 250,   # confirmed: 1250 qty ÷ 5 lots, cross-checked against Sensibull
+    "HDFCBANK": 550, "RELIANCE": 500, "TCS": 175, "INFY": 400,
+    "SBIN": 750, "ICICIBANK": 700, "AXISBANK": 625, "KOTAKBANK": 400,
+    "BAJFINANCE": 125, "BHARTIARTL": 475, "MARUTI": 50, "TITAN": 175,
+    "LT": 150, "TATAMOTORS": 1425, "HINDALCO": 1400,
+}
+
 # Delta-neutral classification — a rough, ADJUSTABLE heuristic, not a
 # precise rule. Different traders use different thresholds; this one
 # expresses "neutral" as being within roughly one typical lot's worth
@@ -133,6 +153,30 @@ class ParsedOption:
         """
         return getattr(self, "_delta_info", {"delta": None, "implied_vol_pct": None,
                                               "days_to_expiry": None, "converged": False})
+
+    @property
+    def position_delta(self) -> Optional[float]:
+        """raw_delta × signed quantity — the full-scale exposure number."""
+        d = self.delta_info.get("delta")
+        return None if d is None else d * self.quantity
+
+    @property
+    def lot_size(self) -> Optional[int]:
+        """Known NSE lot size for this leg's underlying, or None if unlisted."""
+        return LOT_SIZE_MAP.get(self.underlying)
+
+    @property
+    def lot_equivalent_delta(self) -> Optional[float]:
+        """
+        position_delta ÷ lot_size — the Sensibull-comparable per-leg
+        number ("this leg behaves like being short/long X lots of the
+        underlying"), instead of the raw, larger-scale position_delta.
+        Returns None if lot_size is unknown for this underlying.
+        """
+        pd = self.position_delta
+        if pd is None or self.lot_size is None:
+            return None
+        return pd / self.lot_size
 
 
 @dataclass
@@ -242,6 +286,11 @@ class Strangle:
         separate lot-size multiplication is needed. Returns None if
         any leg's delta couldn't be computed (e.g. IV solver didn't
         converge for that leg).
+
+        This is a raw, large-scale number. See lot_size and
+        net_lot_equivalent_delta below for the more intuitive
+        "equivalent lots of underlying" framing (matches how brokers
+        like Sensibull display position delta).
         """
         total = 0.0
         for leg in self.ce_legs + self.pe_legs:
@@ -252,12 +301,34 @@ class Strangle:
         return total
 
     @property
+    def lot_size(self) -> Optional[int]:
+        """Known NSE lot size for this underlying, or None if not in LOT_SIZE_MAP."""
+        return LOT_SIZE_MAP.get(self.underlying)
+
+    @property
+    def net_lot_equivalent_delta(self) -> Optional[float]:
+        """
+        Net position delta expressed as "equivalent lots of the
+        underlying" — net_position_delta ÷ lot_size. This is the
+        number brokers like Sensibull display (e.g. 0.29 instead of a
+        raw number like 57.5) — far more intuitive: it tells you
+        directly how many lots of the underlying this position
+        currently behaves like. Returns None if lot_size is unknown
+        for this underlying, or if net_position_delta itself is None.
+        """
+        nd = self.net_position_delta
+        if nd is None or self.lot_size is None:
+            return None
+        return nd / self.lot_size
+
+    @property
     def delta_status(self) -> str:
         nd = self.net_position_delta
         if nd is None:
             return "UNKNOWN"
-        threshold_neutral = NEUTRAL_LOT_MULTIPLE * DEFAULT_LOT_SIZE_FOR_NEUTRALITY
-        threshold_slight  = SLIGHT_BIAS_LOT_MULTIPLE * DEFAULT_LOT_SIZE_FOR_NEUTRALITY
+        lot = self.lot_size or DEFAULT_LOT_SIZE_FOR_NEUTRALITY
+        threshold_neutral = NEUTRAL_LOT_MULTIPLE * lot
+        threshold_slight  = SLIGHT_BIAS_LOT_MULTIPLE * lot
         if abs(nd) <= threshold_neutral:
             return "NEUTRAL"
         if abs(nd) <= threshold_slight:
@@ -271,6 +342,143 @@ class Strangle:
         if self.delta_status == "UNKNOWN":
             return "⚪"
         return "🟡" if "SLIGHT" in self.delta_status else "🔴"
+
+    # ── Profit/Loss/Breakeven/POP — Sensibull-style position metrics ──
+
+    @property
+    def is_short_strangle(self) -> bool:
+        """True if both sides are net short — the premium-selling case
+        this dashboard is built around. Max profit / breakeven formulas
+        below assume this; they return None otherwise."""
+        ce_short = all(l.is_short for l in self.ce_legs) if self.ce_legs else True
+        pe_short = all(l.is_short for l in self.pe_legs) if self.pe_legs else True
+        return ce_short and pe_short
+
+    def _weighted_avg_price(self, legs: list[ParsedOption]) -> float:
+        total_qty = sum(l.abs_qty for l in legs)
+        if total_qty == 0:
+            return 0.0
+        return sum(l.avg_price * l.abs_qty for l in legs) / total_qty
+
+    @property
+    def combined_entry_premium_per_share(self) -> float:
+        """CE + PE average entry price per share (NOT × quantity) — the
+        per-share number breakeven is computed from."""
+        return self._weighted_avg_price(self.ce_legs) + self._weighted_avg_price(self.pe_legs)
+
+    @property
+    def lower_breakeven(self) -> Optional[float]:
+        """At-expiry lower breakeven: PE strike − combined entry premium."""
+        if not self.pe_strike:
+            return None
+        return self.pe_strike - self.combined_entry_premium_per_share
+
+    @property
+    def upper_breakeven(self) -> Optional[float]:
+        """At-expiry upper breakeven: CE strike + combined entry premium."""
+        if not self.ce_strike:
+            return None
+        return self.ce_strike + self.combined_entry_premium_per_share
+
+    @property
+    def lower_breakeven_pct(self) -> Optional[float]:
+        be = self.lower_breakeven
+        if be is None or not self.spot:
+            return None
+        return (be - self.spot) / self.spot * 100
+
+    @property
+    def upper_breakeven_pct(self) -> Optional[float]:
+        be = self.upper_breakeven
+        if be is None or not self.spot:
+            return None
+        return (be - self.spot) / self.spot * 100
+
+    @property
+    def max_profit(self) -> Optional[float]:
+        """
+        For a short strangle: max profit = total premium collected at
+        entry (both legs expire worthless if spot stays between the
+        strikes at expiry). Returns None if not a short strangle or
+        the position isn't complete (missing a leg).
+        """
+        if not self.is_short_strangle or not self.is_complete:
+            return None
+        return sum(l.entry_value for l in self.ce_legs + self.pe_legs)
+
+    def max_profit_pct(self, margin_used: Optional[float]) -> Optional[float]:
+        """Max profit as % return on margin used. None if margin unknown."""
+        mp = self.max_profit
+        if mp is None or not margin_used:
+            return None
+        return mp / margin_used * 100
+
+    @property
+    def profit_left(self) -> Optional[float]:
+        """Max profit minus current P&L — how much more is achievable."""
+        mp = self.max_profit
+        if mp is None:
+            return None
+        return mp - self.total_pnl
+
+    def profit_left_pct(self, margin_used: Optional[float]) -> Optional[float]:
+        pl = self.profit_left
+        if pl is None or not margin_used:
+            return None
+        return pl / margin_used * 100
+
+    @property
+    def loss_left_label(self) -> str:
+        """Short strangles carry theoretically unlimited risk on the call
+        side (large but bounded-by-zero on the put side) — shown as
+        'Unlimited', matching standard broker-app convention."""
+        return "Unlimited" if self.is_short_strangle else "Defined"
+
+    @property
+    def average_iv_pct(self) -> Optional[float]:
+        """Average of both legs' implied vol — used as the POP model's
+        volatility input. None if either leg's IV is unavailable."""
+        ivs = []
+        for leg in self.ce_legs + self.pe_legs:
+            iv = leg.delta_info.get("implied_vol_pct")
+            if iv is None:
+                return None
+            ivs.append(iv)
+        return sum(ivs) / len(ivs) if ivs else None
+
+    @property
+    def pop_pct(self) -> Optional[float]:
+        """
+        Probability of Profit — the risk-neutral probability (lognormal
+        Black-Scholes distribution, using average IV across both legs)
+        that the underlying finishes BETWEEN the two breakevens at
+        expiry. Returns None if any required input is missing.
+        """
+        import math
+
+        from dashboard.greeks import norm_cdf, parse_expiry_to_date
+
+        lower, upper, iv_pct = self.lower_breakeven, self.upper_breakeven, self.average_iv_pct
+        if lower is None or upper is None or iv_pct is None or not self.spot or lower <= 0:
+            return None
+
+        expiry_date = parse_expiry_to_date(self.expiry)
+        if expiry_date is None:
+            return None
+        days = (expiry_date - date.today()).days
+        T = max(days, 0) / 365.0
+        if T <= 0:
+            return None
+
+        sigma = iv_pct / 100
+        r = 0.065
+        try:
+            d2_upper = (math.log(upper / self.spot) - (r - 0.5 * sigma * sigma) * T) / (sigma * math.sqrt(T))
+            d2_lower = (math.log(lower / self.spot) - (r - 0.5 * sigma * sigma) * T) / (sigma * math.sqrt(T))
+        except (ValueError, ZeroDivisionError):
+            return None
+
+        return (norm_cdf(d2_upper) - norm_cdf(d2_lower)) * 100
 
 
 # ── Symbol parser ───────────────────────────────────────────────────────

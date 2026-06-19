@@ -45,6 +45,7 @@ logger = setup_logging(__name__)
 # ── Dhan HQ API ─────────────────────────────────────────────────────────
 
 DHAN_OPTION_CHAIN_URL = "https://api.dhan.co/v2/optionchain"
+DHAN_EXPIRY_LIST_URL  = "https://api.dhan.co/v2/optionchain/expirylist"
 
 # Maps ArthaChakra underlying names to Dhan's scrip codes
 # Index options use IDX_I segment, equity options use NSE_EQ
@@ -63,6 +64,34 @@ DHAN_SCRIP_MAP: dict[str, dict] = {
     "INFY":        {"scrip": 1594, "segment": "NSE_EQ"},
 }
 
+INDEX_NAMES = {"NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY", "NIFTYNXT50"}
+
+
+def _resolve_scrip(underlying: str) -> Optional[dict]:
+    """
+    Resolve {"scrip": security_id, "segment": ...} for an underlying.
+    DHAN_SCRIP_MAP above is a fast path for common names (avoids a CSV
+    download/parse on every call); anything not in it falls through to
+    a dynamic lookup against Dhan's instrument master
+    (dashboard/dhan_instruments.py) — this is what makes EVERY equity
+    work automatically, not just the handful manually added above.
+    """
+    if underlying in DHAN_SCRIP_MAP:
+        return DHAN_SCRIP_MAP[underlying]
+
+    from dashboard.dhan_instruments import lookup_security_id
+    resolved = lookup_security_id(underlying, is_index=underlying in INDEX_NAMES)
+    if resolved:
+        logger.info("dhan_greeks: dynamically resolved '%s' -> security_id=%s",
+                   underlying, resolved["scrip"])
+    else:
+        logger.warning(
+            "dhan_greeks: no scrip mapping for '%s' — not in static map, not found "
+            "in Dhan's instrument master either. Using BS fallback for this leg.",
+            underlying,
+        )
+    return resolved
+
 # Dhan expiry format is "YYYY-MM-DD"
 # ArthaChakra expiry format from Kite is "DDMMMYY" (e.g. "08JUL26")
 
@@ -77,20 +106,69 @@ def _parse_kite_expiry(expiry_str: str) -> Optional[str]:
         return None
 
 
-def _fetch_option_chain(
-    underlying: str, expiry_dhan: str, client_id: str, access_token: str,
-) -> Optional[dict]:
-    """Make one Dhan option chain API call. Returns raw JSON or None on failure."""
-    scrip_info = DHAN_SCRIP_MAP.get(underlying)
-    if not scrip_info:
-        logger.debug("dhan_greeks: no scrip mapping for '%s'", underlying)
+def _log_error_body(resp, context: str) -> None:
+    """
+    Dhan's error response schema for THIS specific failure doesn't match
+    the {"errorType","errorCode","errorMessage"} shape documented
+    elsewhere — logging the FULL raw body instead of guessing field
+    names is what actually tells us why a request was rejected.
+    """
+    try:
+        body = resp.json()
+        logger.warning("dhan_greeks: [%s] HTTP %d — full body: %s", context, resp.status_code, body)
+    except Exception:
+        logger.warning("dhan_greeks: [%s] HTTP %d — raw text: %s",
+                       context, resp.status_code, resp.text[:500])
+
+
+def fetch_dhan_expiry_list(
+    scrip_info: dict, client_id: str, access_token: str, underlying: str = "",
+) -> Optional[list[str]]:
+    """
+    Returns Dhan's own list of valid expiry dates ("YYYY-MM-DD") for an
+    underlying. We MUST check our computed expiry against this before
+    calling the option chain endpoint — Dhan validates the Expiry field
+    strictly and returns HTTP 400 for any date that isn't an exact match
+    to one of their listed series (e.g. after NSE discontinued weekly
+    expiries for BANKNIFTY/FINNIFTY/MIDCPNIFTY in late 2024, only
+    monthly dates are valid for those).
+
+    Takes an ALREADY-RESOLVED scrip_info dict (see _resolve_scrip) —
+    does not resolve it itself, so callers that already resolved it
+    (fetch_greeks_for_strangles) don't trigger a duplicate lookup/log.
+    """
+    try:
+        import requests
+        resp = requests.post(
+            DHAN_EXPIRY_LIST_URL,
+            headers={"client-id": client_id, "access-token": access_token,
+                    "Content-Type": "application/json"},
+            json={"UnderlyingScrip": scrip_info["scrip"], "UnderlyingSeg": scrip_info["segment"]},
+            timeout=10,
+        )
+        if resp.status_code != 200:
+            _log_error_body(resp, f"expirylist:{underlying}")
+            return None
+        return resp.json().get("data", [])
+    except Exception as e:
+        logger.warning("dhan_greeks: expirylist request failed for %s: %s", underlying, e)
         return None
 
+
+def _fetch_option_chain(
+    scrip_info: dict, expiry_dhan: str, client_id: str, access_token: str, underlying: str = "",
+) -> Optional[dict]:
+    """
+    Make one Dhan option chain API call. Returns raw JSON or None on
+    failure. Takes an ALREADY-RESOLVED scrip_info dict — see
+    fetch_dhan_expiry_list docstring for why.
+    """
     try:
         import requests
         resp = requests.post(
             DHAN_OPTION_CHAIN_URL,
-            headers={"client-id": client_id, "access-token": access_token},
+            headers={"client-id": client_id, "access-token": access_token,
+                    "Content-Type": "application/json"},
             json={
                 "UnderlyingScrip": scrip_info["scrip"],
                 "UnderlyingSeg":   scrip_info["segment"],
@@ -99,7 +177,7 @@ def _fetch_option_chain(
             timeout=10,
         )
         if resp.status_code != 200:
-            logger.warning("dhan_greeks: HTTP %d for %s %s", resp.status_code, underlying, expiry_dhan)
+            _log_error_body(resp, f"optionchain:{underlying}")
             return None
         return resp.json()
     except Exception as e:
@@ -166,15 +244,48 @@ def fetch_greeks_for_strangles(strangles: list, settings) -> dict[tuple, dict]:
         needed.add((s.underlying, s.expiry))
 
     dhan_hits = 0
+    expiry_cache: dict[str, Optional[list[str]]] = {}
+    scrip_cache: dict[str, Optional[dict]] = {}
+
     for underlying, expiry_kite in needed:
         expiry_dhan = _parse_kite_expiry(expiry_kite)
         if not expiry_dhan:
             logger.warning("dhan_greeks: could not parse expiry '%s'", expiry_kite)
             continue
 
+        # Resolve the scrip ONCE per underlying (logs clearly if unresolved,
+        # whether unmapped statically or not found in Dhan's instrument
+        # master either) — avoids resolving (and logging) it twice below.
+        if underlying not in scrip_cache:
+            scrip_cache[underlying] = _resolve_scrip(underlying)
+        if scrip_cache[underlying] is None:
+            continue  # _resolve_scrip already logged exactly why
+
+        scrip_info = scrip_cache[underlying]
+
+        # Fetch (and cache) Dhan's own valid expiry list for this underlying,
+        # so we know WHY a mismatch happens instead of guessing after a 400.
+        if underlying not in expiry_cache:
+            expiry_cache[underlying] = fetch_dhan_expiry_list(
+                scrip_info, settings.dhan_client_id, settings.dhan_access_token,
+                underlying=underlying,
+            )
+        valid_expiries = expiry_cache[underlying]
+
+        if valid_expiries is not None and expiry_dhan not in valid_expiries:
+            logger.warning(
+                "dhan_greeks: computed expiry %s for %s is NOT in Dhan's valid "
+                "list %s — skipping Dhan, using BS fallback for this leg. "
+                "(Common cause: NSE discontinued weekly expiries for some "
+                "indices in 2024 — only monthly dates remain valid.)",
+                expiry_dhan, underlying, valid_expiries,
+            )
+            continue
+
         chain = _fetch_option_chain(
-            underlying, expiry_dhan,
+            scrip_info, expiry_dhan,
             settings.dhan_client_id, settings.dhan_access_token,
+            underlying=underlying,
         )
         if chain is None:
             continue

@@ -38,15 +38,16 @@ from __future__ import annotations
 
 import streamlit as st
 
-from auth.auth_service import AuthError, login, signup
+from auth.auth_service import AuthError, admin_reset_password, change_password, login, signup
 from config import settings
 from core.database import Database
 from kite_oauth.connection_service import (
     add_mock_connection, connect_real_account, deactivate_connection,
-    list_connections, update_connection,
+    list_connections, reconnect_connection, update_connection,
 )
 from kite_oauth.kite_connect_flow import build_login_url
 from users.session_builder import build_user_session
+from users.user_repository import list_users
 
 st.set_page_config(page_title="ArthaChakra", page_icon="🔆", layout="wide")
 
@@ -71,8 +72,8 @@ if db.is_mock:
 # ── Session state ──────────────────────────────────────────────────────
 
 for key, default in [
-    ("user_id", None), ("display_name", None),
-    ("just_connected_id", None), ("kite_setup", None),
+    ("user_id", None), ("display_name", None), ("is_admin", False),
+    ("just_connected_id", None), ("kite_setup", None), ("reconnect_id", None),
 ]:
     if key not in st.session_state:
         st.session_state[key] = default
@@ -81,8 +82,10 @@ for key, default in [
 def logout() -> None:
     st.session_state["user_id"] = None
     st.session_state["display_name"] = None
+    st.session_state["is_admin"] = False
     st.session_state["just_connected_id"] = None
     st.session_state["kite_setup"] = None
+    st.session_state["reconnect_id"] = None
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -104,6 +107,7 @@ def render_login_signup() -> None:
                     user = login(db, username, password)
                     st.session_state["user_id"] = user.user_id
                     st.session_state["display_name"] = user.display_name
+                    st.session_state["is_admin"] = user.is_admin
                     st.rerun()
                 except AuthError as e:
                     st.error(str(e))
@@ -119,6 +123,7 @@ def render_login_signup() -> None:
                     user = signup(db, new_username, new_email, new_password, new_display)
                     st.session_state["user_id"] = user.user_id
                     st.session_state["display_name"] = user.display_name
+                    st.session_state["is_admin"] = user.is_admin
                     st.success(f"Welcome, {user.display_name}!")
                     st.rerun()
                 except AuthError as e:
@@ -147,6 +152,47 @@ def render_existing_connections(user_id: str) -> None:
             if col3.button("Remove", key=f"rm_{c.connection_id}"):
                 deactivate_connection(db, user_id, c.connection_id)
                 st.rerun()
+
+            # ── Token validity + Reconnect ───────────────────────────────
+            if c.access_token.startswith("mock_tok_"):
+                pass  # mock connections never expire, nothing to reconnect
+            elif c.is_token_valid:
+                st.caption(f"✅ Token valid until {c.token_expiry}")
+            else:
+                st.warning(f"⚠️ Token expired (was valid until {c.token_expiry}) — reconnect below.")
+                if st.button("🔄 Reconnect", key=f"reconnect_btn_{c.connection_id}"):
+                    st.session_state["reconnect_id"] = c.connection_id
+                    st.rerun()
+
+            if st.session_state.get("reconnect_id") == c.connection_id:
+                login_url = build_login_url(c.api_key)
+                st.markdown(
+                    f'<a href="{login_url}" target="_blank" style="display:inline-block;'
+                    f'padding:6px 14px;background:#FF4B4B;color:white;border-radius:6px;'
+                    f'text-decoration:none;font-weight:600;font-size:13px;">'
+                    f'🔗 Open Zerodha Login (new tab)</a>',
+                    unsafe_allow_html=True,
+                )
+                st.caption("Log in, copy the request_token (or full redirected URL), paste it below.")
+                reconnect_pasted = st.text_input(
+                    "Paste request_token or redirected URL", key=f"reconnect_paste_{c.connection_id}",
+                )
+                rc1, rc2 = st.columns(2)
+                if rc1.button("Reconnect & Verify", key=f"reconnect_confirm_{c.connection_id}",
+                              type="primary", disabled=not reconnect_pasted):
+                    try:
+                        refreshed, profile = reconnect_connection(
+                            db, user_id, c.connection_id, reconnect_pasted,
+                        )
+                        st.session_state["reconnect_id"] = None
+                        name = profile.get("user_name") or profile.get("user_id") or "?"
+                        st.success(f"✅ Reconnected as {name} — token refreshed.")
+                        st.rerun()
+                    except RuntimeError as e:
+                        st.error(str(e))
+                if rc2.button("Cancel", key=f"reconnect_cancel_{c.connection_id}"):
+                    st.session_state["reconnect_id"] = None
+                    st.rerun()
 
             show_edit = st.toggle(
                 "✏️ Rename / change type", key=f"edit_toggle_{c.connection_id}",
@@ -257,6 +303,24 @@ def render_connect_kite(user_id: str) -> None:
     render_add_real_connection(user_id)
     st.markdown("---")
     render_add_mock_connection(user_id)
+    st.markdown("---")
+    render_dashboard_settings()
+
+
+def render_dashboard_settings() -> None:
+    st.markdown("**📊 Live Dashboard Settings**")
+    current = st.session_state.get("dashboard_refresh_minutes", 5)
+    minutes = st.number_input(
+        "Auto-refresh interval (minutes, 0 = off)",
+        min_value=0, max_value=60, value=current, step=1,
+        key="dashboard_refresh_minutes_input",
+        help="Applies to the Live Dashboard page. Set to 0 to disable auto-refresh.",
+    )
+    st.session_state["dashboard_refresh_minutes"] = minutes
+    if minutes > 0:
+        st.caption(f"Live Dashboard will auto-refresh every {minutes} minute(s).")
+    else:
+        st.caption("Auto-refresh is off — use the Refresh button on the Live Dashboard page.")
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -301,6 +365,33 @@ def render_session_preview(user_id: str, display_name: str) -> None:
 
 
 # ═══════════════════════════════════════════════════════════════════════
+#  ADMIN PANEL — only visible to users with is_admin=True
+# ═══════════════════════════════════════════════════════════════════════
+
+def render_admin_panel() -> None:
+    st.subheader("👑 Admin Panel")
+    st.caption("Reset another user's password without needing their old one.")
+
+    all_users = list_users(db, active_only=False)
+    if not all_users:
+        st.caption("No users found.")
+        return
+
+    options = {f"{u.display_name} ({u.username})": u.user_id for u in all_users}
+    chosen_label = st.selectbox("Select user", list(options.keys()), key="admin_user_pick")
+    target_user_id = options[chosen_label]
+
+    with st.form("admin_reset_form"):
+        new_pw = st.text_input("New password for this user", type="password")
+        if st.form_submit_button("Reset Password", type="primary"):
+            try:
+                admin_reset_password(db, target_user_id, new_pw)
+                st.success(f"Password reset for {chosen_label}.")
+            except AuthError as e:
+                st.error(str(e))
+
+
+# ═══════════════════════════════════════════════════════════════════════
 #  MAIN
 # ═══════════════════════════════════════════════════════════════════════
 
@@ -322,6 +413,19 @@ def main() -> None:
         st.divider()
         st.page_link("pages/1_Live_Dashboard.py", label="📊 Live Dashboard", icon="📊")
         st.divider()
+
+        with st.expander("🔑 Change Password"):
+            with st.form("change_pw_form"):
+                old_pw = st.text_input("Current password", type="password")
+                new_pw = st.text_input("New password", type="password")
+                if st.form_submit_button("Update Password"):
+                    try:
+                        change_password(db, user_id, old_pw, new_pw)
+                        st.success("Password updated.")
+                    except AuthError as e:
+                        st.error(str(e))
+
+        st.divider()
         st.caption(
             "Step 2 validates: real signup/login, per-user Kite Connect "
             "credentials, manual token verification, and the assembled "
@@ -331,6 +435,11 @@ def main() -> None:
     st.title("🔆 ArthaChakra")
     render_connect_kite(user_id)
     st.markdown("---")
+
+    if st.session_state.get("is_admin"):
+        render_admin_panel()
+        st.markdown("---")
+
     render_session_preview(user_id, display_name)
 
 

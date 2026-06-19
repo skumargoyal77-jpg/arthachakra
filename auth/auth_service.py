@@ -98,3 +98,58 @@ def login(db: Database, username: str, password: str) -> User:
         raise AuthError("Invalid username or password.")
 
     return user
+
+
+def change_password(db: Database, user_id: str, old_password: str, new_password: str) -> None:
+    """
+    Self-service password change for a logged-in user. Requires the
+    correct OLD password — this is NOT the admin reset path (see
+    admin_reset_password below, which skips this check entirely).
+    """
+    from users.user_repository import get_user_by_id
+
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise AuthError("User not found.")
+
+    if _hash_password(old_password, user.salt) != user.password_hash:
+        raise AuthError("Current password is incorrect.")
+
+    if len(new_password) < 6:
+        raise AuthError("New password must be at least 6 characters.")
+
+    new_salt = _make_salt()
+    db.users.update_one(
+        {"user_id": user_id},
+        {"$set": {
+            "password_hash": _hash_password(new_password, new_salt),
+            "salt": new_salt,
+        }},
+    )
+
+
+def admin_reset_password(db: Database, target_user_id: str, new_password: str) -> None:
+    """
+    Admin-only password reset — does NOT require the old password.
+    Callers MUST verify the calling user has is_admin=True themselves
+    before invoking this; this function performs no such check, since
+    it has no notion of "who is calling" — that's the caller's job
+    (see app.py's Admin Panel, which checks st.session_state["is_admin"]).
+    """
+    from users.user_repository import get_user_by_id
+
+    target = get_user_by_id(db, target_user_id)
+    if not target:
+        raise AuthError("Target user not found.")
+
+    if len(new_password) < 6:
+        raise AuthError("New password must be at least 6 characters.")
+
+    new_salt = _make_salt()
+    db.users.update_one(
+        {"user_id": target_user_id},
+        {"$set": {
+            "password_hash": _hash_password(new_password, new_salt),
+            "salt": new_salt,
+        }},
+    )

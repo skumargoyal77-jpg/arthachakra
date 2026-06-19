@@ -34,6 +34,7 @@ class User:
     display_name:  str = ""
     created_at:    datetime = field(default_factory=now_utc)
     active:        bool = True
+    is_admin:      bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -45,6 +46,7 @@ class User:
             "display_name":  self.display_name or self.username,
             "created_at":    self.created_at,
             "active":        self.active,
+            "is_admin":      self.is_admin,
         }
 
     @staticmethod
@@ -58,6 +60,7 @@ class User:
             display_name  = d.get("display_name", ""),
             created_at    = d.get("created_at", now_utc()),
             active        = d.get("active", True),
+            is_admin      = d.get("is_admin", False),
         )
 
 

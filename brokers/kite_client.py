@@ -12,6 +12,8 @@ PROJECT PATH:  brokers/kite_client.py
 
 from __future__ import annotations
 
+from typing import Optional
+
 from core.logging_config import setup_logging
 from users.models import BrokerConnection
 
@@ -67,3 +69,49 @@ def fetch_ltp(conn: BrokerConnection, instruments: list[str]) -> dict[str, float
     except Exception as e:
         logger.warning("Failed to fetch LTP for '%s': %s", conn.label, e)
         return {}
+
+
+def fetch_position_margin(conn: BrokerConnection, legs: list) -> Optional[float]:
+    """
+    Real margin required for a set of option legs, via Kite's basket
+    order margin calculator (SPAN + exposure, with netting benefit
+    across legs of the same strangle) — NOT an approximation.
+
+    NOTE — UNVERIFIED AGAINST A LIVE ACCOUNT: kiteconnect's
+    basket_order_margins() payload structure is implemented per Kite
+    Connect's documented contract, but this exact call hasn't been
+    tested against a real account from this environment. If it returns
+    None unexpectedly, check the logged warning for the real exception
+    — that's usually a field-name or structure mismatch we can fix in
+    one round-trip, the same way the Dhan integration was debugged.
+
+    Returns None for mock connections, on any failure, or if `legs` is
+    empty — never a guessed/approximated number.
+    """
+    kite = get_kite_client(conn)
+    if kite is None or not legs:
+        return None
+    try:
+        orders = [
+            {
+                "exchange": "NFO",
+                "tradingsymbol": leg.tradingsymbol,
+                "transaction_type": "SELL" if leg.is_short else "BUY",
+                "variety": "regular",
+                "product": "NRML",
+                "order_type": "MARKET",
+                "quantity": leg.abs_qty,
+            }
+            for leg in legs
+        ]
+        result = kite.basket_order_margins(orders, consider_positions=True, mode="compact")
+        return result.get("final", {}).get("total")
+    except Exception as e:
+        logger.warning(
+            "Failed to fetch margin for '%s' basket (%d legs): %s — "
+            "if this persists, the kiteconnect SDK call signature or "
+            "response structure may need adjusting; this is the exact "
+            "exception to report back.",
+            conn.label, len(legs), e,
+        )
+        return None
