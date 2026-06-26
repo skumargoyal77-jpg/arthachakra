@@ -7,3 +7,9 @@ streamlit>=1.32
 # automatically (see kite_oauth/kite_connect_flow.py).
 kiteconnect>=4.2
 requests>=2.31
+
+# Step 4 — rule book RAG. all-MiniLM-L6-v2 downloads ~80MB from
+# Hugging Face on first run (cached afterward) — needs real internet
+# access at least once.
+chromadb>=0.5
+sentence-transformers>=3.0

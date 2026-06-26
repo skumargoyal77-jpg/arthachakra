@@ -400,3 +400,29 @@
 2026-06-19 20:13:22,424 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
 2026-06-27 01:21:36,789 | WARNING | core.database | Database: MongoDB unavailable (localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 2.0s, Topology Description: <TopologyDescription id: 6a3ed8468938155f8d0808ae, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>) — using in-memory mock
 2026-06-27 01:21:36,797 | INFO    | core.database | Database: running in MOCK mode (in-memory, no persistence)
+2026-06-27 01:46:58,131 | WARNING | core.database | Database: MongoDB unavailable (No servers found yet, Timeout: 2.0s, Topology Description: <TopologyDescription id: 6a3ede3804da732c180b1321, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None>]>) — using in-memory mock
+2026-06-27 01:46:58,132 | INFO    | core.database | Database: running in MOCK mode (in-memory, no persistence)
+2026-06-27 01:46:58,136 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-27 01:48:09,027 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-27 01:48:15,633 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=0
+2026-06-27 01:48:17,972 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-27 01:48:47,016 | WARNING | core.database | Database: MongoDB unavailable (No servers found yet, Timeout: 2.0s, Topology Description: <TopologyDescription id: 6a3edea480a5941ef0fe3be8, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None>]>) — using in-memory mock
+2026-06-27 01:48:47,018 | INFO    | core.database | Database: running in MOCK mode (in-memory, no persistence)
+2026-06-27 01:48:47,668 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-27 01:48:58,636 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-27 01:48:58,734 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=55
+2026-06-27 01:48:58,758 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
+2026-06-27 01:48:59,541 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-27 01:52:05,844 | WARNING | core.database | Database: MongoDB unavailable (No servers found yet, Timeout: 2.0s, Topology Description: <TopologyDescription id: 6a3edf6b2a47bfbdb46eee6c, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None>]>) — using in-memory mock
+2026-06-27 01:52:05,845 | INFO    | core.database | Database: running in MOCK mode (in-memory, no persistence)
+2026-06-27 01:52:06,570 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-27 01:52:18,065 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-27 01:52:18,170 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=55
+2026-06-27 01:52:18,195 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
+2026-06-27 01:52:19,071 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-27 01:54:38,616 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-27 01:54:49,821 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-27 01:54:49,932 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=55
+2026-06-27 01:55:49,880 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-27 01:56:01,195 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-27 01:56:01,287 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=55

@@ -592,13 +592,108 @@ def run_step3() -> bool:
     return passed == total
 
 
+def run_step4() -> bool:
+    """
+    Verification of rag/ — ChromaDB rule book embedding, sourced from
+    MongoDB (not YAML/seed_rules.py directly).
+
+    NOTE: Requires downloading the all-MiniLM-L6-v2 model on first run
+    (~80MB from Hugging Face, cached afterward in ~/.cache/huggingface).
+    Needs real internet access — this is NOT something a sandboxed
+    environment without internet access can run; if this fails with a
+    network/connection error, that's the actual cause, not a bug in
+    this code.
+    """
+    results: list[tuple[str, bool, str]] = []
+
+    def check(name: str, condition: bool, detail: str = "") -> None:
+        results.append((name, condition, detail))
+        icon = "✅" if condition else "❌"
+        print(f"  {icon}  {name}" + (f"  —  {detail}" if detail else ""))
+
+    print_header("ArthaChakra — Step 4 Verification: rag/ (ChromaDB rule book)")
+
+    db = Database()
+    print(f"\n  Database mode: {'MongoDB' if not db.is_mock else 'MOCK (in-memory)'}")
+
+    try:
+        from rules.rules_service import seed_rules_into_db
+        from rag.rule_store import RuleStore
+
+        if db.platform_rules.count_documents({}) == 0:
+            seed_rules_into_db(db)
+
+        print("\n  Loading embedding model (downloads ~80MB on first run)...")
+        store = RuleStore()
+        n = store.embed_from_mongo(db, overwrite=True)
+        check("Embedded all 55 rules from MongoDB (not YAML)", n == 55, f"embedded={n}")
+        check("ChromaDB collection count matches", store.count() == 55)
+
+        # New test queries against the ACTUAL 55-rule book (the old POC-03
+        # queries referenced S-10/S-11/ES-02/ES-03/L-02, all deleted — see
+        # the Step 4 planning discussion for why those can't be reused).
+        test_queries = [
+            ("VIX limit before entering a new trade", ["S-01"]),
+            ("what happens when a strike is breached", ["ES-01"]),
+            ("max ratio between CE and PE legs", ["A-10", "L-03"]),
+            ("margin cap for single stock", ["C-01", "C-04"]),
+            ("going naked on one side", ["A-11"]),
+        ]
+        hits_total, expected_total = 0, 0
+        for query, expected in test_queries:
+            retrieved = [r["rule_id"] for r in store.query(query, n_results=4)]
+            hits = [e for e in expected if e in retrieved]
+            hits_total += len(hits)
+            expected_total += len(expected)
+            check(f"'{query}' retrieves at least one expected rule",
+                 len(hits) > 0, f"got={retrieved} expected={expected}")
+
+        precision = hits_total / expected_total if expected_total else 0
+        check("Overall recall across all 5 queries >= 60%", precision >= 0.60,
+             f"{precision*100:.0f}%")
+
+        # eval_status metadata survives the round trip
+        a10 = store.get_rule("A-10")
+        check("eval_status metadata present and correct for A-10",
+             a10 is not None and a10.get("eval_status") == "EVALUABLE")
+        s01 = store.get_rule("S-01")
+        check("eval_status correctly flags S-01 as NOT_YET_EVALUABLE",
+             s01 is not None and s01.get("eval_status") == "NOT_YET_EVALUABLE")
+
+    except Exception as e:
+        check("RAG pipeline ran without error", False, str(e))
+        print(f"\n  ⚠️  If this is a network/connection error, that's expected in an")
+        print(f"      environment without internet access — the model download to")
+        print(f"      huggingface.co needs a real connection. Run this on your own")
+        print(f"      machine, not a fully sandboxed/offline environment.")
+
+    passed = sum(1 for _, ok, _ in results if ok)
+    total = len(results)
+
+    print(f"\n{SEP2}")
+    if passed == total and total > 0:
+        print(f"  ✅  STEP 4 VERIFICATION PASSED  ({passed}/{total})")
+    else:
+        print(f"  ❌  STEP 4 VERIFICATION FAILED  ({passed}/{total})")
+        for name, ok, detail in results:
+            if not ok:
+                print(f"    ❌ {name}  {detail}")
+    print(SEP2)
+
+    return passed == total and total > 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="ArthaChakra — verification suite")
     parser.add_argument("--step1", action="store_true", help="Run Step 1 verification")
     parser.add_argument("--step2", action="store_true", help="Run Step 2 verification")
     parser.add_argument("--step3", action="store_true", help="Run Step 3 verification")
+    parser.add_argument("--step4", action="store_true", help="Run Step 4 verification")
     args = parser.parse_args()
 
+    if args.step4:
+        ok = run_step4()
+        return 0 if ok else 1
     if args.step3:
         ok = run_step3()
         return 0 if ok else 1
