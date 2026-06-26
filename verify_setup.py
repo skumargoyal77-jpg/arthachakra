@@ -434,12 +434,174 @@ def run_step2() -> bool:
     return passed == total
 
 
+def run_step3() -> bool:
+    """
+    Verification of rules/ — seed + service + engine.
+
+    UNLIKE Step 1/2's test fixtures, seeding the real 55-rule book into
+    platform_rules is NOT a throwaway artefact to clean up afterward —
+    it's the actual Step 3 deliverable. This script seeds it for real.
+    Only the per-user isolation check (custom rule add/remove) uses the
+    _verify_ prefix and gets cleaned up, same pattern as Step 1/2.
+    """
+    results: list[tuple[str, bool, str]] = []
+
+    def check(name: str, condition: bool, detail: str = "") -> None:
+        results.append((name, condition, detail))
+        icon = "✅" if condition else "❌"
+        print(f"  {icon}  {name}" + (f"  —  {detail}" if detail else ""))
+
+    print_header("ArthaChakra — Step 3 Verification: rules/ (seed + service + engine)")
+
+    db = Database()
+    print(f"\n  Database mode: {'MongoDB' if not db.is_mock else 'MOCK (in-memory)'}")
+
+    if not db.is_mock:
+        print("  Cleaning up any leftover _verify_ test data from a previous run...")
+        _cleanup_test_data(db)
+    print()
+
+    try:
+        # ── 1. series_calendar math, checked against user-confirmed examples ──
+        print(f"{SEP}\n  1 — series_calendar.py against confirmed worked examples\n{SEP}")
+        from datetime import date, datetime
+
+        from rules import series_calendar as cal
+
+        check("May 2026 expiry = 26 May (Tuesday)",
+             cal.last_tuesday_of_month(2026, 5) == date(2026, 5, 26))
+        check("June 2026 expiry = 30 Jun (Tuesday)",
+             cal.last_tuesday_of_month(2026, 6) == date(2026, 6, 30))
+        june_window = cal.get_series_window(date(2026, 6, 15))
+        check("June 2026 is a 5-week series", june_window.week_count == 5)
+        check("June series starts 27 May", june_window.series_start == date(2026, 5, 27))
+        check("Week 3 of June (10-16 Jun) requires 8% OTM",
+             cal.required_otm_pct(date(2026, 6, 12)) == 8.0)
+        check("EP-01 Friday override (26 Jun, 4 cal days before Tue expiry) = 85%",
+             cal.required_profit_pct(date(2026, 6, 26)) == 85.0)
+        check("EP-01 expiry-day override (30 Jun) = 95%",
+             cal.required_profit_pct(date(2026, 6, 30)) == 95.0)
+        may_window = cal.get_series_window(date(2026, 5, 10))
+        check("May 2026 is a 4-week series", may_window.week_count == 4)
+
+        # ── 2. Rule book seeding — real deliverable, upsert-aware ──────────
+        print(f"\n{SEP}\n  2 — Rule book seeding (rules_service.seed_rules_into_db)\n{SEP}")
+        from rules.rules_service import (
+            get_effective_rules, remove_rules_not_in_book, seed_rules_into_db,
+        )
+        from rules.seed_rules import get_rule_book
+
+        report1 = seed_rules_into_db(db)
+        check("First seed inserts all 55 rules", report1["inserted"] == 55, str(report1))
+        check("platform_rules now has exactly 55 documents",
+             db.platform_rules.count_documents({}) == 55)
+
+        report2 = seed_rules_into_db(db)
+        check("Re-seed updates existing rules, inserts none (upsert, not duplicate)",
+             report2["inserted"] == 0 and report2["updated"] == 55, str(report2))
+        check("Still exactly 55 documents after re-seed (no duplicates)",
+             db.platform_rules.count_documents({}) == 55)
+
+        removed = remove_rules_not_in_book(db)
+        check("No stale rules to remove on a clean seed", removed == 0)
+
+        # ── 3. Per-user effective set differs after a toggle/add (THE checkpoint) ──
+        print(f"\n{SEP}\n  3 — Same rule book, different effective set per user (the Step 3 checkpoint)\n{SEP}")
+        from auth.auth_service import signup
+        from rules.rules_service import add_custom_rule, remove_custom_rule
+
+        user1 = signup(db, TEST_USERNAME_1, TEST_EMAIL_1, "pw_verify_123")
+        user2 = signup(db, TEST_USERNAME_2, TEST_EMAIL_2, "pw_verify_123")
+
+        rules1_before = get_effective_rules(db, user1.user_id)
+        rules2_before = get_effective_rules(db, user2.user_id)
+        check("Both users start with identical effective rule count (55)",
+             len(rules1_before) == len(rules2_before) == 55)
+
+        add_custom_rule(db, user1.user_id, TEST_RULE_PLATFORM,
+                        "Verify custom rule", "worst_distance_pct", "<", 5, "WARN")
+        rules1_after = get_effective_rules(db, user1.user_id)
+        rules2_after = get_effective_rules(db, user2.user_id)
+        check("User 1's effective set grows to 56 after adding a custom rule",
+             len(rules1_after) == 56)
+        check("User 2's effective set is untouched (still 55) — no cross-talk",
+             len(rules2_after) == 55)
+
+        # ── 4. Engine evaluates the real rule book against live Strangle data ──
+        print(f"\n{SEP}\n  4 — RuleEngine evaluates real rules against live position data\n{SEP}")
+        from dashboard.strangle_grouper import ParsedOption, Strangle
+        from rules.engine import RuleEngine
+
+        engine = RuleEngine()
+        breach_strangle = Strangle(
+            underlying="NIFTY", expiry="30JUN26", spot=24900,
+            ce_legs=[ParsedOption("X", "NIFTY", "30JUN26", 24800, "CE", -25, 50, 20, 750)],
+            pe_legs=[ParsedOption("Y", "NIFTY", "30JUN26", 24200, "PE", -25, 50, 20, 750)],
+        )
+        es01 = next(r for r in get_rule_book() if r["rule_id"] == "ES-01")
+        result = engine.evaluate_rule(es01, breach_strangle)
+        check("ES-01 correctly FAILs when spot has breached the CE strike",
+             result.status == "FAIL", result.message)
+
+        safe_strangle = Strangle(
+            underlying="NIFTY", expiry="30JUN26", spot=24500,
+            ce_legs=[ParsedOption("X", "NIFTY", "30JUN26", 24800, "CE", -25, 50, 20, 750)],
+            pe_legs=[ParsedOption("Y", "NIFTY", "30JUN26", 24200, "PE", -25, 50, 20, 750)],
+        )
+        result2 = engine.evaluate_rule(es01, safe_strangle)
+        check("ES-01 correctly PASSes when spot is between the strikes",
+             result2.status == "PASS", result2.message)
+
+        s01 = next(r for r in get_rule_book() if r["rule_id"] == "S-01")
+        result3 = engine.evaluate_rule(s01, safe_strangle)
+        check("S-01 (needs VIX feed) returns NOT_YET_EVALUABLE, not a guessed PASS/FAIL",
+             result3.status == "NOT_YET_EVALUABLE", result3.message)
+
+        all_results = engine.evaluate_all(get_rule_book(), safe_strangle)
+        check("evaluate_all() returns exactly 55 results, one per rule",
+             len(all_results) == 55)
+
+        # ── 5. Cleanup the test-only custom rule (real 55-rule seed stays) ──
+        remove_custom_rule(db, user1.user_id, TEST_RULE_PLATFORM)
+        rules1_final = get_effective_rules(db, user1.user_id)
+        check("Custom rule cleanly removable, user 1 back to 55",
+             len(rules1_final) == 55)
+
+    finally:
+        if not db.is_mock:
+            _cleanup_test_data(db)
+            print(f"\n  🧹 Cleaned up _verify_ test users/custom-rules — "
+                 f"the real 55-rule seed in platform_rules is left in place.")
+
+    # ── Summary ──────────────────────────────────────────────────────────
+    passed = sum(1 for _, ok, _ in results if ok)
+    total  = len(results)
+
+    print(f"\n{SEP2}")
+    if passed == total:
+        print(f"  ✅  STEP 3 VERIFICATION PASSED  ({passed}/{total})")
+        print(f"  👉  55 rules seeded. 18 evaluable now, 10 advisory, 27 NOT_YET_EVALUABLE")
+        print(f"      pending later steps (VIX feed, corporate events, market intel, etc).")
+    else:
+        print(f"  ❌  STEP 3 VERIFICATION FAILED  ({passed}/{total})")
+        for name, ok, detail in results:
+            if not ok:
+                print(f"    ❌ {name}  {detail}")
+    print(SEP2)
+
+    return passed == total
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="ArthaChakra — verification suite")
     parser.add_argument("--step1", action="store_true", help="Run Step 1 verification")
     parser.add_argument("--step2", action="store_true", help="Run Step 2 verification")
+    parser.add_argument("--step3", action="store_true", help="Run Step 3 verification")
     args = parser.parse_args()
 
+    if args.step3:
+        ok = run_step3()
+        return 0 if ok else 1
     if args.step2:
         ok = run_step2()
         return 0 if ok else 1

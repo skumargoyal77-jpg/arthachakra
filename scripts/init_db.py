@@ -23,6 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from core.database import Database
+from rules.rules_service import seed_rules_into_db, remove_rules_not_in_book
 from users.schema import COLLECTION_SCHEMA, print_schema_report
 
 
@@ -43,6 +44,13 @@ def main() -> int:
     print_schema_report()
     print(f"\n  ✅ {created} indexes verified/created across "
           f"{len(COLLECTION_SCHEMA)} collections.")
+
+    print("\n  Seeding rule book...")
+    report = seed_rules_into_db(db)
+    removed = remove_rules_not_in_book(db)
+    print(f"  ✅ Rules: {report['inserted']} inserted, {report['updated']} updated"
+          f"{f', {removed} stale removed' if removed else ''}.")
+
     print("═" * 70)
     return 0
 

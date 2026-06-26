@@ -125,6 +125,39 @@ class RuleDefinition:
     category:      str             # "MANDATORY" | "OPTIONAL"
     group:         str = "General" # e.g. "Selection", "Exit", "Capital"
     default_on:    bool = True
+    severity:      str = "MEDIUM"  # "CRITICAL" | "HIGH" | "MEDIUM" | "LOW"
+    eval_type:     str = "THRESHOLD"  # "THRESHOLD" | "CALENDAR" | "LOOKUP" | "QUALITATIVE"
+    handler:       str = ""        # name of the evaluator function in rules/engine.py
+    notes:         str = ""
+
+    def to_dict(self) -> dict:
+        return {
+            "rule_id":     self.rule_id,
+            "name":        self.name,
+            "description": self.description,
+            "category":    self.category,
+            "group":       self.group,
+            "default_on":  self.default_on,
+            "severity":    self.severity,
+            "eval_type":   self.eval_type,
+            "handler":     self.handler,
+            "notes":       self.notes,
+        }
+
+    @staticmethod
+    def from_dict(d: dict) -> "RuleDefinition":
+        return RuleDefinition(
+            rule_id     = d["rule_id"],
+            name        = d["name"],
+            description = d["description"],
+            category    = d["category"],
+            group       = d.get("group", "General"),
+            default_on  = d.get("default_on", True),
+            severity    = d.get("severity", "MEDIUM"),
+            eval_type   = d.get("eval_type", "THRESHOLD"),
+            handler     = d.get("handler", ""),
+            notes       = d.get("notes", ""),
+        )
 
 
 @dataclass
