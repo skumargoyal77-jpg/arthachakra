@@ -13,3 +13,6 @@ requests>=2.31
 # access at least once.
 chromadb>=0.5
 sentence-transformers>=3.0
+
+# Step 5 — market_data/. Bhavcopy parsing (NSE F&O end-of-day data).
+pandas>=2.0

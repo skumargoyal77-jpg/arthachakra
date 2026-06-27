@@ -15,17 +15,23 @@ EVAL_STATUS — assigned per rule based on what data actually exists today:
                        Strangle/ParsedOption data (or context for
                        entry-time checks). NOTE: a rule can be
                        EVALUABLE and still sometimes RETURN an
-                       "ADVISORY" status as its result (e.g. ES-11) —
-                       that is different from being CLASSIFIED
+                       "ADVISORY" status as its result (e.g. ES-11,
+                       S-06) - that is different from being CLASSIFIED
                        ADVISORY here, which skips the handler entirely.
   ADVISORY           - qualitative/operational reminder with NO real
                        handler logic - always returns the rule's own
                        description as an informational message.
   NOT_YET_EVALUABLE  - the underlying data source does not exist yet
-                       (VIX feed, corporate events cache, account-level
-                       margin aggregation, etc). The engine returns this
+                       (corporate events cache, account-level margin
+                       aggregation, etc). The engine returns this
                        status explicitly rather than skipping silently
                        or guessing a result.
+
+STEP 5 UPDATE: S-01, S-02, EP-04, S-15 (VIX), S-08 (IVR), S-07 (beta),
+and S-06 (range%) moved from NOT_YET_EVALUABLE to EVALUABLE now that
+market_data/ provides real VIX history, IV/IVR, and OHLC data. See
+rules/engine.py for the handler implementations and
+STRANGLE_OPTIONAL_HANDLERS for why these run without an open position.
 
 PROJECT PATH:  rules/seed_rules.py
 """
@@ -42,8 +48,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "CRITICAL",
         "eval_type": "THRESHOLD",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs live India VIX feed - not built yet (Step 5)",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "vix_hard_limit",
         "notes": "",
     },
@@ -56,8 +62,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "THRESHOLD",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs VIX history (5-day trend) - not built yet (Step 5)",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "vix_slope",
         "notes": "",
     },
@@ -112,8 +118,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "QUALITATIVE",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs historical OHLC (monthly_ohlc) - empty until Step 5",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "range_bound_check",
         "notes": "manual judgment call - hard to automate",
     },
@@ -126,8 +132,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "THRESHOLD",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs historical price data vs Nifty - not built yet (Step 5)",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "beta_check",
         "notes": "",
     },
@@ -140,8 +146,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "THRESHOLD",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs rolling IV history, not just live IV - not built yet (Step 5)",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "iv_rank_check",
         "notes": "",
     },
@@ -196,8 +202,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "THRESHOLD",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs live India VIX feed - not built yet (Step 5)",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "high_iv_entry_protocol",
         "notes": "",
     },
@@ -252,8 +258,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "CRITICAL",
         "eval_type": "THRESHOLD",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs live India VIX feed - not built yet (Step 5)",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "vix_spike_exit",
         "notes": "",
     },

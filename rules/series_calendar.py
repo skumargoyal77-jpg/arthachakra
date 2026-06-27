@@ -28,12 +28,12 @@ VERIFIED EXAMPLE (June 2026, user-confirmed 5-week series):
   Week 4 = 17 Jun – 23 Jun  (6%)
   Week 5 = 24 Jun – 30 Jun  (4%)
 
-"SESSIONS" CAVEAT (affects A-07's "last 3 sessions"):
-  This module has no market-holiday calendar yet — "trading session" is
-  approximated as any weekday (Mon-Fri), which will be WRONG on actual
-  NSE holidays that fall on a weekday. Flagged here rather than silently
-  assumed correct; revisit once a holiday calendar exists (Step 5/7
-  territory).
+"SESSIONS" — is_final_n_sessions() now uses the real NSE holiday
+calendar (core/nse_holidays.py), not just a weekday approximation.
+This used to be a known gap (flagged explicitly here) until a real
+download failure on 26 Jun 2026 — a Friday that turned out to be a
+holiday (Muharram) — surfaced it concretely. Update
+core/nse_holidays.py each December when NSE publishes next year's list.
 
 PROJECT PATH:  rules/series_calendar.py
 """
@@ -130,16 +130,21 @@ def days_to_expiry(as_of: date) -> int:
 def is_final_n_sessions(as_of: date, n: int) -> bool:
     """
     True if `as_of` falls within the last `n` trading SESSIONS before
-    expiry. Approximated as weekdays only — see module docstring's
-    "SESSIONS" caveat regarding market holidays not being accounted for.
+    expiry. Uses the real NSE holiday calendar (core/nse_holidays.py)
+    — this used to be a weekday-only approximation, which was wrong on
+    any holiday that fell on a weekday (confirmed: this caused a real
+    download failure on 26 Jun 2026, a Friday that was actually a
+    holiday — Muharram — not a normal trading day).
     """
+    from core.nse_holidays import is_trading_day
+
     window = get_series_window(as_of)
     if as_of > window.expiry:
         return False
     sessions = 0
     d = window.expiry
     while d >= as_of:
-        if d.weekday() < 5:   # Mon-Fri
+        if is_trading_day(d):
             sessions += 1
         d -= timedelta(days=1)
     return sessions <= n

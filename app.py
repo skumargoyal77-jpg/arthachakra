@@ -148,7 +148,7 @@ def render_existing_connections(user_id: str) -> None:
             account_suffix = f" · Zerodha: {c.broker_account_name}" if c.broker_account_name and c.broker_account_name != "Mock User" else ""
             col1.markdown(f"**{c.label}**{account_suffix}")
             kind = "🔵 mock" if c.access_token.startswith("mock_tok_") else "✅ live"
-            col2.markdown(f"`{c.broker.upper()}` · {c.account_type} · {kind}")
+            col2.markdown(f"`{c.broker.upper()}` · {kind}")
             if col3.button("Remove", key=f"rm_{c.connection_id}"):
                 deactivate_connection(db, user_id, c.connection_id)
                 st.rerun()
@@ -156,10 +156,16 @@ def render_existing_connections(user_id: str) -> None:
             # ── Token validity + Reconnect ───────────────────────────────
             if c.access_token.startswith("mock_tok_"):
                 pass  # mock connections never expire, nothing to reconnect
-            elif c.is_token_valid:
-                st.caption(f"✅ Token valid until {c.token_expiry}")
             else:
-                st.warning(f"⚠️ Token expired (was valid until {c.token_expiry}) — reconnect below.")
+                if c.is_token_valid:
+                    st.caption(f"✅ Token valid until {c.token_expiry}")
+                else:
+                    st.warning(f"⚠️ Token expired (was valid until {c.token_expiry}) — reconnect below.")
+                # Always available, not just when we think it's expired —
+                # our own validity check can be wrong (e.g. a placeholder
+                # expiry date that looks valid but was never a real
+                # Kite-issued token), and Zerodha is the real authority
+                # on whether a token actually works, not our stored date.
                 if st.button("🔄 Reconnect", key=f"reconnect_btn_{c.connection_id}"):
                     st.session_state["reconnect_id"] = c.connection_id
                     st.rerun()
@@ -199,19 +205,13 @@ def render_existing_connections(user_id: str) -> None:
                 value=(c.connection_id == just_connected),
             )
             if show_edit:
-                e1, e2, e3 = st.columns([3, 2, 1])
+                e1, e2 = st.columns([4, 1])
                 new_label = e1.text_input(
                     "Label", value=c.label, key=f"edit_label_{c.connection_id}",
                     label_visibility="collapsed",
                 )
-                new_type = e2.selectbox(
-                    "Type", ["index", "equity", "both"],
-                    index=["index", "equity", "both"].index(c.account_type),
-                    key=f"edit_type_{c.connection_id}", label_visibility="collapsed",
-                )
-                if e3.button("Save", key=f"save_{c.connection_id}"):
-                    update_connection(db, user_id, c.connection_id,
-                                      label=new_label, account_type=new_type)
+                if e2.button("Save", key=f"save_{c.connection_id}"):
+                    update_connection(db, user_id, c.connection_id, label=new_label)
                     if just_connected == c.connection_id:
                         st.session_state["just_connected_id"] = None
                     st.rerun()
@@ -229,10 +229,9 @@ def render_add_real_connection(user_id: str) -> None:
 
     if not setup:
         with st.form("kite_setup_form"):
-            label = st.text_input("Label", placeholder="e.g. My Index Account")
+            label = st.text_input("Label", placeholder="e.g. My Kite Account")
             api_key = st.text_input("Your Kite API Key")
             api_secret = st.text_input("Your Kite API Secret", type="password")
-            account_type = st.selectbox("Account type", ["index", "equity", "both"])
 
             if st.form_submit_button("1. Get Login URL", type="primary"):
                 if not (label and api_key and api_secret):
@@ -240,7 +239,7 @@ def render_add_real_connection(user_id: str) -> None:
                 else:
                     st.session_state["kite_setup"] = {
                         "label": label, "api_key": api_key,
-                        "api_secret": api_secret, "account_type": account_type,
+                        "api_secret": api_secret, "account_type": "both",
                     }
                     st.rerun()
     else:
@@ -289,7 +288,7 @@ def render_add_mock_connection(user_id: str) -> None:
     mock_label = st.text_input("Label", placeholder="e.g. Test Account",
                                key="mock_conn_label", label_visibility="collapsed")
     if st.button("🔵 Add Mock Connection", use_container_width=True, disabled=not mock_label):
-        conn = add_mock_connection(db, user_id, label=mock_label, account_type="equity")
+        conn = add_mock_connection(db, user_id, label=mock_label, account_type="both")
         st.session_state["just_connected_id"] = conn.connection_id
         st.success(f"Mock-connected: {conn.label}")
         st.rerun()
@@ -344,7 +343,7 @@ def render_session_preview(user_id: str, display_name: str) -> None:
         if session.active_connections:
             for c in session.active_connections:
                 kind = "🔵 mock" if c.access_token.startswith("mock_tok_") else "✅ live"
-                st.markdown(f"&nbsp;&nbsp;• {c.label} ({c.broker.upper()}, {c.account_type}) — {kind}")
+                st.markdown(f"&nbsp;&nbsp;• {c.label} ({c.broker.upper()}) — {kind}")
         else:
             st.markdown("&nbsp;&nbsp;_none connected yet_")
 

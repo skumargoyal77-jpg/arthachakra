@@ -31,7 +31,7 @@ PROJECT PATH:  kite_oauth/kite_connect_flow.py
 
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 from urllib.parse import parse_qs, urlparse
 
 from core.logging_config import setup_logging
@@ -85,7 +85,11 @@ def exchange_request_token_strict(api_key: str, api_secret: str, request_token: 
     logger.info("Kite OAuth: live token exchange succeeded")
     return {
         "access_token": session_data["access_token"],
-        "expiry": date.today().strftime("%Y-%m-%d"),   # Kite tokens expire ~6am next day
+        # Kite tokens expire ~6am the day AFTER login, not at the end of
+        # the login day itself - store that actual expiry date, not the
+        # login date. (Found via a real-world case where is_token_valid
+        # said "valid" a day later than Zerodha actually honored it.)
+        "expiry": (date.today() + timedelta(days=1)).strftime("%Y-%m-%d"),
     }
 
 

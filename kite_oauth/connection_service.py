@@ -38,7 +38,7 @@ def add_connection(
     api_secret:    str,
     access_token:  str,
     token_expiry:  str,
-    account_type:  str = "equity",
+    account_type:  str = "both",
     broker:        str = "kite",
     broker_account_name: str = "",
 ) -> BrokerConnection:
@@ -71,7 +71,7 @@ def connect_real_account(
     api_key:      str,
     api_secret:   str,
     pasted_token: str,
-    account_type: str = "equity",
+    account_type: str = "both",
 ) -> tuple[BrokerConnection, dict]:
     """
     The full real-connection flow used by the "Connect & Verify" UI:
@@ -158,7 +158,7 @@ def reconnect_connection(
 
 def add_mock_connection(
     db: Database, user_id: str, label: str,
-    account_type: str = "equity", broker: str = "kite",
+    account_type: str = "both", broker: str = "kite",
 ) -> BrokerConnection:
     """
     Adds a connection with a synthetic mock token — no network calls,

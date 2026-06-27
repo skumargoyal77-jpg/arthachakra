@@ -69,6 +69,16 @@ def _default_context() -> dict:
         "proposed_ce_strike": None,
         "proposed_pe_strike": None,
         "intends_new_short": False,
+        # Step 5 — market data, fetched by the caller (engine.py stays
+        # decoupled from Database; see market_data/ for how these get
+        # populated). None means "not supplied this call", handled the
+        # same as any other missing-context case — see _missing_context_result.
+        "vix": None,                    # current India VIX (float)
+        "vix_5day_readings": None,      # list[float], oldest first, for S-02's trend check
+        "vix_intraday_readings": None,  # list[float], oldest first, for EP-04's spike check
+        "ivr": None,                    # IV Rank for the symbol being evaluated (S-08)
+        "beta": None,                   # beta vs Nifty for the symbol (S-07)
+        "range_pct_3m": None,           # 3-month high-low range as % of avg close (S-06)
     }
 
 
@@ -390,6 +400,97 @@ def exactly_two_legs_at_entry(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
                       rule["severity"])
 
 
+# ── Step 5 handlers — VIX-based ───────────────────────────────────────────
+
+def vix_hard_limit(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-01 — never enter when India VIX >= 25."""
+    vix = ctx.get("vix")
+    if vix is None:
+        return _missing_context_result(rule, "vix")
+    if vix >= 25:
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL", f"VIX {vix:.1f} >= 25 — block entry.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", f"VIX {vix:.1f}, below the 25 hard limit.", rule["severity"])
+
+
+def vix_slope(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-02 — VIX 20-25 band with a >3pt rise over the last 5 days = caution zone."""
+    vix = ctx.get("vix")
+    readings = ctx.get("vix_5day_readings")
+    if vix is None or not readings or len(readings) < 2:
+        return _missing_context_result(rule, "vix and vix_5day_readings")
+    rise = readings[-1] - readings[0]
+    if 20 <= vix <= 25 and rise > 3:
+        return RuleResult(rule["rule_id"], rule["name"], "WARN",
+                          f"VIX {vix:.1f} in 20-25 band, risen {rise:+.1f}pts over 5 days — caution zone.",
+                          rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS",
+                      f"VIX {vix:.1f}, 5-day change {rise:+.1f}pts — not in caution zone.", rule["severity"])
+
+
+def vix_spike_exit(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """EP-04 — exit everything if VIX rises >5pts within the same session."""
+    readings = ctx.get("vix_intraday_readings")
+    if not readings or len(readings) < 2:
+        return _missing_context_result(rule, "vix_intraday_readings")
+    spike = readings[-1] - readings[0]
+    if spike > 5:
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL",
+                          f"VIX spiked {spike:+.1f}pts intraday — exit all positions now.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", f"Intraday VIX change {spike:+.1f}pts — no spike.", rule["severity"])
+
+
+def high_iv_entry_protocol(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-15 — VIX 20-25 band needs a wider 12-13% range + protective put."""
+    vix = ctx.get("vix")
+    if vix is None:
+        return _missing_context_result(rule, "vix")
+    if 20 <= vix <= 25:
+        return RuleResult(rule["rule_id"], rule["name"], "WARN",
+                          f"VIX {vix:.1f} in 20-25 band — use 12-13% OTM range and consider a protective put.",
+                          rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", f"VIX {vix:.1f}, outside the high-IV band.", rule["severity"])
+
+
+# ── Step 5 handlers — market data based (IVR, beta, range%) ──────────────
+
+def iv_rank_check(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-08 — only sell premium when IV Rank > 40."""
+    ivr = ctx.get("ivr")
+    if ivr is None:
+        return _missing_context_result(rule, "ivr")
+    if ivr <= 40:
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL", f"IVR {ivr:.1f} <= 40 — premium too cheap to sell.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", f"IVR {ivr:.1f} > 40 — premium is rich enough to sell.", rule["severity"])
+
+
+def beta_check(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-07 — only trade stocks with beta < 1.2 vs Nifty."""
+    beta = ctx.get("beta")
+    if beta is None:
+        return _missing_context_result(rule, "beta")
+    if beta >= 1.2:
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL", f"Beta {beta:.2f} >= 1.2 — too volatile relative to Nifty.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", f"Beta {beta:.2f} < 1.2.", rule["severity"])
+
+
+def range_bound_check(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """
+    S-06 — range-bound confirmation. Reports the actual 3-month
+    high-low range %, but as ADVISORY rather than a strict pass/fail —
+    no specific threshold was ever defined for "range-bound enough"
+    (this was always meant to be a visual/qualitative judgment call,
+    per the original rule review), so this surfaces the number for the
+    trader to judge rather than inventing a cutoff.
+    """
+    range_pct = ctx.get("range_pct_3m")
+    if range_pct is None:
+        return _missing_context_result(rule, "range_pct_3m")
+    return RuleResult(rule["rule_id"], rule["name"], "ADVISORY",
+                      f"3-month high-low range is {range_pct:.1f}% of average close — "
+                      f"judge range-bound-ness visually, no fixed cutoff defined.",
+                      rule["severity"])
+
+
 # ── Dispatch table ─────────────────────────────────────────────────────────
 
 EVALUABLE_HANDLERS = {
@@ -412,6 +513,22 @@ EVALUABLE_HANDLERS = {
     "entry_timing_window": entry_timing_window,
     "delta_neutral_at_entry": delta_neutral_at_entry,
     "exactly_two_legs_at_entry": exactly_two_legs_at_entry,
+    "vix_hard_limit": vix_hard_limit,
+    "vix_slope": vix_slope,
+    "vix_spike_exit": vix_spike_exit,
+    "high_iv_entry_protocol": high_iv_entry_protocol,
+    "iv_rank_check": iv_rank_check,
+    "beta_check": beta_check,
+    "range_bound_check": range_bound_check,
+}
+
+# Handlers that check market-wide or candidate-symbol conditions rather
+# than an existing position — none of these reference the `strangle`
+# argument at all, so they're callable even when there's no open
+# position yet (e.g. "is VIX safe to enter ANYTHING right now").
+STRANGLE_OPTIONAL_HANDLERS = {
+    "vix_hard_limit", "vix_slope", "vix_spike_exit", "high_iv_entry_protocol",
+    "iv_rank_check", "beta_check", "range_bound_check",
 }
 
 
@@ -445,7 +562,7 @@ class RuleEngine:
             return RuleResult(rule["rule_id"], rule["name"], "NOT_YET_EVALUABLE",
                               f"No handler registered for '{rule.get('handler')}'.",
                               rule.get("severity", "MEDIUM"))
-        if strangle is None:
+        if strangle is None and rule.get("handler") not in STRANGLE_OPTIONAL_HANDLERS:
             return _missing_context_result(rule, "strangle")
         return handler_fn(rule, strangle, ctx)
 

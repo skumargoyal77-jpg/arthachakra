@@ -76,7 +76,7 @@ class BrokerConnection:
     api_secret:    str = ""         # encrypt in production — plain here for Step 1/2
     access_token:  Optional[str] = None
     token_expiry:  Optional[str] = None   # "YYYY-MM-DD"
-    account_type:  str = "equity"   # "equity" | "index" | "both"
+    account_type:  str = "both"     # kept for backward compat with old records; no longer a user choice — see app.py
     broker_account_name: str = ""   # the real name on the broker's own profile (e.g. Zerodha)
     active:        bool = True
     created_at:    datetime = field(default_factory=now_utc)

@@ -426,3 +426,27 @@
 2026-06-27 01:55:49,880 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
 2026-06-27 01:56:01,195 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
 2026-06-27 01:56:01,287 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=55
+2026-06-27 15:44:06,324 | INFO    | market_data.bhavcopy | Saved Bhavcopy 2026-06-25 (8273 KB)
+2026-06-27 15:44:07,931 | INFO    | market_data.bhavcopy | Bhavcopy raw columns: ['TradDt', 'BizDt', 'Sgmt', 'Src', 'FinInstrmTp', 'FinInstrmId', 'ISIN', 'TckrSymb', 'SctySrs', 'XpryDt', 'FininstrmActlXpryDt', 'StrkPric', 'OptnTp', 'FinInstrmNm', 'OpnPric', 'HghPric', 'LwPric', 'ClsPric', 'LastPric', 'PrvsClsgPric', 'UndrlygPric', 'SttlmPric', 'OpnIntrst', 'ChngInOpnIntrst', 'TtlTradgVol', 'TtlTrfVal', 'TtlNbOfTxsExctd', 'SsnId', 'NewBrdLotQty', 'Rmks', 'Rsvd1', 'Rsvd2', 'Rsvd3', 'Rsvd4']
+2026-06-27 15:44:12,591 | WARNING | core.database | Database: MongoDB unavailable (localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 2.0s, Topology Description: <TopologyDescription id: 6a3fa272675e9c025fa44ea5, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [WinError 10061] No connection could be made because the target machine actively refused it (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>) — using in-memory mock
+2026-06-27 15:44:12,592 | INFO    | core.database | Database: running in MOCK mode (in-memory, no persistence)
+2026-06-27 15:47:15,317 | INFO    | market_data.bhavcopy | Bhavcopy raw columns: ['TradDt', 'BizDt', 'Sgmt', 'Src', 'FinInstrmTp', 'FinInstrmId', 'ISIN', 'TckrSymb', 'SctySrs', 'XpryDt', 'FininstrmActlXpryDt', 'StrkPric', 'OptnTp', 'FinInstrmNm', 'OpnPric', 'HghPric', 'LwPric', 'ClsPric', 'LastPric', 'PrvsClsgPric', 'UndrlygPric', 'SttlmPric', 'OpnIntrst', 'ChngInOpnIntrst', 'TtlTradgVol', 'TtlTrfVal', 'TtlNbOfTxsExctd', 'SsnId', 'NewBrdLotQty', 'Rmks', 'Rsvd1', 'Rsvd2', 'Rsvd3', 'Rsvd4']
+2026-06-27 15:47:17,993 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 15:50:43,760 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 15:50:45,897 | WARNING | market_data.vix_fetcher | Failed to fetch India VIX: Incorrect `api_key` or `access_token`.
+2026-06-27 15:54:59,831 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 15:55:00,231 | WARNING | market_data.vix_fetcher | Failed to fetch India VIX: Incorrect `api_key` or `access_token`.
+2026-06-27 16:53:44,504 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 16:54:35,670 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-27 16:54:35,866 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-27 16:54:57,174 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 16:54:57,470 | WARNING | market_data.vix_fetcher | Failed to fetch India VIX: Incorrect `api_key` or `access_token`.
+2026-06-27 17:08:51,973 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 17:11:37,796 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 17:15:29,820 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-27 17:15:29,967 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-27 17:23:00,614 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 17:56:12,620 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 18:01:19,661 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 18:02:30,695 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-27 18:02:31,125 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal

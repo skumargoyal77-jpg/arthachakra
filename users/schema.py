@@ -70,6 +70,20 @@ COLLECTION_SCHEMA: dict[str, dict] = {
             {"keys": [("symbol", 1), ("fetched_at", -1)]},
         ],
     },
+    "vix_history": {
+        "shared":  True,
+        "purpose": "Timestamped India VIX readings — closes S-01, S-02, EP-04, S-15. (Step 5)",
+        "indexes": [
+            {"keys": [("captured_at", -1)]},
+        ],
+    },
+    "iv_history": {
+        "shared":  True,
+        "purpose": "Daily ATM IV per symbol from NSE Bhavcopy, feeds IVR (Rule S-08). (Step 5)",
+        "indexes": [
+            {"keys": [("symbol", 1), ("date", 1)], "unique": True},
+        ],
+    },
 
     # ═══════════════════════════════════════════════════════════════════
     #  PER-USER — every document carries user_id
