@@ -450,3 +450,24 @@
 2026-06-27 18:01:19,661 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
 2026-06-27 18:02:30,695 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
 2026-06-27 18:02:31,125 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-27 18:51:42,805 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-27 18:51:42,969 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-27 18:51:54,278 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-27 18:51:54,389 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=55
+2026-06-27 18:51:54,426 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
+2026-06-27 18:51:55,691 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-28 20:13:13,890 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-28 20:14:21,676 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-28 20:14:21,871 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-28 20:20:47,584 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-28 20:20:47,594 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-28 20:21:01,239 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-28 20:21:01,568 | INFO    | rag.rule_store | RuleStore ready | persist=data/chroma_db | collection=rule_book_v2 | rules=55
+2026-06-28 20:21:01,663 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
+2026-06-28 20:21:04,616 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-28 20:28:13,732 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-28 20:28:13,735 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-28 20:28:25,039 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-28 20:28:25,144 | INFO    | rag.rule_store | RuleStore ready | persist=C:\Trade\Algo\MyModel\ArthaChakra\data\chroma_db | collection=rule_book_v2 | rules=55
+2026-06-28 20:28:25,175 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
+2026-06-28 20:28:26,005 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.

@@ -29,6 +29,9 @@ class Settings:
     log_dir:       str
     dhan_client_id:    str
     dhan_access_token: str
+    anthropic_api_key: str
+    haiku_model:       str
+    sonnet_model:      str
 
 def _load() -> Settings:
     return Settings(
@@ -38,6 +41,12 @@ def _load() -> Settings:
         log_dir       = os.getenv("LOG_DIR", "logs/"),
         dhan_client_id    = os.getenv("DHAN_CLIENT_ID", ""),
         dhan_access_token = os.getenv("DHAN_ACCESS_TOKEN", ""),
+        # Step 6 — one shared Anthropic account bills for every user.
+        # No per-user keys; this is the simplest model and matches how
+        # Dhan is already handled (one shared account, not per-user).
+        anthropic_api_key = os.getenv("ANTHROPIC_API_KEY", ""),
+        haiku_model       = os.getenv("ARTHACHAKRA_HAIKU_MODEL", "claude-haiku-4-5-20251001"),
+        sonnet_model      = os.getenv("ARTHACHAKRA_SONNET_MODEL", "claude-sonnet-4-6"),
     )
 
 

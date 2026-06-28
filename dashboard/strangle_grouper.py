@@ -49,6 +49,12 @@ KNOWN_UNDERLYINGS = sorted([
     "APOLLOHOSP", "ADANIENT",  "PIDILITIND", "CHOLAFIN",  "MUTHOOTFIN",
 ], key=len, reverse=True)
 
+# Index options carry a year in their symbol (DDMMMYY); equity stock
+# options never do (DDMMM only) — see parse_option_symbol below for
+# why this needs to be known structurally, not guessed from date
+# plausibility.
+INDEX_NAMES = {"BANKNIFTY", "NIFTY", "MIDCPNIFTY", "FINNIFTY", "NIFTYNXT50"}
+
 KITE_SPOT_MAP = {
     # Indices — special Kite instrument strings
     "BANKNIFTY":  "NSE:NIFTY BANK",
@@ -494,24 +500,44 @@ class Strangle:
 # 2 digits of the strike as the "year", making every leg appear to have a
 # different expiry → they never group into a strangle.
 
-def _normalize_expiry(ddmmm: str, as_of: date | None = None) -> str:
+def _normalize_expiry(yy_mmm: str, as_of: date | None = None) -> str:
     """
-    Convert 'DDMMM' (no year) → 'DDMMMYY' by inferring the nearest
-    future monthly expiry year. Returns the original string unchanged
-    if it already contains a year (len > 5).
+    Equity monthly option symbols encode YY+MMM (2-digit YEAR + month),
+    NOT day+month — there's no day digit at all, since a monthly
+    contract has exactly one expiry per month. The actual expiry DAY
+    is exchange-determined (last Tuesday of that month — confirmed the
+    same rule applies to both index and equity options) and is
+    NEVER encoded in the symbol itself.
+
+    This used to be misread as "DDMMM" (day+month, no year) with the
+    year guessed via "nearest future occurrence" — which silently
+    broke whenever the 2-digit value, read as a DAY, had already
+    passed this month: e.g. "26JUN" parsed on the 28th rolled forward
+    a full YEAR to "26 June NEXT year", producing a real, observed bug
+    (a strangle's two legs appearing to expire a year apart). Fixed by
+    reading the 2 digits as YEAR and computing the real day via the
+    same last_tuesday_of_month() used everywhere else expiry math
+    happens — no guessing, no rolling, exactly one correct answer.
+
+    Returns the original string unchanged if it already contains a
+    real year+strike combination beyond just YY+MMM (defensive; in
+    practice callers only ever pass exactly "YYMMM").
     """
-    ddmmm = ddmmm.strip().upper()
-    if len(ddmmm) > 5:
-        return ddmmm  # already has year component
+    from rules.series_calendar import last_tuesday_of_month
+
+    yy_mmm = yy_mmm.strip().upper()
+    if len(yy_mmm) > 5:
+        return yy_mmm  # unexpected extra content - return unchanged rather than guess
 
     try:
-        today = as_of or date.today()
-        partial = datetime.strptime(ddmmm, "%d%b")
-        # Try current year first; if the date is > 7 days in the past, use next year
-        candidate = date(today.year, partial.month, partial.day)
-        if candidate < today - timedelta(days=7):
-            candidate = date(today.year + 1, partial.month, partial.day)
-        return candidate.strftime("%d%b%y").upper()
+        yy = int(yy_mmm[:2])
+        mmm = yy_mmm[2:]
+        year = 2000 + yy
+        month_num = datetime.strptime(mmm, "%b").month
+        expiry_date = last_tuesday_of_month(year, month_num)
+        return expiry_date.strftime("%d%b%y").upper()
+    except (ValueError, IndexError):
+        return yy_mmm
     except ValueError:
         return ddmmm
 
@@ -534,49 +560,68 @@ def _expiry_is_plausible(expiry_str: str, as_of: date | None = None) -> bool:
 
 
 def parse_option_symbol(tradingsymbol: str, as_of: date | None = None) -> Optional[ParsedOption]:
+    """
+    Parses a Kite tradingsymbol into underlying/expiry/strike/type.
+
+    FORMAT IS DETERMINED STRUCTURALLY, NOT GUESSED: index options
+    (BANKNIFTY, NIFTY, etc) always carry a 2-digit year in their
+    symbol (DDMMMYY); equity stock options never do (DDMMM only).
+    This used to be disambiguated by checking whether the resulting
+    date was "plausible" (within roughly 3 years of today) — but that
+    check is nearly useless in practice: a strike like 2790 has a
+    leading "27" that LOOKS like a perfectly plausible near-term year,
+    so the old heuristic would misparse an equity symbol like
+    "ASIANPAINT26JUN2790CE" as day=26/month=JUN/YEAR=27 with strike=90,
+    instead of day=26/month=JUN (no year) with the real strike 2790 —
+    silently producing a fake "2027" expiry and a wrong strike. Fixed
+    by knowing the format upfront from INDEX_NAMES, never guessing.
+    """
     ts = tradingsymbol.strip().upper()
 
     for name in KNOWN_UNDERLYINGS:
         if not ts.startswith(name):
             continue
         suffix = ts[len(name):]
+        is_index = name in INDEX_NAMES
 
-        # Format 1: DDMMMYY + STRIKE  (index options with year)
-        # Only accepted if the parsed expiry date is plausible — otherwise
-        # the regex has falsely grabbed the first 2 strike digits as the year.
-        m = re.match(r"^(\d{2}[A-Z]{3}\d{2})(\d+(?:\.\d+)?)(CE|PE)$", suffix)
-        if m and _expiry_is_plausible(m.group(1), as_of):
-            return ParsedOption(
-                tradingsymbol=tradingsymbol, underlying=name,
-                expiry=m.group(1),
-                strike=float(m.group(2)), option_type=m.group(3),
-                quantity=0, avg_price=0.0, ltp=0.0, pnl=0.0,
-            )
+        if is_index:
+            # Format 1 ONLY: DDMMMYY + STRIKE (index options always carry a year)
+            m = re.match(r"^(\d{2}[A-Z]{3}\d{2})(\d+(?:\.\d+)?)(CE|PE)$", suffix)
+            if m:
+                return ParsedOption(
+                    tradingsymbol=tradingsymbol, underlying=name,
+                    expiry=m.group(1),
+                    strike=float(m.group(2)), option_type=m.group(3),
+                    quantity=0, avg_price=0.0, ltp=0.0, pnl=0.0,
+                )
+        else:
+            # Format 2 ONLY: DDMMM + STRIKE (equity options never carry a year)
+            m = re.match(r"^(\d{2}[A-Z]{3})(\d+(?:\.\d+)?)(CE|PE)$", suffix)
+            if m:
+                return ParsedOption(
+                    tradingsymbol=tradingsymbol, underlying=name,
+                    expiry=_normalize_expiry(m.group(1), as_of),
+                    strike=float(m.group(2)), option_type=m.group(3),
+                    quantity=0, avg_price=0.0, ltp=0.0, pnl=0.0,
+                )
 
-        # Format 2: DDMMM + STRIKE  (equity monthly options, no year in symbol)
-        m = re.match(r"^(\d{2}[A-Z]{3})(\d+(?:\.\d+)?)(CE|PE)$", suffix)
-        if m:
-            return ParsedOption(
-                tradingsymbol=tradingsymbol, underlying=name,
-                expiry=_normalize_expiry(m.group(1), as_of),
-                strike=float(m.group(2)), option_type=m.group(3),
-                quantity=0, avg_price=0.0, ltp=0.0, pnl=0.0,
-            )
-
-    # Fallback: underlying not in known list — try both formats
-    m = re.match(r"^([A-Z]+[&-]?[A-Z]*)(\d{2}[A-Z]{3}\d{2})(\d+(?:\.\d+)?)(CE|PE)$", ts)
-    if m and _expiry_is_plausible(m.group(2), as_of):
-        return ParsedOption(
-            tradingsymbol=tradingsymbol, underlying=m.group(1), expiry=m.group(2),
-            strike=float(m.group(3)), option_type=m.group(4),
-            quantity=0, avg_price=0.0, ltp=0.0, pnl=0.0,
-        )
-
+    # Fallback: underlying not in known list at all — we genuinely don't
+    # know if it's an index or equity, so try the equity (no-year) format
+    # first since it's far more common among unlisted names, then the
+    # with-year format only if that fails.
     m = re.match(r"^([A-Z]+[&-]?[A-Z]*)(\d{2}[A-Z]{3})(\d+(?:\.\d+)?)(CE|PE)$", ts)
     if m:
         return ParsedOption(
             tradingsymbol=tradingsymbol, underlying=m.group(1),
             expiry=_normalize_expiry(m.group(2), as_of),
+            strike=float(m.group(3)), option_type=m.group(4),
+            quantity=0, avg_price=0.0, ltp=0.0, pnl=0.0,
+        )
+
+    m = re.match(r"^([A-Z]+[&-]?[A-Z]*)(\d{2}[A-Z]{3}\d{2})(\d+(?:\.\d+)?)(CE|PE)$", ts)
+    if m and _expiry_is_plausible(m.group(2), as_of):
+        return ParsedOption(
+            tradingsymbol=tradingsymbol, underlying=m.group(1), expiry=m.group(2),
             strike=float(m.group(3)), option_type=m.group(4),
             quantity=0, avg_price=0.0, ltp=0.0, pnl=0.0,
         )

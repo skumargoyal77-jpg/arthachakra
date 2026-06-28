@@ -16,3 +16,6 @@ sentence-transformers>=3.0
 
 # Step 5 — market_data/. Bhavcopy parsing (NSE F&O end-of-day data).
 pandas>=2.0
+
+# Step 6 — agent/. Direct Anthropic SDK (no LangChain dependency).
+anthropic>=0.40

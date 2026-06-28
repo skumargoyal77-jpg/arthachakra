@@ -41,7 +41,14 @@ from rag.embedder import DEFAULT_MODEL, RuleEmbedder
 logger = setup_logging(__name__)
 
 COLLECTION_NAME = "rule_book_v2"   # v2: schema changed from POC-03 (eval_status added)
-DEFAULT_PERSIST = "data/chroma_db"
+
+# Anchored to the project root (rag/ is always a direct child of it),
+# NOT a bare relative string. A bare "data/chroma_db" resolves against
+# whatever directory the script happens to be RUN from, not the
+# project's own location — this caused a real bug where embedding from
+# the project root and then querying from a test/ subfolder silently
+# pointed at two different, unrelated folders.
+DEFAULT_PERSIST = str(Path(__file__).resolve().parent.parent / "data" / "chroma_db")
 
 
 def _build_document(rule: dict) -> str:

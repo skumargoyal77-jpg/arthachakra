@@ -50,7 +50,10 @@ from core.logging_config import setup_logging
 
 logger = setup_logging(__name__)
 
-DATA_DIR = Path("data/bhavcopy")
+# Anchored to the project root (market_data/ is always a direct child
+# of it) — see rag/rule_store.py's DEFAULT_PERSIST comment for why a
+# bare relative path is wrong here.
+DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "bhavcopy"
 
 URL_FO = "https://archives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_{date}_F_0000.csv.zip"
 
