@@ -19,3 +19,7 @@ pandas>=2.0
 
 # Step 6 — agent/. Direct Anthropic SDK (no LangChain dependency).
 anthropic>=0.40
+
+# Step 7 — market_intel/. Tavily web search for brokerage reports/news.
+# Works without this installed too - falls back to mock data automatically.
+tavily-python>=0.5

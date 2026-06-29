@@ -491,16 +491,18 @@ def run_step3() -> bool:
         )
         from rules.seed_rules import get_rule_book
 
+        total_rules = len(get_rule_book())   # dynamic - never hardcode this, rules get added over time
+
         report1 = seed_rules_into_db(db)
-        check("First seed inserts all 55 rules", report1["inserted"] == 55, str(report1))
-        check("platform_rules now has exactly 55 documents",
-             db.platform_rules.count_documents({}) == 55)
+        check(f"First seed inserts all {total_rules} rules", report1["inserted"] == total_rules, str(report1))
+        check(f"platform_rules now has exactly {total_rules} documents",
+             db.platform_rules.count_documents({}) == total_rules)
 
         report2 = seed_rules_into_db(db)
         check("Re-seed updates existing rules, inserts none (upsert, not duplicate)",
-             report2["inserted"] == 0 and report2["updated"] == 55, str(report2))
-        check("Still exactly 55 documents after re-seed (no duplicates)",
-             db.platform_rules.count_documents({}) == 55)
+             report2["inserted"] == 0 and report2["updated"] == total_rules, str(report2))
+        check(f"Still exactly {total_rules} documents after re-seed (no duplicates)",
+             db.platform_rules.count_documents({}) == total_rules)
 
         removed = remove_rules_not_in_book(db)
         check("No stale rules to remove on a clean seed", removed == 0)
@@ -515,17 +517,17 @@ def run_step3() -> bool:
 
         rules1_before = get_effective_rules(db, user1.user_id)
         rules2_before = get_effective_rules(db, user2.user_id)
-        check("Both users start with identical effective rule count (55)",
-             len(rules1_before) == len(rules2_before) == 55)
+        check(f"Both users start with identical effective rule count ({total_rules})",
+             len(rules1_before) == len(rules2_before) == total_rules)
 
         add_custom_rule(db, user1.user_id, TEST_RULE_PLATFORM,
                         "Verify custom rule", "worst_distance_pct", "<", 5, "WARN")
         rules1_after = get_effective_rules(db, user1.user_id)
         rules2_after = get_effective_rules(db, user2.user_id)
-        check("User 1's effective set grows to 56 after adding a custom rule",
-             len(rules1_after) == 56)
-        check("User 2's effective set is untouched (still 55) — no cross-talk",
-             len(rules2_after) == 55)
+        check(f"User 1's effective set grows to {total_rules + 1} after adding a custom rule",
+             len(rules1_after) == total_rules + 1)
+        check(f"User 2's effective set is untouched (still {total_rules}) — no cross-talk",
+             len(rules2_after) == total_rules)
 
         # ── 4. Engine evaluates the real rule book against live Strangle data ──
         print(f"\n{SEP}\n  4 — RuleEngine evaluates real rules against live position data\n{SEP}")
@@ -562,14 +564,14 @@ def run_step3() -> bool:
              result3.status == "NOT_YET_EVALUABLE", result3.message)
 
         all_results = engine.evaluate_all(get_rule_book(), safe_strangle)
-        check("evaluate_all() returns exactly 55 results, one per rule",
-             len(all_results) == 55)
+        check(f"evaluate_all() returns exactly {total_rules} results, one per rule",
+             len(all_results) == total_rules)
 
-        # ── 5. Cleanup the test-only custom rule (real 55-rule seed stays) ──
+        # ── 5. Cleanup the test-only custom rule (real rule-book seed stays) ──
         remove_custom_rule(db, user1.user_id, TEST_RULE_PLATFORM)
         rules1_final = get_effective_rules(db, user1.user_id)
-        check("Custom rule cleanly removable, user 1 back to 55",
-             len(rules1_final) == 55)
+        check(f"Custom rule cleanly removable, user 1 back to {total_rules}",
+             len(rules1_final) == total_rules)
 
     finally:
         if not db.is_mock:
@@ -586,9 +588,10 @@ def run_step3() -> bool:
         from collections import Counter
 
         from rules.seed_rules import get_rule_book as _get_book
-        counts = Counter(r["eval_status"] for r in _get_book())
+        book = _get_book()
+        counts = Counter(r["eval_status"] for r in book)
         print(f"  ✅  STEP 3 VERIFICATION PASSED  ({passed}/{total})")
-        print(f"  👉  55 rules seeded. {counts['EVALUABLE']} evaluable now, "
+        print(f"  👉  {len(book)} rules seeded. {counts['EVALUABLE']} evaluable now, "
              f"{counts['ADVISORY']} advisory, {counts['NOT_YET_EVALUABLE']} NOT_YET_EVALUABLE")
         print(f"      pending later steps (corporate events, market intel, etc).")
     else:
@@ -627,16 +630,19 @@ def run_step4() -> bool:
 
     try:
         from rules.rules_service import seed_rules_into_db
+        from rules.seed_rules import get_rule_book
         from rag.rule_store import RuleStore
 
         if db.platform_rules.count_documents({}) == 0:
             seed_rules_into_db(db)
 
+        total_rules = len(get_rule_book())   # dynamic - rules get added over time
+
         print("\n  Loading embedding model (downloads ~80MB on first run)...")
         store = RuleStore()
         n = store.embed_from_mongo(db, overwrite=True)
-        check("Embedded all 55 rules from MongoDB (not YAML)", n == 55, f"embedded={n}")
-        check("ChromaDB collection count matches", store.count() == 55)
+        check(f"Embedded all {total_rules} rules from MongoDB (not YAML)", n == total_rules, f"embedded={n}")
+        check("ChromaDB collection count matches", store.count() == total_rules)
 
         # New test queries against the ACTUAL 55-rule book (the old POC-03
         # queries referenced S-10/S-11/ES-02/ES-03/L-02, all deleted — see
@@ -1063,6 +1069,195 @@ def await_(coro):
     return asyncio.run(coro)
 
 
+def run_step7() -> bool:
+    """
+    Verification of corporate_events/ + market_intel/ going live.
+
+    NSE and Tavily aren't reachable from this sandbox — what's
+    verified here is everything that doesn't require a live call:
+    classification logic against all 6 corporate-event rule
+    scenarios, the mock-fallback path (which must trigger on a real
+    NSE failure, not silently look like "no events"), S-25's
+    threshold logic, and the full engine + tool-dispatch wiring for
+    all 9 newly-evaluable rules.
+    """
+    results: list[tuple[str, bool, str]] = []
+
+    def check(name: str, condition: bool, detail: str = "") -> None:
+        results.append((name, condition, detail))
+        icon = "✅" if condition else "❌"
+        print(f"  {icon}  {name}" + (f"  —  {detail}" if detail else ""))
+
+    print_header("ArthaChakra — Step 7 Verification: corporate_events/ + market_intel/")
+
+    db = Database()
+    print(f"\n  Database mode: {'MongoDB' if not db.is_mock else 'MOCK (in-memory)'}")
+    if not db.is_mock:
+        _cleanup_test_data(db)
+
+    try:
+        from datetime import date
+
+        from corporate_events.event_calendar import EventCalendar
+        from corporate_events.event_classifier import classify_event
+        from market_intel.intel_scanner import IntelScanner
+        from market_intel.signal_models import IntelSummary, MarketSignal, Sentiment, SignalType
+        from rules.engine import RuleEngine
+        from rules.seed_rules import get_rule_book
+
+        today = date(2026, 6, 28)
+        book = {r["rule_id"]: r for r in get_rule_book()}
+        engine = RuleEngine()
+
+        # ── 1. Classification against all 6 corporate-event scenarios ──
+        print(f"\n{SEP}\n  1 — Event classification, all 6 rule scenarios\n{SEP}")
+        e1 = classify_event("HDFCBANK", "Quarterly Results Q1 FY27", date(2026, 7, 1), today=today)
+        check("Results in 3 days -> S-21 (BLOCK_ENTRY)", e1.rule_triggered == "S-21")
+
+        e2 = classify_event("TCS", "Quarterly Results", date(2026, 7, 5), today=today)
+        check("Results in 7 days -> S-24 (REDUCE_SIZE)", e2.rule_triggered == "S-24")
+
+        e3 = classify_event("SBILIFE", "Scheme of Arrangement (Merger)", today, today=today)
+        check("Merger TODAY -> ES-09 (EXIT_IF_OPEN)", e3.rule_triggered == "ES-09")
+
+        e4 = classify_event("SBILIFE", "Merger announced", date(2026, 7, 10), today=today)
+        check("Merger in future -> S-22 (BLOCK_ENTRY)", e4.rule_triggered == "S-22")
+
+        e5 = classify_event("ITC", "Stock Split 1:5", date(2026, 6, 30), today=today)
+        check("Split in 2 days -> S-23 (BLOCK_ENTRY)", e5.rule_triggered == "S-23")
+
+        e6 = classify_event("MARICO", "Board Meeting", date(2026, 7, 3), today=today)
+        check("Board meeting in 5 days -> M-09 (MONITOR)", e6.rule_triggered == "M-09")
+
+        # ── 2. Mock fallback fires correctly on real NSE failure ──────────
+        print(f"\n{SEP}\n  2 — Mock fallback (NSE unreachable -> real mock data, not false-clear)\n{SEP}")
+        cal = EventCalendar(db, mock_mode=False)
+        events = cal.get_events("HDFCBANK", days_ahead=14, today=today)
+        check("Mock fallback returns real data on NSE failure (not an empty false-clear)",
+             len(events) > 0, f"got {len(events)} events")
+
+        # ── 3. Market intel + S-25 threshold ───────────────────────────────
+        print(f"\n{SEP}\n  3 — Market intel scanner + S-25 threshold (3+ distinct bearish brokers)\n{SEP}")
+        scanner = IntelScanner(db, mock_mode=True)
+        summary = scanner.scan_symbol("HDFCBANK")
+        check("IntelScanner returns a real IntelSummary", isinstance(summary, IntelSummary))
+
+        fake_signals = [
+            MarketSignal(symbol="TEST", title=f"{b} downgrades", url=f"u{i}", sentiment=Sentiment.BEARISH,
+                        summary="", signal_type=SignalType.BROKERAGE_REPORT, broker_name=b)
+            for i, b in enumerate(["Goldman Sachs", "Morgan Stanley", "UBS"])
+        ]
+        fake_summary = IntelSummary(symbol="TEST", signals=fake_signals)
+        check("3 distinct bearish brokers triggers is_blocking (S-25)",
+             fake_summary.is_blocking and fake_summary.action == "BLOCK_ENTRY")
+
+        # ── 4. All 9 engine handlers, with the two real bugs found re-verified ──
+        print(f"\n{SEP}\n  4 — Engine handlers for all 9 rules (incl. 2 bugs found+fixed during testing)\n{SEP}")
+
+        r1 = engine.evaluate_rule(book["S-21"], None, {"corporate_event": e1.to_dict()})
+        check("S-21 fires FAIL on a real blocking event", r1.status == "FAIL")
+
+        # Bug #1 found in testing: a non-blocking event used to be
+        # treated as "missing context" (ADVISORY) instead of "checked,
+        # nothing blocks this rule" (PASS) — None is a valid, common
+        # result here, not an absence of information.
+        r2 = engine.evaluate_rule(book["S-21"], None, {"corporate_event": None})
+        check("S-21 with corporate_event=None (checked, nothing blocking) correctly PASSes, not ADVISORY",
+             r2.status == "PASS")
+
+        r3 = engine.evaluate_rule(book["S-22"], None, {"corporate_event": e4.to_dict()})
+        check("S-22 fires FAIL on a future merger", r3.status == "FAIL")
+
+        r4 = engine.evaluate_rule(book["S-23"], None, {"corporate_event": e5.to_dict()})
+        check("S-23 fires FAIL on a near-term split", r4.status == "FAIL")
+
+        r5 = engine.evaluate_rule(book["S-24"], None, {"corporate_event": e2.to_dict()})
+        check("S-24 fires WARN on results-week timing", r5.status == "WARN")
+
+        r6 = engine.evaluate_rule(book["M-09"], None, {"corporate_event": e6.to_dict()})
+        check("M-09 fires ADVISORY (never blocks) on a board meeting", r6.status == "ADVISORY")
+
+        r7 = engine.evaluate_rule(book["ES-09"], None, {"corporate_event": e3.to_dict()})
+        check("ES-09 fires FAIL on a same-day merger", r7.status == "FAIL")
+
+        r8 = engine.evaluate_rule(book["S-25"], None, {"market_intel": {"is_blocking": True, "bearish_count": 3}})
+        check("S-25 fires FAIL on 3+ bearish brokerage calls", r8.status == "FAIL")
+
+        r9 = engine.evaluate_rule(book["M-11"], None, {"market_intel": {"bearish_count": 1}})
+        check("M-11 fires WARN (not block) on any bearish signal", r9.status == "WARN")
+
+        r10 = engine.evaluate_rule(book["M-12"], None, {"market_intel": {"sector_bearish": True}})
+        check("M-12 fires ADVISORY on sector-wide bearish news", r10.status == "ADVISORY")
+
+        # ── 5. eval_status correctly upgraded for all 9 rules ──────────────
+        print(f"\n{SEP}\n  5 — eval_status upgraded to EVALUABLE for all 9 rules\n{SEP}")
+        for rid in ["S-21", "S-22", "S-23", "S-24", "M-09", "ES-09", "S-25", "M-11", "M-12"]:
+            check(f"{rid} eval_status == EVALUABLE", book[rid]["eval_status"] == "EVALUABLE")
+
+        # ── 6. Tool dispatcher integration (bug #2 found in testing) ────────
+        print(f"\n{SEP}\n  6 — agent/tools.py integration (M-09 visibility bug found+fixed)\n{SEP}")
+        import asyncio
+
+        from agent.context_builder import build_context
+        from agent.tools import ToolDispatcher
+        from auth.auth_service import signup
+        from kite_oauth.connection_service import add_mock_connection
+        from rules.rules_service import seed_rules_into_db
+        from users.session_builder import build_user_session
+
+        if db.platform_rules.count_documents({}) == 0:
+            seed_rules_into_db(db)
+
+        user = signup(db, TEST_USERNAME_1, TEST_EMAIL_1, "pw_verify_123")
+        add_mock_connection(db, user.user_id, label="_verify_mock")
+
+        async def _run():
+            session = build_user_session(db, user.user_id, "Verify")
+            ctx = await build_context(session, db)
+            dispatcher = ToolDispatcher(ctx, db, rule_store=None)
+            return dispatcher
+
+        dispatcher = await_(_run())
+
+        # Bug #2 found in testing: _get_corporate_event used
+        # has_blocking_event(), which only surfaces BLOCKING events —
+        # M-09's MONITOR-only events were invisible to its own handler
+        # as a result. Fixed to use get_events() (all events) instead.
+        result_m09 = dispatcher.dispatch("check_rule", {"rule_id": "M-09", "underlying": "SBILIFE"})
+        check("M-09 correctly sees its own (non-blocking) event via the tool dispatcher",
+             "ADVISORY" in result_m09, result_m09)
+
+        result_events_tool = dispatcher.dispatch("get_corporate_events", {"symbol": "HDFCBANK"})
+        check("get_corporate_events tool returns real data, not an exception string",
+             "Corporate Events" in result_events_tool or "Clear" in result_events_tool)
+
+        result_intel_tool = dispatcher.dispatch("get_market_intel", {"symbol": "HDFCBANK"})
+        check("get_market_intel tool returns real data, not an exception string",
+             "Market Intelligence" in result_intel_tool)
+
+    finally:
+        if not db.is_mock:
+            _cleanup_test_data(db)
+            print(f"\n  🧹 Cleaned up _verify_ test data.")
+
+    passed = sum(1 for _, ok, _ in results if ok)
+    total = len(results)
+
+    print(f"\n{SEP2}")
+    if passed == total:
+        print(f"  ✅  STEP 7 VERIFICATION PASSED  ({passed}/{total})")
+        print(f"  👉  NSE and Tavily live calls need real network access to test")
+        print(f"      end-to-end — everything around them is fully verified here.")
+    else:
+        print(f"  ❌  STEP 7 VERIFICATION FAILED  ({passed}/{total})")
+        for name, ok, detail in results:
+            if not ok:
+                print(f"    ❌ {name}  {detail}")
+    print(SEP2)
+
+    return passed == total
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="ArthaChakra — verification suite")
     parser.add_argument("--step1", action="store_true", help="Run Step 1 verification")
@@ -1071,8 +1266,12 @@ def main() -> int:
     parser.add_argument("--step4", action="store_true", help="Run Step 4 verification")
     parser.add_argument("--step5", action="store_true", help="Run Step 5 verification")
     parser.add_argument("--step6", action="store_true", help="Run Step 6 verification")
+    parser.add_argument("--step7", action="store_true", help="Run Step 7 verification")
     args = parser.parse_args()
 
+    if args.step7:
+        ok = run_step7()
+        return 0 if ok else 1
     if args.step6:
         ok = run_step6()
         return 0 if ok else 1

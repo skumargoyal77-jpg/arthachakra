@@ -471,3 +471,31 @@
 2026-06-28 20:28:25,144 | INFO    | rag.rule_store | RuleStore ready | persist=C:\Trade\Algo\MyModel\ArthaChakra\data\chroma_db | collection=rule_book_v2 | rules=55
 2026-06-28 20:28:25,175 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
 2026-06-28 20:28:26,005 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-29 01:32:00,855 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 01:32:00,862 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-29 01:32:24,940 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-29 01:32:25,473 | INFO    | rag.rule_store | RuleStore ready | persist=C:\Trade\Algo\MyModel\ArthaChakra\data\chroma_db | collection=rule_book_v2 | rules=55
+2026-06-29 01:32:25,587 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
+2026-06-29 01:32:28,227 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-29 01:34:21,804 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 01:34:23,663 | WARNING | corporate_events.nse_client | Could not parse NSE date format: '-' — none of ['%d-%b-%Y', '%d-%m-%Y', '%Y-%m-%d', '%d/%m/%Y'] matched
+2026-06-29 01:34:23,663 | WARNING | corporate_events.nse_client | Could not parse NSE date format: '-' — none of ['%d-%b-%Y', '%d-%m-%Y', '%Y-%m-%d', '%d/%m/%Y'] matched
+2026-06-29 01:34:23,663 | WARNING | corporate_events.nse_client | Could not parse NSE date format: '-' — none of ['%d-%b-%Y', '%d-%m-%Y', '%Y-%m-%d', '%d/%m/%Y'] matched
+2026-06-29 01:34:23,664 | WARNING | corporate_events.nse_client | Could not parse NSE date format: '-' — none of ['%d-%b-%Y', '%d-%m-%Y', '%Y-%m-%d', '%d/%m/%Y'] matched
+2026-06-29 01:34:23,664 | WARNING | corporate_events.nse_client | Could not parse NSE date format: '-' — none of ['%d-%b-%Y', '%d-%m-%Y', '%Y-%m-%d', '%d/%m/%Y'] matched
+2026-06-29 01:41:15,963 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 01:42:58,133 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 01:45:02,026 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 01:47:53,262 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 01:48:32,122 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 01:48:43,834 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 14:06:56,209 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 14:07:25,810 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-29 14:07:25,977 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-29 14:12:59,536 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 14:12:59,544 | INFO    | rag.embedder | Loading embedding model: all-MiniLM-L6-v2
+2026-06-29 14:13:20,036 | INFO    | rag.embedder | Embedding model ready: all-MiniLM-L6-v2
+2026-06-29 14:13:20,339 | INFO    | rag.rule_store | RuleStore ready | persist=C:\Trade\Algo\MyModel\ArthaChakra\data\chroma_db | collection=rule_book_v2 | rules=55
+2026-06-29 14:13:20,392 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
+2026-06-29 14:13:21,667 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
+2026-06-29 14:45:29,476 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)

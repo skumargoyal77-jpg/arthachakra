@@ -79,6 +79,14 @@ def _default_context() -> dict:
         "ivr": None,                    # IV Rank for the symbol being evaluated (S-08)
         "beta": None,                   # beta vs Nifty for the symbol (S-07)
         "range_pct_3m": None,           # 3-month high-low range as % of avg close (S-06)
+        # Step 7 — pre-fetched corporate event / market intel for the
+        # underlying being checked (see agent/tools.py for how these
+        # get populated). Same decoupled pattern as VIX/IVR/beta above
+        # — the engine never reaches into Database or the network
+        # itself, the caller fetches first.
+        "corporate_event": None,        # dict: {action, rule_triggered, description, days_away} or None
+        "market_intel": None,           # dict: {is_blocking, bearish_count, bullish_count, action} or None
+        "results_before_expiry": None,  # dict (event) or None - for S-27's whole-series check
     }
 
 
@@ -491,6 +499,135 @@ def range_bound_check(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
                       rule["severity"])
 
 
+# ── Step 7 handlers — corporate events ────────────────────────────────────
+# All check the SAME pre-fetched ctx["corporate_event"] dict, looking for
+# whether ITS rule_triggered matches the rule being evaluated — the
+# actual classification (which rule_id applies) already happened in
+# corporate_events/event_classifier.py before this ever runs.
+
+def _corporate_event_check(rule: dict, ctx: dict, expected_rule_id: str) -> RuleResult:
+    if "corporate_event" not in ctx:
+        return _missing_context_result(rule, "corporate_event")
+    event = ctx.get("corporate_event")
+    if event is not None and event.get("rule_triggered") == expected_rule_id:
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL",
+                          f"{event.get('description')} in {event.get('days_away')} day(s) — "
+                          f"{event.get('action')}.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS",
+                      "No blocking corporate event for this rule.", rule["severity"])
+
+
+def no_entry_near_results(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-21 — no entry within 5 trading days of quarterly/annual/half-yearly results."""
+    return _corporate_event_check(rule, ctx, "S-21")
+
+
+def no_entry_on_merger(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-22 — block entry if M&A/merger/demerger announced."""
+    return _corporate_event_check(rule, ctx, "S-22")
+
+
+def no_entry_near_split_bonus(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-23 — no entry within 3 days of split/bonus ex-date."""
+    return _corporate_event_check(rule, ctx, "S-23")
+
+
+def reduce_size_results_week(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-24 — halve lot size if results are 6-7 days away."""
+    if "corporate_event" not in ctx:
+        return _missing_context_result(rule, "corporate_event")
+    event = ctx.get("corporate_event")
+    if event is not None and event.get("rule_triggered") == "S-24":
+        return RuleResult(rule["rule_id"], rule["name"], "WARN",
+                          f"{event.get('description')} in {event.get('days_away')} day(s) — "
+                          f"reduce position size 50%.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", "Not in results week.", rule["severity"])
+
+
+def monitor_board_meeting(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """M-09 — informational only, never blocks. Board meeting/AGM within 7 days."""
+    if "corporate_event" not in ctx:
+        return _missing_context_result(rule, "corporate_event")
+    event = ctx.get("corporate_event")
+    if event is not None and event.get("rule_triggered") == "M-09":
+        return RuleResult(rule["rule_id"], rule["name"], "ADVISORY",
+                          f"{event.get('description')} in {event.get('days_away')} day(s) — "
+                          f"informational, not blocking.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", "No event to monitor.", rule["severity"])
+
+
+def exit_on_same_day_merger(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """ES-09 — exit an OPEN position immediately if merger/demerger announced same day."""
+    if "corporate_event" not in ctx:
+        return _missing_context_result(rule, "corporate_event")
+    event = ctx.get("corporate_event")
+    if event is not None and event.get("rule_triggered") == "ES-09":
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL",
+                          f"{event.get('description')} announced TODAY — exit this position now.",
+                          rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", "No same-day merger/demerger.", rule["severity"])
+
+
+def no_entry_results_before_expiry(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """
+    S-27 — whole-series block, not a narrow timing window like S-21.
+    If results fall ANYWHERE between today and this series' expiry,
+    block entry (and re-entry/adjustment) for this stock for the rest
+    of the series — entering earlier in the month doesn't avoid the
+    risk, since the position would still be open when results hit.
+    """
+    if "results_before_expiry" not in ctx:
+        return _missing_context_result(rule, "results_before_expiry")
+    event = ctx.get("results_before_expiry")
+    if event is not None:
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL",
+                          f"Results ({event.get('description')}) fall on {event.get('event_date')}, "
+                          f"before this series' expiry — do not enter, re-enter, or adjust this stock "
+                          f"for the rest of the series.", rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS",
+                      "No results scheduled before this series' expiry.", rule["severity"])
+
+
+# ── Step 7 handlers — market intelligence ─────────────────────────────────
+
+def block_on_bearish_calls(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """S-25 — block entry if 3+ distinct bearish brokerage calls in recent search."""
+    intel = ctx.get("market_intel")
+    if intel is None:
+        return _missing_context_result(rule, "market_intel")
+    if intel.get("is_blocking"):
+        return RuleResult(rule["rule_id"], rule["name"], "FAIL",
+                          f"{intel.get('bearish_count', 0)} bearish brokerage call(s) found — block entry.",
+                          rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS",
+                      f"{intel.get('bearish_count', 0) if intel else 0} bearish call(s), below the block threshold.",
+                      rule["severity"])
+
+
+def warn_bearish_signal(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """M-11 — warn (don't block) before entry if any bearish signal found."""
+    intel = ctx.get("market_intel")
+    if intel is None:
+        return _missing_context_result(rule, "market_intel")
+    if intel.get("bearish_count", 0) > 0:
+        return RuleResult(rule["rule_id"], rule["name"], "WARN",
+                          f"{intel.get('bearish_count')} bearish signal(s) found — review before entry.",
+                          rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", "No bearish signals found.", rule["severity"])
+
+
+def review_sector_bearish_news(rule: dict, s: Strangle, ctx: dict) -> RuleResult:
+    """M-12 — flag portfolio-wide review if sector-wide bearish news detected."""
+    intel = ctx.get("market_intel")
+    if intel is None:
+        return _missing_context_result(rule, "market_intel")
+    if intel.get("sector_bearish"):
+        return RuleResult(rule["rule_id"], rule["name"], "ADVISORY",
+                          "Sector-wide bearish news detected — review all positions in this sector.",
+                          rule["severity"])
+    return RuleResult(rule["rule_id"], rule["name"], "PASS", "No sector-wide bearish news.", rule["severity"])
+
+
 # ── Dispatch table ─────────────────────────────────────────────────────────
 
 EVALUABLE_HANDLERS = {
@@ -520,6 +657,16 @@ EVALUABLE_HANDLERS = {
     "iv_rank_check": iv_rank_check,
     "beta_check": beta_check,
     "range_bound_check": range_bound_check,
+    "no_entry_near_results": no_entry_near_results,
+    "no_entry_on_merger": no_entry_on_merger,
+    "no_entry_near_split_bonus": no_entry_near_split_bonus,
+    "reduce_size_results_week": reduce_size_results_week,
+    "monitor_board_meeting": monitor_board_meeting,
+    "exit_on_same_day_merger": exit_on_same_day_merger,
+    "no_entry_results_before_expiry": no_entry_results_before_expiry,
+    "block_on_bearish_calls": block_on_bearish_calls,
+    "warn_bearish_signal": warn_bearish_signal,
+    "review_sector_bearish_news": review_sector_bearish_news,
 }
 
 # Handlers that check market-wide or candidate-symbol conditions rather
@@ -529,6 +676,10 @@ EVALUABLE_HANDLERS = {
 STRANGLE_OPTIONAL_HANDLERS = {
     "vix_hard_limit", "vix_slope", "vix_spike_exit", "high_iv_entry_protocol",
     "iv_rank_check", "beta_check", "range_bound_check",
+    "no_entry_near_results", "no_entry_on_merger", "no_entry_near_split_bonus",
+    "reduce_size_results_week", "monitor_board_meeting", "exit_on_same_day_merger",
+    "no_entry_results_before_expiry",
+    "block_on_bearish_calls", "warn_bearish_signal", "review_sector_bearish_news",
 }
 
 

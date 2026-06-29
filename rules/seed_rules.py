@@ -1,37 +1,21 @@
 """
 rules/seed_rules.py
 ────────────────────────
-The full ArthaChakra rule book — 55 rules, built from scratch for this
-project. Every rule here was reviewed, revised, or newly written during
-the Step 3 rule-review session; nothing is carried over unmodified from
-any earlier POC rules.yaml. All 55 are MANDATORY (category="MANDATORY")
-per the explicit decision to not have an optional tier for this set —
-default_rules stays seeded empty for now, ready for future optional or
-user-toggleable rules without any code changes.
+The full ArthaChakra rule book — 56 rules, built from scratch for this
+project. All 56 are MANDATORY (category="MANDATORY").
 
-EVAL_STATUS — assigned per rule based on what data actually exists today:
-  EVALUABLE          - dispatched to a real handler function in
-                       rules/engine.py, checked against live
-                       Strangle/ParsedOption data (or context for
-                       entry-time checks). NOTE: a rule can be
-                       EVALUABLE and still sometimes RETURN an
-                       "ADVISORY" status as its result (e.g. ES-11,
-                       S-06) - that is different from being CLASSIFIED
-                       ADVISORY here, which skips the handler entirely.
-  ADVISORY           - qualitative/operational reminder with NO real
-                       handler logic - always returns the rule's own
-                       description as an informational message.
-  NOT_YET_EVALUABLE  - the underlying data source does not exist yet
-                       (corporate events cache, account-level margin
-                       aggregation, etc). The engine returns this
-                       status explicitly rather than skipping silently
-                       or guessing a result.
+EVAL_STATUS:
+  EVALUABLE          - dispatched to a real handler in rules/engine.py
+  ADVISORY           - static reminder, no real handler logic
+  NOT_YET_EVALUABLE  - underlying data source does not exist yet
 
-STEP 5 UPDATE: S-01, S-02, EP-04, S-15 (VIX), S-08 (IVR), S-07 (beta),
-and S-06 (range%) moved from NOT_YET_EVALUABLE to EVALUABLE now that
-market_data/ provides real VIX history, IV/IVR, and OHLC data. See
-rules/engine.py for the handler implementations and
-STRANGLE_OPTIONAL_HANDLERS for why these run without an open position.
+STEP 7 UPDATE: S-21, S-22, S-23, S-24, M-09, ES-09 (corporate events) and
+S-25, M-11, M-12 (market intel) moved from NOT_YET_EVALUABLE to EVALUABLE.
+
+S-27 added post-Step-7, found via real live TCS data: S-21/S-24/M-09 all
+use narrow day-windows before results, but a position entered earlier in
+the month stays open until expiry and is still exposed if results land
+before that expiry. S-27 is a whole-series block, not a timing window.
 
 PROJECT PATH:  rules/seed_rules.py
 """
@@ -692,8 +676,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "CRITICAL",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs corporate_events_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "no_entry_near_results",
         "notes": "KEPT - no conflict. Overlaps with S-03's broader \"skip whole stock if results scheduled during series\" but adds a precise 5-day window; complementary",
     },
@@ -706,8 +690,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "CRITICAL",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs corporate_events_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "no_entry_on_merger",
         "notes": "KEPT - no conflict. S-04's corporate-action list (buyback/split/bonus/rights/dividend) doesn't actually include merger/demerger - this fills a real gap",
     },
@@ -720,8 +704,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs corporate_events_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "no_entry_near_split_bonus",
         "notes": "KEPT - no conflict. Overlaps with S-04's blanket \"skip during series\" for the same event type",
     },
@@ -734,8 +718,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs corporate_events_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "reduce_size_results_week",
         "notes": "KEPT - no conflict. Sequences cleanly with S-21: 6-7 days out = reduce size",
     },
@@ -748,8 +732,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "MEDIUM",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs corporate_events_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "monitor_board_meeting",
         "notes": "KEPT - no conflict. Informational only",
     },
@@ -762,8 +746,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "CRITICAL",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs corporate_events_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "exit_on_same_day_merger",
         "notes": "KEPT - no conflict. The original ES-06 naming collision is moot now since old ES-06 (re-entry cooling) was deleted entirely today. This is a real event-driven exit",
     },
@@ -776,8 +760,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "HIGH",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs market_intel_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "block_on_bearish_calls",
         "notes": "KEPT - no conflict.",
     },
@@ -790,8 +774,8 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "MEDIUM",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs market_intel_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "warn_bearish_signal",
         "notes": "KEPT - no conflict. Sequences cleanly with S-25: any signal = warn",
     },
@@ -804,10 +788,24 @@ RULE_BOOK: list[dict] = [
         "default_on": True,
         "severity": "MEDIUM",
         "eval_type": "LOOKUP",
-        "eval_status": "NOT_YET_EVALUABLE",
-        "not_evaluable_reason": "Needs market_intel_cache populated - empty until Step 7",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
         "handler": "review_sector_bearish_news",
         "notes": "KEPT - no conflict. Portfolio-level flag",
+    },
+    {
+        "rule_id": "S-27",
+        "name": "No Entry If Results Fall Before Monthly Expiry",
+        "description": "If a quarterly/annual/half-yearly results announcement for this stock is scheduled at any point between today and the current series expiry (last Tuesday of the month), block entry for this stock for the rest of the series - entering earlier in the month does not avoid the risk, since the position would still be open and exposed when results actually hit. Also applies to re-entries and adjustments mid-series, not just brand-new entries.",
+        "category": "MANDATORY",
+        "group": "Setup",
+        "default_on": True,
+        "severity": "CRITICAL",
+        "eval_type": "LOOKUP",
+        "eval_status": "EVALUABLE",
+        "not_evaluable_reason": "",
+        "handler": "no_entry_results_before_expiry",
+        "notes": "NEW - closes a real gap found via live TCS data. S-21 only blocks the last 5 days before results; S-24 only reduces size 6-7 days before. A position entered earlier in the month (e.g. 10+ days before results) would still be open when results hit, since strangles run to expiry not to the results date. Distinct from S-21 - this is a whole-series block, not a tactical timing window. Applies to re-entry/adjustment too, per explicit confirmation.",
     },
 ]
 
