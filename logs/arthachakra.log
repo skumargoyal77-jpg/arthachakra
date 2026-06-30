@@ -499,3 +499,633 @@
 2026-06-29 14:13:20,392 | INFO    | rag.rule_store | Deleted 55 existing embeddings before re-embedding.
 2026-06-29 14:13:21,667 | INFO    | rag.rule_store | Embedded 55 rules from MongoDB into ChromaDB.
 2026-06-29 14:45:29,476 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-29 15:08:08,639 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 15:08:08,712 | INFO    | pnl.snapshot | Snapshot user=usr_f94d040714 date=2026-06-29: 0 strangles, total_pnl=0.00
+2026-06-29 15:08:09,185 | INFO    | pnl.snapshot | Snapshot user=usr_d2cbe27367 date=2026-06-29: 4 strangles, total_pnl=15772.50
+2026-06-29 15:08:34,696 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 15:08:34,739 | INFO    | pnl.snapshot | Snapshot user=usr_f94d040714 date=2026-06-25: 0 strangles, total_pnl=0.00
+2026-06-29 15:08:35,307 | INFO    | pnl.snapshot | Snapshot user=usr_d2cbe27367 date=2026-06-25: 4 strangles, total_pnl=15772.50
+2026-06-29 15:08:43,125 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 15:08:43,171 | INFO    | pnl.snapshot | Snapshot user=usr_f94d040714 date=2026-06-21: 0 strangles, total_pnl=0.00
+2026-06-29 15:08:43,704 | INFO    | pnl.snapshot | Snapshot user=usr_d2cbe27367 date=2026-06-21: 4 strangles, total_pnl=15772.50
+2026-06-29 17:50:12,864 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-29 17:50:13,670 | WARNING | market_data.ohlc_updater | Bhavcopy not available for 2026-06-29 — OHLC update skipped.
+2026-06-30 00:17:14,760 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 00:17:15,251 | WARNING | market_data.ohlc_updater | Bhavcopy not available for 2026-06-30 — OHLC update skipped.
+2026-06-30 00:18:42,020 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 00:18:42,967 | INFO    | market_data.bhavcopy | Saved Bhavcopy 2026-06-29 (8360 KB)
+2026-06-30 00:18:45,841 | INFO    | market_data.bhavcopy | Bhavcopy raw columns: ['TradDt', 'BizDt', 'Sgmt', 'Src', 'FinInstrmTp', 'FinInstrmId', 'ISIN', 'TckrSymb', 'SctySrs', 'XpryDt', 'FininstrmActlXpryDt', 'StrkPric', 'OptnTp', 'FinInstrmNm', 'OpnPric', 'HghPric', 'LwPric', 'ClsPric', 'LastPric', 'PrvsClsgPric', 'UndrlygPric', 'SttlmPric', 'OpnIntrst', 'ChngInOpnIntrst', 'TtlTradgVol', 'TtlTrfVal', 'TtlNbOfTxsExctd', 'SsnId', 'NewBrdLotQty', 'Rmks', 'Rsvd1', 'Rsvd2', 'Rsvd3', 'Rsvd4']
+2026-06-30 00:24:00,874 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 00:24:01,980 | INFO    | market_data.yfinance_backfill | Fetching HDFCBANK (HDFCBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:03,097 | INFO    | market_data.yfinance_backfill | Backfilled HDFCBANK: 66 months written
+2026-06-30 00:24:04,298 | INFO    | market_data.yfinance_backfill | Fetching TCS (TCS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:05,117 | INFO    | market_data.yfinance_backfill | Backfilled TCS: 66 months written
+2026-06-30 00:24:06,318 | INFO    | market_data.yfinance_backfill | Fetching SBILIFE (SBILIFE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:06,850 | INFO    | market_data.yfinance_backfill | Backfilled SBILIFE: 66 months written
+2026-06-30 00:24:08,051 | INFO    | market_data.yfinance_backfill | Fetching ASIANPAINT (ASIANPAINT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:09,008 | INFO    | market_data.yfinance_backfill | Backfilled ASIANPAINT: 66 months written
+2026-06-30 00:24:10,209 | INFO    | market_data.yfinance_backfill | Fetching MARICO (MARICO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:11,054 | INFO    | market_data.yfinance_backfill | Backfilled MARICO: 66 months written
+2026-06-30 00:24:12,255 | INFO    | market_data.yfinance_backfill | Fetching HDFCLIFE (HDFCLIFE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:12,919 | INFO    | market_data.yfinance_backfill | Backfilled HDFCLIFE: 66 months written
+2026-06-30 00:24:14,120 | INFO    | market_data.yfinance_backfill | Fetching RELIANCE (RELIANCE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:15,067 | INFO    | market_data.yfinance_backfill | Backfilled RELIANCE: 66 months written
+2026-06-30 00:24:16,269 | INFO    | market_data.yfinance_backfill | Fetching INFY (INFY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:17,530 | INFO    | market_data.yfinance_backfill | Backfilled INFY: 66 months written
+2026-06-30 00:24:18,731 | INFO    | market_data.yfinance_backfill | Fetching ITC (ITC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:19,404 | INFO    | market_data.yfinance_backfill | Backfilled ITC: 66 months written
+2026-06-30 00:24:20,606 | INFO    | market_data.yfinance_backfill | Fetching NESTLEIND (NESTLEIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:21,796 | INFO    | market_data.yfinance_backfill | Backfilled NESTLEIND: 66 months written
+2026-06-30 00:24:22,998 | INFO    | market_data.yfinance_backfill | Fetching POWERGRID (POWERGRID.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:23,893 | INFO    | market_data.yfinance_backfill | Backfilled POWERGRID: 66 months written
+2026-06-30 00:24:25,094 | INFO    | market_data.yfinance_backfill | Fetching NTPC (NTPC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:25,926 | INFO    | market_data.yfinance_backfill | Backfilled NTPC: 66 months written
+2026-06-30 00:24:27,128 | INFO    | market_data.yfinance_backfill | Fetching NIFTY (^NSEI) from 2021-01-01 to 2026-06-30
+2026-06-30 00:24:27,641 | INFO    | market_data.yfinance_backfill | Backfilled NIFTY: 66 months written
+2026-06-30 00:26:32,673 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 00:27:22,882 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 00:28:14,994 | INFO    | dashboard.dhan_instruments | dhan_instruments: downloaded 225632 rows — columns found: ['EXCH_ID', 'SEGMENT', 'SECURITY_ID', 'ISIN', 'INSTRUMENT', 'UNDERLYING_SECURITY_ID', 'UNDERLYING_SYMBOL', 'SYMBOL_NAME', 'DISPLAY_NAME', 'INSTRUMENT_TYPE', 'SERIES', 'LOT_SIZE', 'SM_EXPIRY_DATE', 'STRIKE_PRICE', 'OPTION_TYPE', 'TICK_SIZE', 'EXPIRY_FLAG', 'BRACKET_FLAG', 'COVER_FLAG', 'ASM_GSM_FLAG', 'ASM_GSM_CATEGORY', 'BUY_SELL_INDICATOR', 'BUY_CO_MIN_MARGIN_PER', 'BUY_CO_SL_RANGE_MAX_PERC', 'BUY_CO_SL_RANGE_MIN_PERC', 'BUY_BO_MIN_MARGIN_PER', 'BUY_BO_PROFIT_RANGE_MAX_PERC', 'BUY_BO_PROFIT_RANGE_MIN_PERC', 'MTF_LEVERAGE', 'SM_UPPER_LIMIT', 'SM_LOWER_LIMIT', 'SM_FREEZE_QTY', '']
+2026-06-30 00:28:15,009 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1136194
+2026-06-30 00:28:15,175 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:15,326 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:15,332 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1136528
+2026-06-30 00:28:15,454 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:15,567 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:15,577 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1136420
+2026-06-30 00:28:15,710 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:15,834 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:15,841 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1136096
+2026-06-30 00:28:15,937 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:16,049 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 00:28:16,057 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-30 00:28:53,743 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 00:29:45,527 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 00:32:11,091 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 00:32:23,153 | INFO    | market_intel.intel_scanner | IntelScanner: NIFTY -> 6 signals (B:0 Bear:1 N:5) -> WARN_BEFORE_ENTRY
+2026-06-30 00:32:31,948 | INFO    | market_intel.intel_scanner | IntelScanner: HDFCBANK -> 2 signals (B:1 Bear:0 N:1) -> CLEAR
+2026-06-30 00:32:43,528 | INFO    | market_intel.intel_scanner | IntelScanner: NESTLEIND -> 3 signals (B:0 Bear:0 N:3) -> CLEAR
+2026-06-30 00:32:53,755 | INFO    | market_intel.intel_scanner | IntelScanner: ITC -> 3 signals (B:1 Bear:1 N:1) -> WARN_BEFORE_ENTRY
+2026-06-30 01:25:52,266 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 01:27:03,963 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-30 01:27:04,072 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-30 01:27:36,143 | INFO    | dashboard.dhan_instruments | dhan_instruments: downloaded 225632 rows — columns found: ['EXCH_ID', 'SEGMENT', 'SECURITY_ID', 'ISIN', 'INSTRUMENT', 'UNDERLYING_SECURITY_ID', 'UNDERLYING_SYMBOL', 'SYMBOL_NAME', 'DISPLAY_NAME', 'INSTRUMENT_TYPE', 'SERIES', 'LOT_SIZE', 'SM_EXPIRY_DATE', 'STRIKE_PRICE', 'OPTION_TYPE', 'TICK_SIZE', 'EXPIRY_FLAG', 'BRACKET_FLAG', 'COVER_FLAG', 'ASM_GSM_FLAG', 'ASM_GSM_CATEGORY', 'BUY_SELL_INDICATOR', 'BUY_CO_MIN_MARGIN_PER', 'BUY_CO_SL_RANGE_MAX_PERC', 'BUY_CO_SL_RANGE_MIN_PERC', 'BUY_BO_MIN_MARGIN_PER', 'BUY_BO_PROFIT_RANGE_MAX_PERC', 'BUY_BO_PROFIT_RANGE_MIN_PERC', 'MTF_LEVERAGE', 'SM_UPPER_LIMIT', 'SM_LOWER_LIMIT', 'SM_FREEZE_QTY', '']
+2026-06-30 01:27:36,202 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'HDFCLIFE' -> security_id=1136420
+2026-06-30 01:27:36,338 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:HDFCLIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:36,521 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:HDFCLIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:36,532 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'ASIANPAINT' -> security_id=1136096
+2026-06-30 01:27:36,690 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:ASIANPAINT] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:36,845 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:ASIANPAINT] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:36,860 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'SBILIFE' -> security_id=1136528
+2026-06-30 01:27:37,085 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:SBILIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:37,300 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:SBILIFE] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:37,309 | INFO    | dashboard.dhan_greeks | dhan_greeks: dynamically resolved 'MARICO' -> security_id=1136194
+2026-06-30 01:27:37,490 | WARNING | dashboard.dhan_greeks | dhan_greeks: [expirylist:MARICO] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:37,635 | WARNING | dashboard.dhan_greeks | dhan_greeks: [optionchain:MARICO] HTTP 401 — full body: {'data': {'808': 'Authentication Failed - Client ID or Token invalid'}, 'status': 'failed'}
+2026-06-30 01:27:37,639 | INFO    | dashboard.dhan_greeks | dhan_greeks: total entries — 0 from Dhan, remainder from BS fallback
+2026-06-30 01:30:42,596 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 11:52:52,847 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 11:52:54,989 | INFO    | market_data.yfinance_backfill | Fetching ASIANPAINT (ASIANPAINT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:52:56,209 | INFO    | market_data.yfinance_backfill | Backfilled ASIANPAINT: 66 months written
+2026-06-30 11:52:57,410 | INFO    | market_data.yfinance_backfill | Fetching HDFCBANK (HDFCBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:52:57,844 | INFO    | market_data.yfinance_backfill | Backfilled HDFCBANK: 66 months written
+2026-06-30 11:52:59,046 | INFO    | market_data.yfinance_backfill | Fetching HDFCLIFE (HDFCLIFE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:52:59,439 | INFO    | market_data.yfinance_backfill | Backfilled HDFCLIFE: 66 months written
+2026-06-30 11:53:00,640 | INFO    | market_data.yfinance_backfill | Fetching INFY (INFY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:01,139 | INFO    | market_data.yfinance_backfill | Backfilled INFY: 66 months written
+2026-06-30 11:53:02,340 | INFO    | market_data.yfinance_backfill | Fetching ITC (ITC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:02,771 | INFO    | market_data.yfinance_backfill | Backfilled ITC: 66 months written
+2026-06-30 11:53:03,972 | INFO    | market_data.yfinance_backfill | Fetching MARICO (MARICO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:04,431 | INFO    | market_data.yfinance_backfill | Backfilled MARICO: 66 months written
+2026-06-30 11:53:05,632 | INFO    | market_data.yfinance_backfill | Fetching NESTLEIND (NESTLEIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:06,127 | INFO    | market_data.yfinance_backfill | Backfilled NESTLEIND: 66 months written
+2026-06-30 11:53:07,328 | INFO    | market_data.yfinance_backfill | Fetching NIFTY (^NSEI) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:07,752 | INFO    | market_data.yfinance_backfill | Backfilled NIFTY: 66 months written
+2026-06-30 11:53:08,953 | INFO    | market_data.yfinance_backfill | Fetching NTPC (NTPC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:09,390 | INFO    | market_data.yfinance_backfill | Backfilled NTPC: 66 months written
+2026-06-30 11:53:10,592 | INFO    | market_data.yfinance_backfill | Fetching POWERGRID (POWERGRID.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:11,097 | INFO    | market_data.yfinance_backfill | Backfilled POWERGRID: 66 months written
+2026-06-30 11:53:12,298 | INFO    | market_data.yfinance_backfill | Fetching RELIANCE (RELIANCE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:12,829 | INFO    | market_data.yfinance_backfill | Backfilled RELIANCE: 66 months written
+2026-06-30 11:53:14,030 | INFO    | market_data.yfinance_backfill | Fetching SBILIFE (SBILIFE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:14,568 | INFO    | market_data.yfinance_backfill | Backfilled SBILIFE: 66 months written
+2026-06-30 11:53:15,769 | INFO    | market_data.yfinance_backfill | Fetching TCS (TCS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 11:53:16,262 | INFO    | market_data.yfinance_backfill | Backfilled TCS: 66 months written
+2026-06-30 12:04:55,228 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 12:04:55,772 | INFO    | dashboard.fo_universe_importer | F&O universe import: 211 stocks, 5 indices
+2026-06-30 12:04:57,343 | INFO    | market_data.nse_index_constituents | Updated index memberships for 500 symbols across 5 indices
+2026-06-30 12:05:14,497 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 12:05:15,429 | INFO    | market_data.yfinance_backfill | Fetching 360ONE (360ONE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:16,350 | INFO    | market_data.yfinance_backfill | Backfilled 360ONE: 66 months written
+2026-06-30 12:05:17,551 | INFO    | market_data.yfinance_backfill | Fetching ABB (ABB.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:18,014 | INFO    | market_data.yfinance_backfill | Backfilled ABB: 66 months written
+2026-06-30 12:05:19,215 | INFO    | market_data.yfinance_backfill | Fetching ABCAPITAL (ABCAPITAL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:19,741 | INFO    | market_data.yfinance_backfill | Backfilled ABCAPITAL: 66 months written
+2026-06-30 12:05:20,942 | INFO    | market_data.yfinance_backfill | Fetching ADANIENSOL (ADANIENSOL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:21,385 | INFO    | market_data.yfinance_backfill | Backfilled ADANIENSOL: 66 months written
+2026-06-30 12:05:22,586 | INFO    | market_data.yfinance_backfill | Fetching ADANIENT (ADANIENT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:23,043 | INFO    | market_data.yfinance_backfill | Backfilled ADANIENT: 66 months written
+2026-06-30 12:05:24,244 | INFO    | market_data.yfinance_backfill | Fetching ADANIGREEN (ADANIGREEN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:24,606 | INFO    | market_data.yfinance_backfill | Backfilled ADANIGREEN: 66 months written
+2026-06-30 12:05:25,806 | INFO    | market_data.yfinance_backfill | Fetching ADANIPORTS (ADANIPORTS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:26,333 | INFO    | market_data.yfinance_backfill | Backfilled ADANIPORTS: 66 months written
+2026-06-30 12:05:27,534 | INFO    | market_data.yfinance_backfill | Fetching ADANIPOWER (ADANIPOWER.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:27,907 | INFO    | market_data.yfinance_backfill | Backfilled ADANIPOWER: 66 months written
+2026-06-30 12:05:29,108 | INFO    | market_data.yfinance_backfill | Fetching ALKEM (ALKEM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:29,582 | INFO    | market_data.yfinance_backfill | Backfilled ALKEM: 66 months written
+2026-06-30 12:05:30,783 | INFO    | market_data.yfinance_backfill | Fetching AMBER (AMBER.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:31,337 | INFO    | market_data.yfinance_backfill | Backfilled AMBER: 66 months written
+2026-06-30 12:05:32,538 | INFO    | market_data.yfinance_backfill | Fetching AMBUJACEM (AMBUJACEM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:33,182 | INFO    | market_data.yfinance_backfill | Backfilled AMBUJACEM: 66 months written
+2026-06-30 12:05:34,383 | INFO    | market_data.yfinance_backfill | Fetching ANGELONE (ANGELONE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:34,992 | INFO    | market_data.yfinance_backfill | Backfilled ANGELONE: 66 months written
+2026-06-30 12:05:36,193 | INFO    | market_data.yfinance_backfill | Fetching APLAPOLLO (APLAPOLLO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:36,779 | INFO    | market_data.yfinance_backfill | Backfilled APLAPOLLO: 66 months written
+2026-06-30 12:05:37,980 | INFO    | market_data.yfinance_backfill | Fetching APOLLOHOSP (APOLLOHOSP.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:38,593 | INFO    | market_data.yfinance_backfill | Backfilled APOLLOHOSP: 66 months written
+2026-06-30 12:05:39,794 | INFO    | market_data.yfinance_backfill | Fetching ASHOKLEY (ASHOKLEY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:40,455 | INFO    | market_data.yfinance_backfill | Backfilled ASHOKLEY: 66 months written
+2026-06-30 12:05:41,657 | INFO    | market_data.yfinance_backfill | Fetching ASIANPAINT (ASIANPAINT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:42,267 | INFO    | market_data.yfinance_backfill | Backfilled ASIANPAINT: 66 months written
+2026-06-30 12:05:43,467 | INFO    | market_data.yfinance_backfill | Fetching ASTRAL (ASTRAL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:44,052 | INFO    | market_data.yfinance_backfill | Backfilled ASTRAL: 66 months written
+2026-06-30 12:05:45,254 | INFO    | market_data.yfinance_backfill | Fetching AUBANK (AUBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:45,650 | INFO    | market_data.yfinance_backfill | Backfilled AUBANK: 66 months written
+2026-06-30 12:05:46,850 | INFO    | market_data.yfinance_backfill | Fetching AUROPHARMA (AUROPHARMA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:47,417 | INFO    | market_data.yfinance_backfill | Backfilled AUROPHARMA: 66 months written
+2026-06-30 12:05:48,619 | INFO    | market_data.yfinance_backfill | Fetching AXISBANK (AXISBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:49,059 | INFO    | market_data.yfinance_backfill | Backfilled AXISBANK: 66 months written
+2026-06-30 12:05:50,260 | INFO    | market_data.yfinance_backfill | Fetching BAJAJ-AUTO (BAJAJ-AUTO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:50,761 | INFO    | market_data.yfinance_backfill | Backfilled BAJAJ-AUTO: 66 months written
+2026-06-30 12:05:51,962 | INFO    | market_data.yfinance_backfill | Fetching BAJAJFINSV (BAJAJFINSV.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:52,601 | INFO    | market_data.yfinance_backfill | Backfilled BAJAJFINSV: 66 months written
+2026-06-30 12:05:53,804 | INFO    | market_data.yfinance_backfill | Fetching BAJAJHLDNG (BAJAJHLDNG.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:54,403 | INFO    | market_data.yfinance_backfill | Backfilled BAJAJHLDNG: 66 months written
+2026-06-30 12:05:55,605 | INFO    | market_data.yfinance_backfill | Fetching BAJFINANCE (BAJFINANCE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:56,331 | INFO    | market_data.yfinance_backfill | Backfilled BAJFINANCE: 66 months written
+2026-06-30 12:05:57,533 | INFO    | market_data.yfinance_backfill | Fetching BANDHANBNK (BANDHANBNK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:58,127 | INFO    | market_data.yfinance_backfill | Backfilled BANDHANBNK: 66 months written
+2026-06-30 12:05:59,328 | INFO    | market_data.yfinance_backfill | Fetching BANKBARODA (BANKBARODA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:05:59,987 | INFO    | market_data.yfinance_backfill | Backfilled BANKBARODA: 66 months written
+2026-06-30 12:06:01,188 | INFO    | market_data.yfinance_backfill | Fetching BANKINDIA (BANKINDIA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:01,905 | INFO    | market_data.yfinance_backfill | Backfilled BANKINDIA: 66 months written
+2026-06-30 12:06:03,107 | INFO    | market_data.yfinance_backfill | Fetching BANKNIFTY (^NSEBANK) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:03,683 | INFO    | market_data.yfinance_backfill | Backfilled BANKNIFTY: 66 months written
+2026-06-30 12:06:04,884 | INFO    | market_data.yfinance_backfill | Fetching BDL (BDL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:05,492 | INFO    | market_data.yfinance_backfill | Backfilled BDL: 66 months written
+2026-06-30 12:06:06,693 | INFO    | market_data.yfinance_backfill | Fetching BEL (BEL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:07,387 | INFO    | market_data.yfinance_backfill | Backfilled BEL: 66 months written
+2026-06-30 12:06:08,589 | INFO    | market_data.yfinance_backfill | Fetching BHARATFORG (BHARATFORG.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:09,205 | INFO    | market_data.yfinance_backfill | Backfilled BHARATFORG: 66 months written
+2026-06-30 12:06:10,407 | INFO    | market_data.yfinance_backfill | Fetching BHARTIARTL (BHARTIARTL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:11,101 | INFO    | market_data.yfinance_backfill | Backfilled BHARTIARTL: 66 months written
+2026-06-30 12:06:12,302 | INFO    | market_data.yfinance_backfill | Fetching BHEL (BHEL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:12,930 | INFO    | market_data.yfinance_backfill | Backfilled BHEL: 66 months written
+2026-06-30 12:06:14,131 | INFO    | market_data.yfinance_backfill | Fetching BIOCON (BIOCON.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:14,813 | INFO    | market_data.yfinance_backfill | Backfilled BIOCON: 66 months written
+2026-06-30 12:06:16,014 | INFO    | market_data.yfinance_backfill | Fetching BLUESTARCO (BLUESTARCO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:16,693 | INFO    | market_data.yfinance_backfill | Backfilled BLUESTARCO: 66 months written
+2026-06-30 12:06:17,894 | INFO    | market_data.yfinance_backfill | Fetching BOSCHLTD (BOSCHLTD.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:18,645 | INFO    | market_data.yfinance_backfill | Backfilled BOSCHLTD: 66 months written
+2026-06-30 12:06:19,846 | INFO    | market_data.yfinance_backfill | Fetching BPCL (BPCL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:20,501 | INFO    | market_data.yfinance_backfill | Backfilled BPCL: 66 months written
+2026-06-30 12:06:21,702 | INFO    | market_data.yfinance_backfill | Fetching BRITANNIA (BRITANNIA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:22,323 | INFO    | market_data.yfinance_backfill | Backfilled BRITANNIA: 66 months written
+2026-06-30 12:06:23,525 | INFO    | market_data.yfinance_backfill | Fetching BSE (BSE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:24,190 | INFO    | market_data.yfinance_backfill | Backfilled BSE: 66 months written
+2026-06-30 12:06:25,391 | INFO    | market_data.yfinance_backfill | Fetching CAMS (CAMS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:26,113 | INFO    | market_data.yfinance_backfill | Backfilled CAMS: 66 months written
+2026-06-30 12:06:27,314 | INFO    | market_data.yfinance_backfill | Fetching CANBK (CANBK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:27,976 | INFO    | market_data.yfinance_backfill | Backfilled CANBK: 66 months written
+2026-06-30 12:06:29,177 | INFO    | market_data.yfinance_backfill | Fetching CDSL (CDSL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:29,875 | INFO    | market_data.yfinance_backfill | Backfilled CDSL: 66 months written
+2026-06-30 12:06:31,076 | INFO    | market_data.yfinance_backfill | Fetching CGPOWER (CGPOWER.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:31,725 | INFO    | market_data.yfinance_backfill | Backfilled CGPOWER: 66 months written
+2026-06-30 12:06:32,927 | INFO    | market_data.yfinance_backfill | Fetching CHOLAFIN (CHOLAFIN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:33,573 | INFO    | market_data.yfinance_backfill | Backfilled CHOLAFIN: 66 months written
+2026-06-30 12:06:34,774 | INFO    | market_data.yfinance_backfill | Fetching CIPLA (CIPLA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:35,426 | INFO    | market_data.yfinance_backfill | Backfilled CIPLA: 66 months written
+2026-06-30 12:06:36,627 | INFO    | market_data.yfinance_backfill | Fetching COALINDIA (COALINDIA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:37,348 | INFO    | market_data.yfinance_backfill | Backfilled COALINDIA: 66 months written
+2026-06-30 12:06:38,549 | INFO    | market_data.yfinance_backfill | Fetching COCHINSHIP (COCHINSHIP.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:39,207 | INFO    | market_data.yfinance_backfill | Backfilled COCHINSHIP: 66 months written
+2026-06-30 12:06:40,408 | INFO    | market_data.yfinance_backfill | Fetching COFORGE (COFORGE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:41,033 | INFO    | market_data.yfinance_backfill | Backfilled COFORGE: 66 months written
+2026-06-30 12:06:42,234 | INFO    | market_data.yfinance_backfill | Fetching COLPAL (COLPAL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:42,938 | INFO    | market_data.yfinance_backfill | Backfilled COLPAL: 66 months written
+2026-06-30 12:06:44,139 | INFO    | market_data.yfinance_backfill | Fetching CONCOR (CONCOR.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:44,809 | INFO    | market_data.yfinance_backfill | Backfilled CONCOR: 66 months written
+2026-06-30 12:06:46,011 | INFO    | market_data.yfinance_backfill | Fetching CROMPTON (CROMPTON.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:46,670 | INFO    | market_data.yfinance_backfill | Backfilled CROMPTON: 66 months written
+2026-06-30 12:06:47,871 | INFO    | market_data.yfinance_backfill | Fetching CUMMINSIND (CUMMINSIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:48,483 | INFO    | market_data.yfinance_backfill | Backfilled CUMMINSIND: 66 months written
+2026-06-30 12:06:49,684 | INFO    | market_data.yfinance_backfill | Fetching DABUR (DABUR.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:50,394 | INFO    | market_data.yfinance_backfill | Backfilled DABUR: 66 months written
+2026-06-30 12:06:51,595 | INFO    | market_data.yfinance_backfill | Fetching DALBHARAT (DALBHARAT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:52,218 | INFO    | market_data.yfinance_backfill | Backfilled DALBHARAT: 66 months written
+2026-06-30 12:06:53,419 | INFO    | market_data.yfinance_backfill | Fetching DELHIVERY (DELHIVERY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:53,912 | INFO    | market_data.yfinance_backfill | Backfilled DELHIVERY: 50 months written
+2026-06-30 12:06:55,113 | INFO    | market_data.yfinance_backfill | Fetching DIVISLAB (DIVISLAB.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:55,847 | INFO    | market_data.yfinance_backfill | Backfilled DIVISLAB: 66 months written
+2026-06-30 12:06:57,048 | INFO    | market_data.yfinance_backfill | Fetching DIXON (DIXON.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:57,813 | INFO    | market_data.yfinance_backfill | Backfilled DIXON: 66 months written
+2026-06-30 12:06:59,015 | INFO    | market_data.yfinance_backfill | Fetching DLF (DLF.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:06:59,658 | INFO    | market_data.yfinance_backfill | Backfilled DLF: 66 months written
+2026-06-30 12:07:00,859 | INFO    | market_data.yfinance_backfill | Fetching DMART (DMART.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:01,706 | INFO    | market_data.yfinance_backfill | Backfilled DMART: 66 months written
+2026-06-30 12:07:02,907 | INFO    | market_data.yfinance_backfill | Fetching DRREDDY (DRREDDY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:03,503 | INFO    | market_data.yfinance_backfill | Backfilled DRREDDY: 66 months written
+2026-06-30 12:07:04,704 | INFO    | market_data.yfinance_backfill | Fetching EICHERMOT (EICHERMOT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:05,351 | INFO    | market_data.yfinance_backfill | Backfilled EICHERMOT: 66 months written
+2026-06-30 12:07:06,551 | INFO    | market_data.yfinance_backfill | Fetching ETERNAL (ETERNAL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:07,102 | INFO    | market_data.yfinance_backfill | Backfilled ETERNAL: 60 months written
+2026-06-30 12:07:08,305 | INFO    | market_data.yfinance_backfill | Fetching EXIDEIND (EXIDEIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:09,077 | INFO    | market_data.yfinance_backfill | Backfilled EXIDEIND: 66 months written
+2026-06-30 12:07:10,278 | INFO    | market_data.yfinance_backfill | Fetching FEDERALBNK (FEDERALBNK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:10,913 | INFO    | market_data.yfinance_backfill | Backfilled FEDERALBNK: 66 months written
+2026-06-30 12:07:12,114 | INFO    | market_data.yfinance_backfill | Fetching FINNIFTY (FINNIFTY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:13,356 | WARNING | market_data.yfinance_backfill | No data returned for FINNIFTY (FINNIFTY.NS)
+2026-06-30 12:07:13,357 | INFO    | market_data.yfinance_backfill | Backfilled FINNIFTY: 0 months written
+2026-06-30 12:07:14,558 | INFO    | market_data.yfinance_backfill | Fetching FORCEMOT (FORCEMOT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:15,196 | INFO    | market_data.yfinance_backfill | Backfilled FORCEMOT: 65 months written
+2026-06-30 12:07:16,397 | INFO    | market_data.yfinance_backfill | Fetching FORTIS (FORTIS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:17,017 | INFO    | market_data.yfinance_backfill | Backfilled FORTIS: 66 months written
+2026-06-30 12:07:18,218 | INFO    | market_data.yfinance_backfill | Fetching GAIL (GAIL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:19,003 | INFO    | market_data.yfinance_backfill | Backfilled GAIL: 66 months written
+2026-06-30 12:07:20,204 | INFO    | market_data.yfinance_backfill | Fetching GLENMARK (GLENMARK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:20,863 | INFO    | market_data.yfinance_backfill | Backfilled GLENMARK: 66 months written
+2026-06-30 12:07:22,064 | INFO    | market_data.yfinance_backfill | Fetching GMRAIRPORT (GMRAIRPORT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:22,673 | INFO    | market_data.yfinance_backfill | Backfilled GMRAIRPORT: 66 months written
+2026-06-30 12:07:23,874 | INFO    | market_data.yfinance_backfill | Fetching GODFRYPHLP (GODFRYPHLP.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:24,494 | INFO    | market_data.yfinance_backfill | Backfilled GODFRYPHLP: 66 months written
+2026-06-30 12:07:25,695 | INFO    | market_data.yfinance_backfill | Fetching GODREJCP (GODREJCP.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:26,411 | INFO    | market_data.yfinance_backfill | Backfilled GODREJCP: 66 months written
+2026-06-30 12:07:27,612 | INFO    | market_data.yfinance_backfill | Fetching GODREJPROP (GODREJPROP.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:28,555 | INFO    | market_data.yfinance_backfill | Backfilled GODREJPROP: 66 months written
+2026-06-30 12:07:29,756 | INFO    | market_data.yfinance_backfill | Fetching GRASIM (GRASIM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:30,433 | INFO    | market_data.yfinance_backfill | Backfilled GRASIM: 66 months written
+2026-06-30 12:07:31,636 | INFO    | market_data.yfinance_backfill | Fetching GVT&D (GVT&D.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:32,329 | INFO    | market_data.yfinance_backfill | Backfilled GVT&D: 66 months written
+2026-06-30 12:07:33,530 | INFO    | market_data.yfinance_backfill | Fetching HAL (HAL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:34,180 | INFO    | market_data.yfinance_backfill | Backfilled HAL: 66 months written
+2026-06-30 12:07:35,381 | INFO    | market_data.yfinance_backfill | Fetching HAVELLS (HAVELLS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:36,091 | INFO    | market_data.yfinance_backfill | Backfilled HAVELLS: 66 months written
+2026-06-30 12:07:37,292 | INFO    | market_data.yfinance_backfill | Fetching HCLTECH (HCLTECH.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:37,978 | INFO    | market_data.yfinance_backfill | Backfilled HCLTECH: 66 months written
+2026-06-30 12:07:39,180 | INFO    | market_data.yfinance_backfill | Fetching HDFCAMC (HDFCAMC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:39,851 | INFO    | market_data.yfinance_backfill | Backfilled HDFCAMC: 66 months written
+2026-06-30 12:07:41,052 | INFO    | market_data.yfinance_backfill | Fetching HDFCBANK (HDFCBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:41,727 | INFO    | market_data.yfinance_backfill | Backfilled HDFCBANK: 66 months written
+2026-06-30 12:07:42,929 | INFO    | market_data.yfinance_backfill | Fetching HDFCLIFE (HDFCLIFE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:43,571 | INFO    | market_data.yfinance_backfill | Backfilled HDFCLIFE: 66 months written
+2026-06-30 12:07:44,772 | INFO    | market_data.yfinance_backfill | Fetching HEROMOTOCO (HEROMOTOCO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:45,394 | INFO    | market_data.yfinance_backfill | Backfilled HEROMOTOCO: 66 months written
+2026-06-30 12:07:46,596 | INFO    | market_data.yfinance_backfill | Fetching HINDALCO (HINDALCO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:47,510 | INFO    | market_data.yfinance_backfill | Backfilled HINDALCO: 66 months written
+2026-06-30 12:07:48,711 | INFO    | market_data.yfinance_backfill | Fetching HINDPETRO (HINDPETRO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:49,363 | INFO    | market_data.yfinance_backfill | Backfilled HINDPETRO: 66 months written
+2026-06-30 12:07:50,564 | INFO    | market_data.yfinance_backfill | Fetching HINDUNILVR (HINDUNILVR.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:51,265 | INFO    | market_data.yfinance_backfill | Backfilled HINDUNILVR: 66 months written
+2026-06-30 12:07:52,466 | INFO    | market_data.yfinance_backfill | Fetching HINDZINC (HINDZINC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:53,124 | INFO    | market_data.yfinance_backfill | Backfilled HINDZINC: 66 months written
+2026-06-30 12:07:54,326 | INFO    | market_data.yfinance_backfill | Fetching HYUNDAI (HYUNDAI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:54,718 | INFO    | market_data.yfinance_backfill | Backfilled HYUNDAI: 21 months written
+2026-06-30 12:07:55,919 | INFO    | market_data.yfinance_backfill | Fetching ICICIBANK (ICICIBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:56,562 | INFO    | market_data.yfinance_backfill | Backfilled ICICIBANK: 66 months written
+2026-06-30 12:07:57,764 | INFO    | market_data.yfinance_backfill | Fetching ICICIGI (ICICIGI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:07:58,405 | INFO    | market_data.yfinance_backfill | Backfilled ICICIGI: 66 months written
+2026-06-30 12:07:59,606 | INFO    | market_data.yfinance_backfill | Fetching ICICIPRULI (ICICIPRULI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:00,265 | INFO    | market_data.yfinance_backfill | Backfilled ICICIPRULI: 66 months written
+2026-06-30 12:08:01,466 | INFO    | market_data.yfinance_backfill | Fetching IDEA (IDEA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:02,275 | INFO    | market_data.yfinance_backfill | Backfilled IDEA: 66 months written
+2026-06-30 12:08:03,476 | INFO    | market_data.yfinance_backfill | Fetching IDFCFIRSTB (IDFCFIRSTB.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:04,062 | INFO    | market_data.yfinance_backfill | Backfilled IDFCFIRSTB: 66 months written
+2026-06-30 12:08:05,264 | INFO    | market_data.yfinance_backfill | Fetching IEX (IEX.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:05,908 | INFO    | market_data.yfinance_backfill | Backfilled IEX: 66 months written
+2026-06-30 12:08:07,109 | INFO    | market_data.yfinance_backfill | Fetching INDHOTEL (INDHOTEL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:07,711 | INFO    | market_data.yfinance_backfill | Backfilled INDHOTEL: 66 months written
+2026-06-30 12:08:08,912 | INFO    | market_data.yfinance_backfill | Fetching INDIANB (INDIANB.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:09,530 | INFO    | market_data.yfinance_backfill | Backfilled INDIANB: 66 months written
+2026-06-30 12:08:10,731 | INFO    | market_data.yfinance_backfill | Fetching INDIGO (INDIGO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:11,490 | INFO    | market_data.yfinance_backfill | Backfilled INDIGO: 66 months written
+2026-06-30 12:08:12,691 | INFO    | market_data.yfinance_backfill | Fetching INDUSINDBK (INDUSINDBK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:13,301 | INFO    | market_data.yfinance_backfill | Backfilled INDUSINDBK: 66 months written
+2026-06-30 12:08:14,502 | INFO    | market_data.yfinance_backfill | Fetching INDUSTOWER (INDUSTOWER.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:15,098 | INFO    | market_data.yfinance_backfill | Backfilled INDUSTOWER: 66 months written
+2026-06-30 12:08:16,299 | INFO    | market_data.yfinance_backfill | Fetching INFY (INFY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:16,946 | INFO    | market_data.yfinance_backfill | Backfilled INFY: 66 months written
+2026-06-30 12:08:18,147 | INFO    | market_data.yfinance_backfill | Fetching INOXWIND (INOXWIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:18,742 | INFO    | market_data.yfinance_backfill | Backfilled INOXWIND: 66 months written
+2026-06-30 12:08:19,942 | INFO    | market_data.yfinance_backfill | Fetching IOC (IOC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:20,930 | INFO    | market_data.yfinance_backfill | Backfilled IOC: 66 months written
+2026-06-30 12:08:22,131 | INFO    | market_data.yfinance_backfill | Fetching IREDA (IREDA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:22,605 | INFO    | market_data.yfinance_backfill | Backfilled IREDA: 32 months written
+2026-06-30 12:08:23,806 | INFO    | market_data.yfinance_backfill | Fetching IRFC (IRFC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:24,416 | INFO    | market_data.yfinance_backfill | Backfilled IRFC: 66 months written
+2026-06-30 12:08:25,617 | INFO    | market_data.yfinance_backfill | Fetching ITC (ITC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:26,256 | INFO    | market_data.yfinance_backfill | Backfilled ITC: 66 months written
+2026-06-30 12:08:27,457 | INFO    | market_data.yfinance_backfill | Fetching JINDALSTEL (JINDALSTEL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:28,020 | INFO    | market_data.yfinance_backfill | Backfilled JINDALSTEL: 66 months written
+2026-06-30 12:08:29,220 | INFO    | market_data.yfinance_backfill | Fetching JIOFIN (JIOFIN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:29,663 | INFO    | market_data.yfinance_backfill | Backfilled JIOFIN: 35 months written
+2026-06-30 12:08:30,864 | INFO    | market_data.yfinance_backfill | Fetching JSWENERGY (JSWENERGY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:31,546 | INFO    | market_data.yfinance_backfill | Backfilled JSWENERGY: 66 months written
+2026-06-30 12:08:32,747 | INFO    | market_data.yfinance_backfill | Fetching JSWSTEEL (JSWSTEEL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:33,509 | INFO    | market_data.yfinance_backfill | Backfilled JSWSTEEL: 66 months written
+2026-06-30 12:08:34,712 | INFO    | market_data.yfinance_backfill | Fetching JUBLFOOD (JUBLFOOD.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:35,287 | INFO    | market_data.yfinance_backfill | Backfilled JUBLFOOD: 66 months written
+2026-06-30 12:08:36,488 | INFO    | market_data.yfinance_backfill | Fetching KALYANKJIL (KALYANKJIL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:37,165 | INFO    | market_data.yfinance_backfill | Backfilled KALYANKJIL: 64 months written
+2026-06-30 12:08:38,367 | INFO    | market_data.yfinance_backfill | Fetching KAYNES (KAYNES.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:38,895 | INFO    | market_data.yfinance_backfill | Backfilled KAYNES: 44 months written
+2026-06-30 12:08:40,097 | INFO    | market_data.yfinance_backfill | Fetching KEI (KEI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:40,952 | INFO    | market_data.yfinance_backfill | Backfilled KEI: 66 months written
+2026-06-30 12:08:42,153 | INFO    | market_data.yfinance_backfill | Fetching KFINTECH (KFINTECH.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:42,668 | INFO    | market_data.yfinance_backfill | Backfilled KFINTECH: 43 months written
+2026-06-30 12:08:43,869 | INFO    | market_data.yfinance_backfill | Fetching KOTAKBANK (KOTAKBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:44,462 | INFO    | market_data.yfinance_backfill | Backfilled KOTAKBANK: 66 months written
+2026-06-30 12:08:45,662 | INFO    | market_data.yfinance_backfill | Fetching KPITTECH (KPITTECH.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:46,085 | INFO    | market_data.yfinance_backfill | Backfilled KPITTECH: 66 months written
+2026-06-30 12:08:47,285 | INFO    | market_data.yfinance_backfill | Fetching LAURUSLABS (LAURUSLABS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:47,710 | INFO    | market_data.yfinance_backfill | Backfilled LAURUSLABS: 66 months written
+2026-06-30 12:08:48,911 | INFO    | market_data.yfinance_backfill | Fetching LICHSGFIN (LICHSGFIN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:49,597 | INFO    | market_data.yfinance_backfill | Backfilled LICHSGFIN: 66 months written
+2026-06-30 12:08:50,798 | INFO    | market_data.yfinance_backfill | Fetching LICI (LICI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:51,323 | INFO    | market_data.yfinance_backfill | Backfilled LICI: 50 months written
+2026-06-30 12:08:52,524 | INFO    | market_data.yfinance_backfill | Fetching LODHA (LODHA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:53,021 | INFO    | market_data.yfinance_backfill | Backfilled LODHA: 63 months written
+2026-06-30 12:08:54,223 | INFO    | market_data.yfinance_backfill | Fetching LT (LT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:54,733 | INFO    | market_data.yfinance_backfill | Backfilled LT: 66 months written
+2026-06-30 12:08:55,934 | INFO    | market_data.yfinance_backfill | Fetching LTF (LTF.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:56,419 | INFO    | market_data.yfinance_backfill | Backfilled LTF: 66 months written
+2026-06-30 12:08:57,620 | INFO    | market_data.yfinance_backfill | Fetching LTM (LTM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:58,084 | INFO    | market_data.yfinance_backfill | Backfilled LTM: 66 months written
+2026-06-30 12:08:59,285 | INFO    | market_data.yfinance_backfill | Fetching LUPIN (LUPIN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:08:59,791 | INFO    | market_data.yfinance_backfill | Backfilled LUPIN: 66 months written
+2026-06-30 12:09:00,992 | INFO    | market_data.yfinance_backfill | Fetching M&M (M&M.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:01,455 | INFO    | market_data.yfinance_backfill | Backfilled M&M: 66 months written
+2026-06-30 12:09:02,656 | INFO    | market_data.yfinance_backfill | Fetching MANAPPURAM (MANAPPURAM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:03,438 | INFO    | market_data.yfinance_backfill | Backfilled MANAPPURAM: 66 months written
+2026-06-30 12:09:04,640 | INFO    | market_data.yfinance_backfill | Fetching MANKIND (MANKIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:04,979 | INFO    | market_data.yfinance_backfill | Backfilled MANKIND: 38 months written
+2026-06-30 12:09:06,180 | INFO    | market_data.yfinance_backfill | Fetching MARICO (MARICO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:06,594 | INFO    | market_data.yfinance_backfill | Backfilled MARICO: 66 months written
+2026-06-30 12:09:07,794 | INFO    | market_data.yfinance_backfill | Fetching MARUTI (MARUTI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:08,242 | INFO    | market_data.yfinance_backfill | Backfilled MARUTI: 66 months written
+2026-06-30 12:09:09,443 | INFO    | market_data.yfinance_backfill | Fetching MAXHEALTH (MAXHEALTH.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:09,899 | INFO    | market_data.yfinance_backfill | Backfilled MAXHEALTH: 66 months written
+2026-06-30 12:09:11,100 | INFO    | market_data.yfinance_backfill | Fetching MAZDOCK (MAZDOCK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:11,498 | INFO    | market_data.yfinance_backfill | Backfilled MAZDOCK: 66 months written
+2026-06-30 12:09:12,699 | INFO    | market_data.yfinance_backfill | Fetching MCX (MCX.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:13,184 | INFO    | market_data.yfinance_backfill | Backfilled MCX: 66 months written
+2026-06-30 12:09:14,385 | INFO    | market_data.yfinance_backfill | Fetching MFSL (MFSL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:14,864 | INFO    | market_data.yfinance_backfill | Backfilled MFSL: 66 months written
+2026-06-30 12:09:16,065 | INFO    | market_data.yfinance_backfill | Fetching MIDCPNIFTY (MIDCPNIFTY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:17,181 | WARNING | market_data.yfinance_backfill | No data returned for MIDCPNIFTY (MIDCPNIFTY.NS)
+2026-06-30 12:09:17,181 | INFO    | market_data.yfinance_backfill | Backfilled MIDCPNIFTY: 0 months written
+2026-06-30 12:09:18,382 | INFO    | market_data.yfinance_backfill | Fetching MOTHERSON (MOTHERSON.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:18,893 | INFO    | market_data.yfinance_backfill | Backfilled MOTHERSON: 66 months written
+2026-06-30 12:09:20,093 | INFO    | market_data.yfinance_backfill | Fetching MOTILALOFS (MOTILALOFS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:20,729 | INFO    | market_data.yfinance_backfill | Backfilled MOTILALOFS: 66 months written
+2026-06-30 12:09:21,930 | INFO    | market_data.yfinance_backfill | Fetching MPHASIS (MPHASIS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:22,524 | INFO    | market_data.yfinance_backfill | Backfilled MPHASIS: 66 months written
+2026-06-30 12:09:23,726 | INFO    | market_data.yfinance_backfill | Fetching MUTHOOTFIN (MUTHOOTFIN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:24,619 | INFO    | market_data.yfinance_backfill | Backfilled MUTHOOTFIN: 66 months written
+2026-06-30 12:09:25,820 | INFO    | market_data.yfinance_backfill | Fetching NAM-INDIA (NAM-INDIA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:26,372 | INFO    | market_data.yfinance_backfill | Backfilled NAM-INDIA: 66 months written
+2026-06-30 12:09:27,573 | INFO    | market_data.yfinance_backfill | Fetching NATIONALUM (NATIONALUM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:28,248 | INFO    | market_data.yfinance_backfill | Backfilled NATIONALUM: 66 months written
+2026-06-30 12:09:29,449 | INFO    | market_data.yfinance_backfill | Fetching NAUKRI (NAUKRI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:29,932 | INFO    | market_data.yfinance_backfill | Backfilled NAUKRI: 66 months written
+2026-06-30 12:09:31,133 | INFO    | market_data.yfinance_backfill | Fetching NBCC (NBCC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:31,551 | INFO    | market_data.yfinance_backfill | Backfilled NBCC: 66 months written
+2026-06-30 12:09:32,753 | INFO    | market_data.yfinance_backfill | Fetching NESTLEIND (NESTLEIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:33,244 | INFO    | market_data.yfinance_backfill | Backfilled NESTLEIND: 66 months written
+2026-06-30 12:09:34,445 | INFO    | market_data.yfinance_backfill | Fetching NHPC (NHPC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:34,891 | INFO    | market_data.yfinance_backfill | Backfilled NHPC: 66 months written
+2026-06-30 12:09:36,092 | INFO    | market_data.yfinance_backfill | Fetching NIFTY (^NSEI) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:36,667 | INFO    | market_data.yfinance_backfill | Backfilled NIFTY: 66 months written
+2026-06-30 12:09:37,868 | INFO    | market_data.yfinance_backfill | Fetching NIFTYNXT50 (NIFTYNXT50.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:38,968 | WARNING | market_data.yfinance_backfill | No data returned for NIFTYNXT50 (NIFTYNXT50.NS)
+2026-06-30 12:09:38,968 | INFO    | market_data.yfinance_backfill | Backfilled NIFTYNXT50: 0 months written
+2026-06-30 12:09:40,170 | INFO    | market_data.yfinance_backfill | Fetching NMDC (NMDC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:40,872 | INFO    | market_data.yfinance_backfill | Backfilled NMDC: 66 months written
+2026-06-30 12:09:42,073 | INFO    | market_data.yfinance_backfill | Fetching NTPC (NTPC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:42,590 | INFO    | market_data.yfinance_backfill | Backfilled NTPC: 66 months written
+2026-06-30 12:09:43,791 | INFO    | market_data.yfinance_backfill | Fetching NUVAMA (NUVAMA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:44,285 | INFO    | market_data.yfinance_backfill | Backfilled NUVAMA: 34 months written
+2026-06-30 12:09:45,486 | INFO    | market_data.yfinance_backfill | Fetching NYKAA (NYKAA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:46,019 | INFO    | market_data.yfinance_backfill | Backfilled NYKAA: 56 months written
+2026-06-30 12:09:47,220 | INFO    | market_data.yfinance_backfill | Fetching OBEROIRLTY (OBEROIRLTY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:47,716 | INFO    | market_data.yfinance_backfill | Backfilled OBEROIRLTY: 66 months written
+2026-06-30 12:09:48,917 | INFO    | market_data.yfinance_backfill | Fetching OFSS (OFSS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:49,756 | INFO    | market_data.yfinance_backfill | Backfilled OFSS: 66 months written
+2026-06-30 12:09:50,958 | INFO    | market_data.yfinance_backfill | Fetching OIL (OIL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:51,386 | INFO    | market_data.yfinance_backfill | Backfilled OIL: 66 months written
+2026-06-30 12:09:52,586 | INFO    | market_data.yfinance_backfill | Fetching ONGC (ONGC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:53,109 | INFO    | market_data.yfinance_backfill | Backfilled ONGC: 66 months written
+2026-06-30 12:09:54,310 | INFO    | market_data.yfinance_backfill | Fetching PAGEIND (PAGEIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:54,740 | INFO    | market_data.yfinance_backfill | Backfilled PAGEIND: 66 months written
+2026-06-30 12:09:55,941 | INFO    | market_data.yfinance_backfill | Fetching PATANJALI (PATANJALI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:56,356 | INFO    | market_data.yfinance_backfill | Backfilled PATANJALI: 66 months written
+2026-06-30 12:09:57,557 | INFO    | market_data.yfinance_backfill | Fetching PAYTM (PAYTM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:09:58,210 | INFO    | market_data.yfinance_backfill | Backfilled PAYTM: 56 months written
+2026-06-30 12:09:59,411 | INFO    | market_data.yfinance_backfill | Fetching PERSISTENT (PERSISTENT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:00,234 | INFO    | market_data.yfinance_backfill | Backfilled PERSISTENT: 66 months written
+2026-06-30 12:10:01,435 | INFO    | market_data.yfinance_backfill | Fetching PETRONET (PETRONET.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:01,946 | INFO    | market_data.yfinance_backfill | Backfilled PETRONET: 66 months written
+2026-06-30 12:10:03,147 | INFO    | market_data.yfinance_backfill | Fetching PFC (PFC.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:03,690 | INFO    | market_data.yfinance_backfill | Backfilled PFC: 66 months written
+2026-06-30 12:10:04,891 | INFO    | market_data.yfinance_backfill | Fetching PGEL (PGEL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:05,327 | INFO    | market_data.yfinance_backfill | Backfilled PGEL: 66 months written
+2026-06-30 12:10:06,528 | INFO    | market_data.yfinance_backfill | Fetching PHOENIXLTD (PHOENIXLTD.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:06,955 | INFO    | market_data.yfinance_backfill | Backfilled PHOENIXLTD: 66 months written
+2026-06-30 12:10:08,156 | INFO    | market_data.yfinance_backfill | Fetching PIDILITIND (PIDILITIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:08,791 | INFO    | market_data.yfinance_backfill | Backfilled PIDILITIND: 66 months written
+2026-06-30 12:10:09,992 | INFO    | market_data.yfinance_backfill | Fetching PIIND (PIIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:10,407 | INFO    | market_data.yfinance_backfill | Backfilled PIIND: 66 months written
+2026-06-30 12:10:11,608 | INFO    | market_data.yfinance_backfill | Fetching PNB (PNB.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:12,075 | INFO    | market_data.yfinance_backfill | Backfilled PNB: 66 months written
+2026-06-30 12:10:13,275 | INFO    | market_data.yfinance_backfill | Fetching PNBHOUSING (PNBHOUSING.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:13,680 | INFO    | market_data.yfinance_backfill | Backfilled PNBHOUSING: 66 months written
+2026-06-30 12:10:14,880 | INFO    | market_data.yfinance_backfill | Fetching POLICYBZR (POLICYBZR.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:15,277 | INFO    | market_data.yfinance_backfill | Backfilled POLICYBZR: 56 months written
+2026-06-30 12:10:16,478 | INFO    | market_data.yfinance_backfill | Fetching POLYCAB (POLYCAB.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:17,276 | INFO    | market_data.yfinance_backfill | Backfilled POLYCAB: 66 months written
+2026-06-30 12:10:18,478 | INFO    | market_data.yfinance_backfill | Fetching POWERGRID (POWERGRID.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:18,920 | INFO    | market_data.yfinance_backfill | Backfilled POWERGRID: 66 months written
+2026-06-30 12:10:20,121 | INFO    | market_data.yfinance_backfill | Fetching POWERINDIA (POWERINDIA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:20,634 | INFO    | market_data.yfinance_backfill | Backfilled POWERINDIA: 66 months written
+2026-06-30 12:10:21,834 | INFO    | market_data.yfinance_backfill | Fetching PREMIERENE (PREMIERENE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:22,151 | INFO    | market_data.yfinance_backfill | Backfilled PREMIERENE: 22 months written
+2026-06-30 12:10:23,352 | INFO    | market_data.yfinance_backfill | Fetching PRESTIGE (PRESTIGE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:23,798 | INFO    | market_data.yfinance_backfill | Backfilled PRESTIGE: 66 months written
+2026-06-30 12:10:24,999 | INFO    | market_data.yfinance_backfill | Fetching RADICO (RADICO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:25,453 | INFO    | market_data.yfinance_backfill | Backfilled RADICO: 66 months written
+2026-06-30 12:10:26,654 | INFO    | market_data.yfinance_backfill | Fetching RBLBANK (RBLBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:27,058 | INFO    | market_data.yfinance_backfill | Backfilled RBLBANK: 66 months written
+2026-06-30 12:10:28,258 | INFO    | market_data.yfinance_backfill | Fetching RECLTD (RECLTD.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:28,728 | INFO    | market_data.yfinance_backfill | Backfilled RECLTD: 66 months written
+2026-06-30 12:10:29,928 | INFO    | market_data.yfinance_backfill | Fetching RELIANCE (RELIANCE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:30,389 | INFO    | market_data.yfinance_backfill | Backfilled RELIANCE: 66 months written
+2026-06-30 12:10:31,590 | INFO    | market_data.yfinance_backfill | Fetching RVNL (RVNL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:32,174 | INFO    | market_data.yfinance_backfill | Backfilled RVNL: 66 months written
+2026-06-30 12:10:33,375 | INFO    | market_data.yfinance_backfill | Fetching SAIL (SAIL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:33,909 | INFO    | market_data.yfinance_backfill | Backfilled SAIL: 66 months written
+2026-06-30 12:10:35,110 | INFO    | market_data.yfinance_backfill | Fetching SAMMAANCAP (SAMMAANCAP.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:35,642 | INFO    | market_data.yfinance_backfill | Backfilled SAMMAANCAP: 66 months written
+2026-06-30 12:10:36,843 | INFO    | market_data.yfinance_backfill | Fetching SBICARD (SBICARD.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:37,301 | INFO    | market_data.yfinance_backfill | Backfilled SBICARD: 66 months written
+2026-06-30 12:10:38,502 | INFO    | market_data.yfinance_backfill | Fetching SBILIFE (SBILIFE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:38,933 | INFO    | market_data.yfinance_backfill | Backfilled SBILIFE: 66 months written
+2026-06-30 12:10:40,134 | INFO    | market_data.yfinance_backfill | Fetching SBIN (SBIN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:40,580 | INFO    | market_data.yfinance_backfill | Backfilled SBIN: 66 months written
+2026-06-30 12:10:41,781 | INFO    | market_data.yfinance_backfill | Fetching SHREECEM (SHREECEM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:42,216 | INFO    | market_data.yfinance_backfill | Backfilled SHREECEM: 66 months written
+2026-06-30 12:10:43,417 | INFO    | market_data.yfinance_backfill | Fetching SHRIRAMFIN (SHRIRAMFIN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:43,937 | INFO    | market_data.yfinance_backfill | Backfilled SHRIRAMFIN: 66 months written
+2026-06-30 12:10:45,138 | INFO    | market_data.yfinance_backfill | Fetching SIEMENS (SIEMENS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:45,604 | INFO    | market_data.yfinance_backfill | Backfilled SIEMENS: 66 months written
+2026-06-30 12:10:46,805 | INFO    | market_data.yfinance_backfill | Fetching SOLARINDS (SOLARINDS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:47,248 | INFO    | market_data.yfinance_backfill | Backfilled SOLARINDS: 66 months written
+2026-06-30 12:10:48,449 | INFO    | market_data.yfinance_backfill | Fetching SONACOMS (SONACOMS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:48,882 | INFO    | market_data.yfinance_backfill | Backfilled SONACOMS: 61 months written
+2026-06-30 12:10:50,083 | INFO    | market_data.yfinance_backfill | Fetching SRF (SRF.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:50,523 | INFO    | market_data.yfinance_backfill | Backfilled SRF: 66 months written
+2026-06-30 12:10:51,724 | INFO    | market_data.yfinance_backfill | Fetching SUNPHARMA (SUNPHARMA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:52,310 | INFO    | market_data.yfinance_backfill | Backfilled SUNPHARMA: 66 months written
+2026-06-30 12:10:53,511 | INFO    | market_data.yfinance_backfill | Fetching SUPREMEIND (SUPREMEIND.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:53,944 | INFO    | market_data.yfinance_backfill | Backfilled SUPREMEIND: 66 months written
+2026-06-30 12:10:55,145 | INFO    | market_data.yfinance_backfill | Fetching SUZLON (SUZLON.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:55,620 | INFO    | market_data.yfinance_backfill | Backfilled SUZLON: 66 months written
+2026-06-30 12:10:56,820 | INFO    | market_data.yfinance_backfill | Fetching SWIGGY (SWIGGY.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:57,094 | INFO    | market_data.yfinance_backfill | Backfilled SWIGGY: 20 months written
+2026-06-30 12:10:58,295 | INFO    | market_data.yfinance_backfill | Fetching TATACONSUM (TATACONSUM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:10:58,793 | INFO    | market_data.yfinance_backfill | Backfilled TATACONSUM: 66 months written
+2026-06-30 12:10:59,993 | INFO    | market_data.yfinance_backfill | Fetching TATAELXSI (TATAELXSI.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:00,395 | INFO    | market_data.yfinance_backfill | Backfilled TATAELXSI: 66 months written
+2026-06-30 12:11:01,595 | INFO    | market_data.yfinance_backfill | Fetching TATAPOWER (TATAPOWER.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:02,107 | INFO    | market_data.yfinance_backfill | Backfilled TATAPOWER: 66 months written
+2026-06-30 12:11:03,308 | INFO    | market_data.yfinance_backfill | Fetching TATASTEEL (TATASTEEL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:03,833 | INFO    | market_data.yfinance_backfill | Backfilled TATASTEEL: 66 months written
+2026-06-30 12:11:05,034 | INFO    | market_data.yfinance_backfill | Fetching TCS (TCS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:05,455 | INFO    | market_data.yfinance_backfill | Backfilled TCS: 66 months written
+2026-06-30 12:11:06,656 | INFO    | market_data.yfinance_backfill | Fetching TECHM (TECHM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:07,310 | INFO    | market_data.yfinance_backfill | Backfilled TECHM: 66 months written
+2026-06-30 12:11:08,511 | INFO    | market_data.yfinance_backfill | Fetching TIINDIA (TIINDIA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:09,056 | INFO    | market_data.yfinance_backfill | Backfilled TIINDIA: 66 months written
+2026-06-30 12:11:10,257 | INFO    | market_data.yfinance_backfill | Fetching TITAN (TITAN.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:10,708 | INFO    | market_data.yfinance_backfill | Backfilled TITAN: 66 months written
+2026-06-30 12:11:11,909 | INFO    | market_data.yfinance_backfill | Fetching TMPV (TMPV.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:12,427 | INFO    | market_data.yfinance_backfill | Backfilled TMPV: 66 months written
+2026-06-30 12:11:13,628 | INFO    | market_data.yfinance_backfill | Fetching TORNTPHARM (TORNTPHARM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:14,053 | INFO    | market_data.yfinance_backfill | Backfilled TORNTPHARM: 66 months written
+2026-06-30 12:11:15,254 | INFO    | market_data.yfinance_backfill | Fetching TRENT (TRENT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:15,731 | INFO    | market_data.yfinance_backfill | Backfilled TRENT: 66 months written
+2026-06-30 12:11:16,931 | INFO    | market_data.yfinance_backfill | Fetching TVSMOTOR (TVSMOTOR.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:17,368 | INFO    | market_data.yfinance_backfill | Backfilled TVSMOTOR: 66 months written
+2026-06-30 12:11:18,569 | INFO    | market_data.yfinance_backfill | Fetching ULTRACEMCO (ULTRACEMCO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:19,156 | INFO    | market_data.yfinance_backfill | Backfilled ULTRACEMCO: 66 months written
+2026-06-30 12:11:20,358 | INFO    | market_data.yfinance_backfill | Fetching UNIONBANK (UNIONBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:20,803 | INFO    | market_data.yfinance_backfill | Backfilled UNIONBANK: 66 months written
+2026-06-30 12:11:22,004 | INFO    | market_data.yfinance_backfill | Fetching UNITDSPR (UNITDSPR.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:22,554 | INFO    | market_data.yfinance_backfill | Backfilled UNITDSPR: 66 months written
+2026-06-30 12:11:23,754 | INFO    | market_data.yfinance_backfill | Fetching UNOMINDA (UNOMINDA.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:24,178 | INFO    | market_data.yfinance_backfill | Backfilled UNOMINDA: 66 months written
+2026-06-30 12:11:25,378 | INFO    | market_data.yfinance_backfill | Fetching UPL (UPL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:25,864 | INFO    | market_data.yfinance_backfill | Backfilled UPL: 66 months written
+2026-06-30 12:11:27,065 | INFO    | market_data.yfinance_backfill | Fetching VBL (VBL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:27,450 | INFO    | market_data.yfinance_backfill | Backfilled VBL: 66 months written
+2026-06-30 12:11:28,651 | INFO    | market_data.yfinance_backfill | Fetching VEDL (VEDL.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:29,197 | INFO    | market_data.yfinance_backfill | Backfilled VEDL: 66 months written
+2026-06-30 12:11:30,398 | INFO    | market_data.yfinance_backfill | Fetching VMM (VMM.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:30,656 | INFO    | market_data.yfinance_backfill | Backfilled VMM: 19 months written
+2026-06-30 12:11:31,857 | INFO    | market_data.yfinance_backfill | Fetching VOLTAS (VOLTAS.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:32,480 | INFO    | market_data.yfinance_backfill | Backfilled VOLTAS: 66 months written
+2026-06-30 12:11:33,681 | INFO    | market_data.yfinance_backfill | Fetching WAAREEENER (WAAREEENER.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:33,984 | INFO    | market_data.yfinance_backfill | Backfilled WAAREEENER: 21 months written
+2026-06-30 12:11:35,185 | INFO    | market_data.yfinance_backfill | Fetching WIPRO (WIPRO.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:35,734 | INFO    | market_data.yfinance_backfill | Backfilled WIPRO: 66 months written
+2026-06-30 12:11:36,935 | INFO    | market_data.yfinance_backfill | Fetching YESBANK (YESBANK.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:37,408 | INFO    | market_data.yfinance_backfill | Backfilled YESBANK: 66 months written
+2026-06-30 12:11:38,610 | INFO    | market_data.yfinance_backfill | Fetching ZYDUSLIFE (ZYDUSLIFE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:11:39,242 | INFO    | market_data.yfinance_backfill | Backfilled ZYDUSLIFE: 66 months written
+2026-06-30 12:16:26,376 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 12:16:27,565 | INFO    | market_data.yfinance_backfill | Fetching FINNIFTY (NIFTY_FIN_SERVICE.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:16:28,719 | INFO    | market_data.yfinance_backfill | Backfilled FINNIFTY: 66 months written
+2026-06-30 12:16:29,920 | INFO    | market_data.yfinance_backfill | Fetching MIDCPNIFTY (NIFTY_MID_SELECT.NS) from 2021-01-01 to 2026-06-30
+2026-06-30 12:16:30,106 | WARNING | market_data.yfinance_backfill | No data returned for MIDCPNIFTY (NIFTY_MID_SELECT.NS)
+2026-06-30 12:16:30,106 | INFO    | market_data.yfinance_backfill | Backfilled MIDCPNIFTY: 0 months written
+2026-06-30 12:16:31,308 | INFO    | market_data.yfinance_backfill | Fetching NIFTYNXT50 (^NSMIDCP) from 2021-01-01 to 2026-06-30
+2026-06-30 12:16:31,977 | INFO    | market_data.yfinance_backfill | Backfilled NIFTYNXT50: 66 months written
+2026-06-30 14:07:58,710 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 14:08:00,569 | INFO    | market_data.yfinance_backfill | Fetching MIDCPNIFTY (NIFTY_MID_SELECT.NS) from 2023-11-01 to 2026-06-30
+2026-06-30 14:08:01,581 | WARNING | market_data.yfinance_backfill | No data returned for MIDCPNIFTY (NIFTY_MID_SELECT.NS)
+2026-06-30 14:08:01,582 | INFO    | market_data.yfinance_backfill | Backfilled MIDCPNIFTY: 0 months written
+2026-06-30 14:09:37,073 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 14:09:37,771 | INFO    | market_data.yfinance_backfill | Fetching NIFTY MID SELECT (NIFTY MID SELECT.NS) from 2023-11-01 to 2026-06-30
+2026-06-30 14:10:39,212 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 14:10:40,423 | INFO    | market_data.yfinance_backfill | Fetching NIFTY_MID_SELECT.NS (NIFTY_MID_SELECT.NS.NS) from 2023-11-01 to 2026-06-30
+2026-06-30 14:10:42,160 | WARNING | market_data.yfinance_backfill | No data returned for NIFTY_MID_SELECT.NS (NIFTY_MID_SELECT.NS.NS)
+2026-06-30 14:10:42,160 | INFO    | market_data.yfinance_backfill | Backfilled NIFTY_MID_SELECT.NS: 0 months written
+2026-06-30 14:12:24,002 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 14:12:34,052 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 14:12:34,810 | INFO    | market_data.yfinance_backfill | Fetching NIFTY_MIDCAP_50 (NIFTY_MIDCAP_50.NS) from 2023-11-01 to 2026-06-30
+2026-06-30 14:12:35,821 | WARNING | market_data.yfinance_backfill | No data returned for NIFTY_MIDCAP_50 (NIFTY_MIDCAP_50.NS)
+2026-06-30 14:12:35,821 | INFO    | market_data.yfinance_backfill | Backfilled NIFTY_MIDCAP_50: 0 months written
+2026-06-30 14:13:56,889 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 14:13:57,971 | INFO    | market_data.yfinance_backfill | Fetching NSE:NIFTYMIDCAP50 (NSE:NIFTYMIDCAP50.NS) from 2023-11-01 to 2026-06-30
+2026-06-30 14:13:59,489 | WARNING | market_data.yfinance_backfill | No data returned for NSE:NIFTYMIDCAP50 (NSE:NIFTYMIDCAP50.NS)
+2026-06-30 14:13:59,489 | INFO    | market_data.yfinance_backfill | Backfilled NSE:NIFTYMIDCAP50: 0 months written
+2026-06-30 14:14:21,225 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 14:14:22,069 | INFO    | market_data.yfinance_backfill | Fetching NSEMDCP50 (NSEMDCP50.NS) from 2023-11-01 to 2026-06-30
+2026-06-30 14:14:23,571 | WARNING | market_data.yfinance_backfill | No data returned for NSEMDCP50 (NSEMDCP50.NS)
+2026-06-30 14:14:23,571 | INFO    | market_data.yfinance_backfill | Backfilled NSEMDCP50: 0 months written
+2026-06-30 15:02:35,837 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 15:05:36,838 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 15:06:10,326 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 15:07:01,766 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 15:18:38,893 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 15:19:05,765 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: live token exchange succeeded
+2026-06-30 15:19:05,956 | INFO    | kite_oauth.kite_connect_flow | Kite OAuth: connection verified for Sandeep Kumar Goyal
+2026-06-30 15:19:41,563 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 15:19:52,813 | INFO    | market_intel.intel_scanner | IntelScanner: 360ONE -> 4 signals (B:0 Bear:1 N:3) -> WARN_BEFORE_ENTRY
+2026-06-30 16:46:19,954 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 16:46:38,498 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 16:46:49,042 | INFO    | market_intel.intel_scanner | IntelScanner: 360ONE -> 4 signals (B:0 Bear:1 N:3) -> WARN_BEFORE_ENTRY
+2026-06-30 17:13:20,845 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 17:13:53,313 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 17:25:05,635 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 17:33:59,743 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 17:34:16,438 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 17:38:09,661 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 17:40:19,692 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 17:40:19,768 | INFO    | core.database | ensure_indexes: created 1 indexes across 1 collections
+2026-06-30 17:41:24,063 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 17:41:39,676 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 17:42:12,967 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 17:42:23,912 | INFO    | market_intel.intel_scanner | IntelScanner: BANKNIFTY -> 6 signals (B:2 Bear:1 N:3) -> WARN_BEFORE_ENTRY
+2026-06-30 17:42:33,533 | INFO    | market_intel.intel_scanner | IntelScanner: NIFTYNXT50 -> 7 signals (B:0 Bear:1 N:6) -> WARN_BEFORE_ENTRY
+2026-06-30 17:42:46,135 | INFO    | market_intel.intel_scanner | IntelScanner: COLPAL -> 4 signals (B:0 Bear:1 N:3) -> WARN_BEFORE_ENTRY
+2026-06-30 17:45:40,162 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 17:45:51,147 | INFO    | market_intel.intel_scanner | IntelScanner: NIFTY -> 7 signals (B:0 Bear:1 N:6) -> WARN_BEFORE_ENTRY
+2026-06-30 17:46:01,486 | INFO    | market_intel.intel_scanner | IntelScanner: FINNIFTY -> 3 signals (B:0 Bear:0 N:3) -> CLEAR
+2026-06-30 17:46:10,606 | INFO    | market_intel.intel_scanner | IntelScanner: HDFCBANK -> 3 signals (B:1 Bear:1 N:1) -> WARN_BEFORE_ENTRY
+2026-06-30 17:46:22,266 | INFO    | market_intel.intel_scanner | IntelScanner: BRITANNIA -> 3 signals (B:0 Bear:1 N:2) -> WARN_BEFORE_ENTRY
+2026-06-30 17:46:32,490 | INFO    | market_intel.intel_scanner | IntelScanner: NESTLEIND -> 3 signals (B:0 Bear:1 N:2) -> WARN_BEFORE_ENTRY
+2026-06-30 17:46:41,854 | INFO    | market_intel.intel_scanner | IntelScanner: CIPLA -> 2 signals (B:0 Bear:1 N:1) -> WARN_BEFORE_ENTRY
+2026-06-30 17:46:52,082 | INFO    | market_intel.intel_scanner | IntelScanner: DABUR -> 2 signals (B:0 Bear:1 N:1) -> WARN_BEFORE_ENTRY
+2026-06-30 17:47:02,636 | INFO    | market_intel.intel_scanner | IntelScanner: DRREDDY -> 2 signals (B:0 Bear:1 N:1) -> WARN_BEFORE_ENTRY
+2026-06-30 17:47:14,113 | INFO    | market_intel.intel_scanner | IntelScanner: ITC -> 3 signals (B:1 Bear:1 N:1) -> WARN_BEFORE_ENTRY
+2026-06-30 18:37:23,560 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 18:52:47,218 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 18:52:47,291 | INFO    | core.database | ensure_indexes: created 17 indexes across 16 collections
+2026-06-30 18:52:59,842 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 20:35:37,107 | INFO    | core.database | Database: connected to MongoDB (mongodb://admin:nse_pass_2026@localhost:27017/ / arthachakra)
+2026-06-30 20:35:57,438 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 20:36:08,284 | INFO    | market_intel.intel_scanner | IntelScanner: 360ONE -> 4 signals (B:0 Bear:1 N:3) -> WARN_BEFORE_ENTRY
+2026-06-30 20:38:02,646 | INFO    | market_intel.tavily_search | TavilySearch ready (live mode)
+2026-06-30 20:38:14,022 | INFO    | market_intel.intel_scanner | IntelScanner: FINNIFTY -> 2 signals (B:0 Bear:0 N:2) -> CLEAR
+2026-06-30 20:38:24,280 | INFO    | market_intel.intel_scanner | IntelScanner: NIFTYNXT50 -> 5 signals (B:0 Bear:0 N:5) -> CLEAR
+2026-06-30 20:38:33,453 | INFO    | market_intel.intel_scanner | IntelScanner: DABUR -> 6 signals (B:0 Bear:3 N:3) -> BLOCK_ENTRY
+2026-06-30 20:38:43,207 | INFO    | market_intel.intel_scanner | IntelScanner: TATACONSUM -> 2 signals (B:0 Bear:1 N:1) -> WARN_BEFORE_ENTRY
+2026-06-30 20:38:53,455 | INFO    | market_intel.intel_scanner | IntelScanner: MARICO -> 4 signals (B:0 Bear:1 N:3) -> WARN_BEFORE_ENTRY

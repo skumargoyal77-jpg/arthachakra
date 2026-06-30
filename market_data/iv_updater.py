@@ -91,6 +91,20 @@ def update_iv_for_symbol(db: Database, scraper: BhavcopyScraper, symbol: str, dt
     return {"symbol": symbol, "date": dt.isoformat(), "iv_atm": iv, "ivr": ivr}
 
 
+def get_latest_ivr(db: Database, symbol: str) -> float | None:
+    """
+    Read-only IVR from already-stored iv_history — no live Bhavcopy
+    fetch needed. For callers (like dashboard/action_plan.py) that
+    just want "what's the IVR right now" without triggering a fresh
+    NSE download every time.
+    """
+    history = db.iv_history.find({"symbol": symbol})
+    series = [h["iv_atm"] for h in sorted(history, key=lambda h: h["date"]) if h.get("iv_atm") is not None]
+    if not series:
+        return None
+    return compute_ivr(series)
+
+
 def update_iv_for_watchlist(db: Database, symbols: list[str], dt: date) -> list[dict]:
     """Runs update_iv_for_symbol for every symbol in the watchlist. One bad symbol never stops the rest."""
     scraper = BhavcopyScraper()

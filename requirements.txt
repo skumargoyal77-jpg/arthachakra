@@ -17,9 +17,18 @@ sentence-transformers>=3.0
 # Step 5 — market_data/. Bhavcopy parsing (NSE F&O end-of-day data).
 pandas>=2.0
 
+# Step 9 — fast historical OHLC backfill (alternative to the slow
+# day-by-day Bhavcopy accumulation). Works without this installed too -
+# falls back gracefully with a clear error if missing.
+yfinance>=0.2
+
 # Step 6 — agent/. Direct Anthropic SDK (no LangChain dependency).
 anthropic>=0.40
 
 # Step 7 — market_intel/. Tavily web search for brokerage reports/news.
 # Works without this installed too - falls back to mock data automatically.
 tavily-python>=0.5
+
+# Step 9 — pages/2_Stock_Scanner.py Excel export (pandas' .xlsx engine
+# needs this installed even though it's never imported directly).
+openpyxl>=3.1

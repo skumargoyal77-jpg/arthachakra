@@ -120,9 +120,10 @@ COLLECTION_SCHEMA: dict[str, dict] = {
     },
     "action_plans": {
         "shared":  False,
-        "purpose": "Per-user monthly stock shortlist from the Stock Selector. (Step 9)",
+        "purpose": "Per-user, NAMED stock shortlists from the Stock Selector — "
+                   "multiple shortlists allowed per month, distinguished by name. (Step 9)",
         "indexes": [
-            {"keys": [("user_id", 1), ("month_key", 1)], "unique": True},
+            {"keys": [("user_id", 1), ("month_key", 1), ("shortlist_name", 1)], "unique": True},
         ],
     },
     "positions_cache": {

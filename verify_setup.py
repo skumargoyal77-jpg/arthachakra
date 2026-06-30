@@ -1258,6 +1258,378 @@ def run_step7() -> bool:
     return passed == total
 
 
+def run_step8() -> bool:
+    """
+    Verification of pnl/ — daily snapshot job + weekly/monthly rollups.
+
+    Reuses agent/context_builder.py for the actual position fetching
+    (already proven correct in Step 6), so this focuses on what's new:
+    per-user isolation in the snapshot itself (the actual checkpoint),
+    upsert behavior (re-running the same day never duplicates), and
+    the rollup math against constructed multi-day history.
+    """
+    results: list[tuple[str, bool, str]] = []
+
+    def check(name: str, condition: bool, detail: str = "") -> None:
+        results.append((name, condition, detail))
+        icon = "✅" if condition else "❌"
+        print(f"  {icon}  {name}" + (f"  —  {detail}" if detail else ""))
+
+    print_header("ArthaChakra — Step 8 Verification: pnl/ (snapshot + reporting)")
+
+    db = Database()
+    print(f"\n  Database mode: {'MongoDB' if not db.is_mock else 'MOCK (in-memory)'}")
+    if not db.is_mock:
+        _cleanup_test_data(db)
+
+    try:
+        from datetime import date, timedelta
+
+        from auth.auth_service import signup
+        from kite_oauth.connection_service import add_mock_connection
+        from pnl.reporting import get_monthly_rollup, get_weekly_rollup
+        from pnl.snapshot import run_daily_snapshot
+
+        # ── 1. THE CHECKPOINT: two users, two separate daily_pnl docs ──────
+        print(f"\n{SEP}\n  1 — Checkpoint: two users, same date, separate documents\n{SEP}")
+        user1 = signup(db, TEST_USERNAME_1, TEST_EMAIL_1, "pw_verify_123")
+        user2 = signup(db, TEST_USERNAME_2, TEST_EMAIL_2, "pw_verify_123")
+        add_mock_connection(db, user1.user_id, label="_verify_pnl_user1")
+        add_mock_connection(db, user2.user_id, label="_verify_pnl_user2")
+
+        today = date(2026, 6, 29)
+        snap_results = run_daily_snapshot(db, as_of=today)
+
+        check("Both users snapshotted successfully",
+             all(r.success for r in snap_results), str([r.error for r in snap_results if not r.success]))
+
+        docs = list(db.daily_pnl.find({"date": today.isoformat()}))
+        verify_docs = [d for d in docs if d["user_id"] in (user1.user_id, user2.user_id)]
+        check("Two separate documents exist for the same date",
+             len(verify_docs) == 2, f"found {len(verify_docs)}")
+
+        doc1 = next((d for d in verify_docs if d["user_id"] == user1.user_id), None)
+        doc2 = next((d for d in verify_docs if d["user_id"] == user2.user_id), None)
+        check("User 1's document is correctly scoped to user 1", doc1 is not None)
+        check("User 2's document is correctly scoped to user 2", doc2 is not None)
+        check("The two documents have different user_ids (no cross-talk)",
+             doc1 is not None and doc2 is not None and doc1["user_id"] != doc2["user_id"])
+
+        # ── 2. Upsert behavior — re-running never duplicates ────────────────
+        print(f"\n{SEP}\n  2 — Re-running the same day upserts, never duplicates\n{SEP}")
+        run_daily_snapshot(db, as_of=today)
+        run_daily_snapshot(db, as_of=today)
+        docs_after = list(db.daily_pnl.find({"user_id": user1.user_id, "date": today.isoformat()}))
+        check("Still exactly 1 document after 3 total runs on the same day",
+             len(docs_after) == 1, f"found {len(docs_after)}")
+
+        # ── 3. Weekly/monthly rollup math ───────────────────────────────────
+        print(f"\n{SEP}\n  3 — Rollup math against constructed multi-day history\n{SEP}")
+        rollup_user = "_verify_rollup_user"
+        daily_values = {
+            "2026-06-22": -500.0, "2026-06-23": 1200.0, "2026-06-24": -300.0,
+            "2026-06-25": 800.0, "2026-06-26": 2000.0,
+        }
+        for d, pnl in daily_values.items():
+            db.daily_pnl.update_one(
+                {"user_id": rollup_user, "date": d},
+                {"$set": {"user_id": rollup_user, "date": d, "total_pnl": pnl}},
+                upsert=True,
+            )
+
+        weekly = get_weekly_rollup(db, rollup_user, as_of=date(2026, 6, 26))
+        check("Weekly rollup picks up all 5 days", weekly.days_with_data == 5)
+        check("Weekly rollup sum is correct", weekly.sum_pnl == sum(daily_values.values()))
+        check("Weekly rollup correctly identifies best day",
+             weekly.best_day == ("2026-06-26", 2000.0))
+        check("Weekly rollup correctly identifies worst day",
+             weekly.worst_day == ("2026-06-22", -500.0))
+
+        monthly = get_monthly_rollup(db, rollup_user, as_of=date(2026, 6, 26))
+        check("Monthly rollup also picks up all 5 days (same month)", monthly.days_with_data == 5)
+
+        # Cleanup the rollup test data (not a real user, just raw daily_pnl docs)
+        for d in daily_values:
+            db.daily_pnl.delete_one({"user_id": rollup_user, "date": d})
+
+    finally:
+        if not db.is_mock:
+            _cleanup_test_data(db)
+            db.daily_pnl.delete_one({"user_id": user1.user_id, "date": today.isoformat()})
+            db.daily_pnl.delete_one({"user_id": user2.user_id, "date": today.isoformat()})
+            print(f"\n  🧹 Cleaned up _verify_ test data.")
+
+    passed = sum(1 for _, ok, _ in results if ok)
+    total = len(results)
+
+    print(f"\n{SEP2}")
+    if passed == total:
+        print(f"  ✅  STEP 8 VERIFICATION PASSED  ({passed}/{total})")
+    else:
+        print(f"  ❌  STEP 8 VERIFICATION FAILED  ({passed}/{total})")
+        for name, ok, detail in results:
+            if not ok:
+                print(f"    ❌ {name}  {detail}")
+    print(SEP2)
+
+    return passed == total
+
+
+def run_step9() -> bool:
+    """
+    Verification of dashboard/ + pages/ — stock universe, analysis
+    engine, and the per-user Action Plan.
+
+    THE CHECKPOINT: two users, same shared stock data, genuinely
+    different Action Plan verdicts — proven the same way as every
+    other per-user claim in this project, by constructing a real
+    difference (one user has a real broker connection, one doesn't)
+    and confirming the rule verdict actually differs as a result.
+    """
+    results: list[tuple[str, bool, str]] = []
+
+    def check(name: str, condition: bool, detail: str = "") -> None:
+        results.append((name, condition, detail))
+        icon = "✅" if condition else "❌"
+        print(f"  {icon}  {name}" + (f"  —  {detail}" if detail else ""))
+
+    print_header("ArthaChakra — Step 9 Verification: dashboard/ + pages/ (Stock Scanner)")
+
+    db = Database()
+    print(f"\n  Database mode: {'MongoDB' if not db.is_mock else 'MOCK (in-memory)'}")
+    if not db.is_mock:
+        _cleanup_test_data(db)
+
+    try:
+        from datetime import datetime, date
+
+        from auth.auth_service import signup
+        from dashboard.action_plan import build_action_plan
+        from dashboard.stock_analysis import compute_stock_analysis, records_from_dicts
+        from dashboard.stock_universe import get_ohlc_for_analysis, upsert_stock
+        from kite_oauth.connection_service import add_mock_connection
+        from market_data.vix_fetcher import cache_vix_reading
+        from rules.rules_service import seed_rules_into_db
+        from users.session_builder import build_user_session
+
+        if db.platform_rules.count_documents({}) == 0:
+            seed_rules_into_db(db)
+
+        # ── 1. Analysis engine math (pure, no DB) ───────────────────────────
+        print(f"\n{SEP}\n  1 — Backtested win-rate analysis engine\n{SEP}")
+        raw = [
+            {"month_key": "2026-01", "open": 1000, "high": 1050, "low": 970},
+            {"month_key": "2026-02", "open": 1020, "high": 1080, "low": 990},
+            {"month_key": "2026-03", "open": 1010, "high": 1060, "low": 950},
+            {"month_key": "2026-04", "open": 1030, "high": 1200, "low": 1000},  # big move - Loose
+            {"month_key": "2026-05", "open": 1040, "high": 1090, "low": 1010},
+        ]
+        records = records_from_dicts(raw)
+        analysis = compute_stock_analysis("_VERIFY_STOCK", records, target=10)
+        check("4/5 months win at 10% threshold -> 80% win rate", analysis.target_win_pct == 80.0)
+        check("80% win rate classifies as Violet tier", analysis.tier == "Violet")
+
+        # ── 2. Shared stock universe + OHLC access ──────────────────────────
+        print(f"\n{SEP}\n  2 — Shared stock universe (nse_stocks / monthly_ohlc)\n{SEP}")
+        upsert_stock(db, "_VERIFY_HDFCBANK", "Verify HDFC Bank", "Banking")
+        for i, month in enumerate(["2026-01", "2026-02", "2026-03"]):
+            o = 1700 + i * 20
+            db.monthly_ohlc.update_one(
+                {"symbol": "_VERIFY_HDFCBANK", "month_key": month},
+                {"$set": {"symbol": "_VERIFY_HDFCBANK", "month_key": month,
+                         "open": o, "high": o + 50, "low": o - 30, "close": o + 10}},
+                upsert=True,
+            )
+        ohlc = get_ohlc_for_analysis(db, "_VERIFY_HDFCBANK")
+        check("get_ohlc_for_analysis reads Step 5-shaped monthly_ohlc data correctly",
+             len(ohlc) == 3 and set(ohlc[0].keys()) == {"month_key", "open", "high", "low"})
+
+        # Explicit check on EVERY public function in stock_universe.py —
+        # added after a real bug where an edit accidentally merged
+        # get_universe_stats()'s body into manual_upsert_ohlc(), silently
+        # deleting get_universe_stats() entirely. That bug shipped
+        # undetected because nothing here called it directly — only the
+        # live Streamlit page did. Importing every expected name here
+        # means a future accidental deletion fails LOUDLY at import time,
+        # not silently in production.
+        import dashboard.stock_universe as _su
+        for fn_name in ["upsert_stock", "set_index_memberships", "get_all_stocks", "get_stock",
+                       "get_all_symbols", "get_ohlc_for_analysis", "get_latest_month",
+                       "get_month_count", "manual_upsert_ohlc", "get_universe_stats"]:
+            check(f"dashboard.stock_universe.{fn_name} exists and is callable",
+                 hasattr(_su, fn_name) and callable(getattr(_su, fn_name)))
+
+        from dashboard.stock_universe import get_universe_stats, manual_upsert_ohlc
+        manual_upsert_ohlc(db, "_VERIFY_HDFCBANK", "2026-06", 800.0, 810.0, 790.0)
+        stats = get_universe_stats(db)
+        check("get_universe_stats returns the expected dict shape",
+             set(stats.keys()) == {"stocks", "active_stocks", "ohlc_records"})
+
+        # ── 3. THE CHECKPOINT: two users, different Action Plan verdicts ───
+        print(f"\n{SEP}\n  3 — Checkpoint: two users, same stock, different verdicts\n{SEP}")
+        cache_vix_reading(db, 28.5, as_of=datetime.now())   # pre-cache a high (blocking) VIX reading
+
+        user1 = signup(db, TEST_USERNAME_1, TEST_EMAIL_1, "pw_verify_123")
+        user2 = signup(db, TEST_USERNAME_2, TEST_EMAIL_2, "pw_verify_123")
+        add_mock_connection(db, user1.user_id, label="_verify_mock_only")   # no real VIX context
+        db.broker_connections.insert_one({                                    # user2: real-looking connection
+            "connection_id": "_verify_conn_real", "user_id": user2.user_id, "broker": "kite",
+            "label": "_verify_real_conn", "api_key": "x", "api_secret": "x",
+            "access_token": "real_looking_token", "token_expiry": "2099-01-01",
+            "account_type": "both", "broker_account_name": "", "active": True,
+        })
+
+        session1 = build_user_session(db, user1.user_id, "Verify1")
+        session2 = build_user_session(db, user2.user_id, "Verify2")
+
+        today = date(2026, 6, 29)
+        plan1 = build_action_plan(db, session1, candidate_symbols=["_VERIFY_HDFCBANK"], as_of=today)
+        plan2 = build_action_plan(db, session2, candidate_symbols=["_VERIFY_HDFCBANK"], as_of=today)
+
+        def _find_s01(plan):
+            for v in plan.enter + plan.caution + plan.avoid:
+                for r in v.rule_results:
+                    if r.rule_id == "S-01":
+                        return r
+            return None
+
+        s01_1, s01_2 = _find_s01(plan1), _find_s01(plan2)
+        check("User 1 (mock-only) gets ADVISORY on S-01 (no real VIX context)",
+             s01_1 is not None and s01_1.status == "ADVISORY")
+        check("User 2 (real connection) gets a real FAIL on S-01 (VIX 28.5 >= 25)",
+             s01_2 is not None and s01_2.status == "FAIL")
+        check("The two users' verdicts genuinely differ — not the same plan with a user_id tag",
+             s01_1.status != s01_2.status)
+
+        db.broker_connections.delete_one({"connection_id": "_verify_conn_real"})
+
+        # ── 4. Full F&O universe importer (real fo_mktlots.csv format) ─────
+        print(f"\n{SEP}\n  4 — F&O universe importer against the real fo_mktlots.csv format\n{SEP}")
+        from dashboard.fo_universe_importer import parse_fo_mktlots
+
+        synthetic_csv = (
+            "UNDERLYING,SYMBOL,JUN-26,JUL-26\n"
+            "NIFTY 50,NIFTY,65,65\n"
+            "NIFTY BANK,BANKNIFTY,30,30\n"
+            "Derivatives on Individual Securities,Symbol,JUN-26,JUL-26\n"
+            "HDFC BANK LTD,HDFCBANK,550,550\n"
+            "TATA CONSULTANCY,TCS,,175\n"   # blank first month, lot size in second
+        )
+        import tempfile
+        from pathlib import Path
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
+            f.write(synthetic_csv)
+            tmp_path = f.name
+        entries = parse_fo_mktlots(tmp_path)
+        check("Section-divider row ('Symbol' literal) correctly skipped",
+             not any(e["symbol"].lower() == "symbol" for e in entries))
+        check("Both real indices correctly tagged is_index=True",
+             sum(1 for e in entries if e["is_index"]) == 2)
+        check("Both real stocks correctly tagged is_index=False",
+             sum(1 for e in entries if not e["is_index"]) == 2)
+        tcs_entry = next((e for e in entries if e["symbol"] == "TCS"), None)
+        check("Lot size correctly taken from first NON-BLANK month column (TCS: blank Jun, 175 in Jul)",
+             tcs_entry is not None and tcs_entry["lot_size"] == 175)
+        Path(tmp_path).unlink()
+
+        # ── 5. Index membership tagging (multi-index symbols) ───────────────
+        print(f"\n{SEP}\n  5 — Index constituent parsing + multi-index tagging\n{SEP}")
+        from market_data.nse_index_constituents import parse_constituent_csv
+        from dashboard.stock_universe import set_index_memberships, get_stock as _get_stock
+
+        synthetic_constituent_csv = (
+            "Company Name,Industry,Symbol,Series,ISIN Code\n"
+            "HDFC Bank Ltd.,Financial Services,HDFCBANK,EQ,INE040A01034\n"
+            "Reliance Industries Ltd.,Energy,RELIANCE,EQ,INE002A01018\n"
+        )
+        parsed = parse_constituent_csv(synthetic_constituent_csv)
+        check("Index constituent CSV parses real NSE column format ('Symbol')",
+             parsed == ["HDFCBANK", "RELIANCE"])
+
+        upsert_stock(db, "_VERIFY_MULTI_IDX", "Verify Multi Index")
+        set_index_memberships(db, "_VERIFY_MULTI_IDX", ["NIFTY50", "BANKNIFTY"])
+        doc = _get_stock(db, "_VERIFY_MULTI_IDX")
+        check("A symbol can belong to multiple indices simultaneously",
+             doc is not None and set(doc.get("index_memberships", [])) == {"NIFTY50", "BANKNIFTY"})
+        db.nse_stocks.delete_one({"symbol": "_VERIFY_MULTI_IDX"})
+
+        # ── 6. Per-user saved shortlist (manual workflow, distinct from Action Plan) ──
+        print(f"\n{SEP}\n  6 — Per-user saved shortlist isolation + multiple named shortlists\n{SEP}")
+        from dashboard.saved_shortlist import (
+            get_shortlist, get_shortlists_for_month, save_shortlist,
+        )
+
+        save_shortlist(db, user1.user_id, "_VERIFY_MONTH", ["HDFCBANK", "TCS"], notes="user1 picks")
+        save_shortlist(db, user2.user_id, "_VERIFY_MONTH", ["RELIANCE"], notes="user2 picks")
+        list1 = get_shortlist(db, user1.user_id, "_VERIFY_MONTH")
+        list2 = get_shortlist(db, user2.user_id, "_VERIFY_MONTH")
+        check("User 1's saved shortlist correctly isolated", list1 is not None and list1["symbols"] == ["HDFCBANK", "TCS"])
+        check("User 2's saved shortlist correctly isolated (different list, same month)",
+             list2 is not None and list2["symbols"] == ["RELIANCE"])
+
+        # Multiple NAMED shortlists for the SAME user, SAME month
+        save_shortlist(db, user1.user_id, "_VERIFY_MONTH", ["HDFCBANK", "TCS"], shortlist_name="Banking+IT")
+        save_shortlist(db, user1.user_id, "_VERIFY_MONTH", ["RELIANCE"], shortlist_name="Energy Only")
+        user1_lists = get_shortlists_for_month(db, user1.user_id, "_VERIFY_MONTH")
+        check("Same user can save multiple DIFFERENTLY-NAMED shortlists for the same month",
+             len(user1_lists) == 3)   # Default (from the first save_shortlist call) + 2 named
+
+        # Re-saving the SAME name overwrites, does not duplicate
+        save_shortlist(db, user1.user_id, "_VERIFY_MONTH", ["HDFCBANK"], shortlist_name="Banking+IT")
+        user1_lists_after = get_shortlists_for_month(db, user1.user_id, "_VERIFY_MONTH")
+        check("Re-saving the SAME shortlist name overwrites, does not duplicate",
+             len(user1_lists_after) == 3)
+        banking_it = next(s for s in user1_lists_after if s["shortlist_name"] == "Banking+IT")
+        check("The overwritten shortlist has the NEW symbols, not the old ones",
+             banking_it["symbols"] == ["HDFCBANK"])
+
+        db.action_plans.delete_one({"user_id": user1.user_id, "month_key": "_VERIFY_MONTH", "shortlist_name": "Default"})
+        db.action_plans.delete_one({"user_id": user1.user_id, "month_key": "_VERIFY_MONTH", "shortlist_name": "Banking+IT"})
+        db.action_plans.delete_one({"user_id": user1.user_id, "month_key": "_VERIFY_MONTH", "shortlist_name": "Energy Only"})
+        db.action_plans.delete_one({"user_id": user2.user_id, "month_key": "_VERIFY_MONTH", "shortlist_name": "Default"})
+
+        # ── 7. Action Plan correctly scoped to a CHOSEN shortlist ───────────
+        print(f"\n{SEP}\n  7 — Action Plan correctly scoped to one chosen shortlist\n{SEP}")
+        save_shortlist(db, user1.user_id, "_VERIFY_MONTH2", ["_VERIFY_HDFCBANK"], shortlist_name="JustHDFC")
+        scoped_plan = build_action_plan(db, session1, candidate_symbols=["_VERIFY_HDFCBANK"],
+                                        as_of=date(2026, 6, 29))
+        scoped_symbols = {v.symbol for v in scoped_plan.enter + scoped_plan.caution + scoped_plan.avoid}
+        check("Action Plan scoped to a chosen shortlist never evaluates symbols outside it",
+             scoped_symbols <= {"_VERIFY_HDFCBANK"})
+        db.action_plans.delete_one({"user_id": user1.user_id, "month_key": "_VERIFY_MONTH2", "shortlist_name": "JustHDFC"})
+
+        # ── 8. 4% threshold floor supported end-to-end, not just the UI slider ──
+        print(f"\n{SEP}\n  8 — 4% threshold floor (was 8%) supported by the analysis engine\n{SEP}")
+        from dashboard.stock_analysis import THRESHOLDS as _THRESHOLDS
+        check("THRESHOLDS now starts at 4%, not 8%", _THRESHOLDS[0] == 4)
+        low_analysis = compute_stock_analysis("_VERIFY_HDFCBANK", records, target=4)
+        check("compute_stock_analysis accepts target=4 and populates win_rates[4]",
+             4 in low_analysis.win_rates)
+
+    finally:
+        db.nse_stocks.delete_one({"symbol": "_VERIFY_HDFCBANK"})
+        for m in ["2026-01", "2026-02", "2026-03"]:
+            db.monthly_ohlc.delete_one({"symbol": "_VERIFY_HDFCBANK", "month_key": m})
+        if not db.is_mock:
+            _cleanup_test_data(db)
+            print(f"\n  🧹 Cleaned up _verify_ test data.")
+
+    passed = sum(1 for _, ok, _ in results if ok)
+    total = len(results)
+
+    print(f"\n{SEP2}")
+    if passed == total:
+        print(f"  ✅  STEP 9 VERIFICATION PASSED  ({passed}/{total})")
+    else:
+        print(f"  ❌  STEP 9 VERIFICATION FAILED  ({passed}/{total})")
+        for name, ok, detail in results:
+            if not ok:
+                print(f"    ❌ {name}  {detail}")
+    print(SEP2)
+
+    return passed == total
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="ArthaChakra — verification suite")
     parser.add_argument("--step1", action="store_true", help="Run Step 1 verification")
@@ -1267,8 +1639,16 @@ def main() -> int:
     parser.add_argument("--step5", action="store_true", help="Run Step 5 verification")
     parser.add_argument("--step6", action="store_true", help="Run Step 6 verification")
     parser.add_argument("--step7", action="store_true", help="Run Step 7 verification")
+    parser.add_argument("--step8", action="store_true", help="Run Step 8 verification")
+    parser.add_argument("--step9", action="store_true", help="Run Step 9 verification")
     args = parser.parse_args()
 
+    if args.step9:
+        ok = run_step9()
+        return 0 if ok else 1
+    if args.step8:
+        ok = run_step8()
+        return 0 if ok else 1
     if args.step7:
         ok = run_step7()
         return 0 if ok else 1

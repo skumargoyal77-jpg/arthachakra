@@ -24,7 +24,7 @@ from dashboard.strangle_grouper import (
     KITE_SPOT_MAP, MOCK_POSITIONS, MOCK_SPOTS,
     group_positions_into_strangles, parse_option_symbol,
 )
-from kite_oauth.connection_service import list_connections
+from users.session_builder import build_user_session
 
 st.set_page_config(page_title="Live Dashboard", page_icon="📊", layout="wide")
 
@@ -219,7 +219,13 @@ if refresh_minutes and refresh_minutes > 0 and not _supports_run_every:
 
 
 def _render_dashboard_body() -> None:
-    connections = list_connections(db=db, user_id=user_id)
+    # Threaded through UserSession rather than calling list_connections()
+    # directly — every other per-user loader in this project (agent/,
+    # pnl/, dashboard/action_plan.py) already goes through
+    # build_user_session(); this page was the one holdout still doing
+    # its own ad-hoc connection fetch.
+    session = build_user_session(db, user_id)
+    connections = session.active_connections
     if not connections:
         st.info("No Kite accounts connected yet. Go to the main page to add one.")
         return

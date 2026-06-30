@@ -127,6 +127,18 @@ class MongoCollectionAdapter:
     def create_index(self, keys, unique: bool = False):
         return self._coll.create_index(keys, unique=unique)
 
+    def list_indexes(self) -> list[dict]:
+        """Returns each index as a plain dict (not pymongo's lazy
+        cursor/SON type) - same normalize-the-return-type principle as
+        every other method here. Needed for index migrations (see
+        scripts/migrate_shortlist_index.py) where the actual current
+        state of the database needs to be inspected before acting on it,
+        not just assumed from the schema definition in code."""
+        return [dict(idx) for idx in self._coll.list_indexes()]
+
+    def drop_index(self, index_name: str) -> None:
+        self._coll.drop_index(index_name)
+
 
 # ── Database ───────────────────────────────────────────────────────────
 
